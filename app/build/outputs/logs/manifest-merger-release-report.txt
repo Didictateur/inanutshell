@@ -1,0 +1,306 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:2:1-35:12
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:2:1-35:12
+MERGED from [com.google.android.material:material:1.11.0] /home/pluto/.gradle/caches/8.14.1/transforms/847d8164f95edd4773112c2b46df1064/transformed/material-1.11.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/5379484f76ac42448d931dbb81afd0f1/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/pluto/.gradle/caches/8.14.1/transforms/c74b1c3cc0c37bfcf6699684ed89b82f/transformed/constraintlayout-2.0.1/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/9fe3b44f7d3c948555599893628277d0/transformed/appcompat-1.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/pluto/.gradle/caches/8.14.1/transforms/bd121d946e88ce5573e53afe2ce61ece/transformed/jetified-viewpager2-1.1.0-beta02/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/pluto/.gradle/caches/8.14.1/transforms/96ceb15be2296f4c8f55dd09481a8415/transformed/recyclerview-1.3.2/AndroidManifest.xml:17:1-22:12
+MERGED from [io.noties.markwon:core:4.6.2] /home/pluto/.gradle/caches/8.14.1/transforms/5a1561ee7b4143fd462d1a8bd0585440/transformed/jetified-core-4.6.2/AndroidManifest.xml:2:1-11:12
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pluto/.gradle/caches/8.14.1/transforms/e1ffd49d270193a704018a5d26e2b088/transformed/fragment-1.3.6/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.activity:activity:1.8.0] /home/pluto/.gradle/caches/8.14.1/transforms/256ca7017c4552bf14339822a0e0f741/transformed/jetified-activity-1.8.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/fc6e219fcc7acabdebc59bf48e1b6676/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/577b66b35829ef51fe7b784fce95aa27/transformed/drawerlayout-1.1.1/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/1d3b5d6ac8eb9fc1bd20e9c2183d707c/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/7b83ca6b41c12cce49eb8b0d3fb073f9/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.transition:transition:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/5cc1db86e04c4c741b7026709c278d7d/transformed/transition-1.2.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/025d954fa063c3358d15ab50a2fae497/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/943d27ef176348037ee5a5788e070a0c/transformed/vectordrawable-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/956602b1501401c86e4c4fb8943beed1/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:17:1-23:12
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/623b734753640db93e68a0d976710b6a/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.loader:loader:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/0c24174688e880ab84f1171d6b33d71f/transformed/loader-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pluto/.gradle/caches/8.14.1/transforms/bbc2f59941685a1bdfdb9199f255d65c/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:17:1-35:12
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/d38ca5dfd6b558940b841f10390b4ae9/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/0cd054fad3122c9b23f3a0a5a0c74d10/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/aaad4f2fb49ac695bf31e16e377c3317/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/4b13577d10301894d269521a3198e0e9/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/bff6f011d7b01939a938f5543eaa9f36/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/d8aecb9780df8f586cebceb9399562f4/transformed/jetified-core-ktx-1.9.0/AndroidManifest.xml:2:1-7:12
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/5031b0ef94c90e4ba739349aaabbc28a/transformed/viewpager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.customview:customview:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/01f3ef8d2c7ecf440b856c57bc283823/transformed/customview-1.1.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:17:1-30:12
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/1294d056aeadec5cb74f89936eb02cbc/transformed/cursoradapter-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/af874db992960ad7f961d83b966927e9/transformed/cardview-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/3bc4fb1f941d1d6c218c2b1ac12aa73d/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:17:1-55:12
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/6304958687dc234c6a7dac7c89bb5660/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:17:1-24:12
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/26cb8ccd8853599466b4898496d7c732/transformed/interpolator-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/f0249722365d8351682e4a1dba24e23b/transformed/core-runtime-2.2.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e507443ccb1f3b376ede32428f7b8521/transformed/documentfile-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e695aad0086e7f75e8529ca66eac94f8/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.print:print:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/442769b51a9b9347bf81d798f28df64e/transformed/print-1.0.0/AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/2a67357eb813da26b74ec675a742897c/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:17:1-22:12
+	package
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+	android:versionName
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+	android:versionCode
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:3:2-60
+uses-sdk
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:5:3-71
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:5:3-71
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:5:3-71
+MERGED from [com.google.android.material:material:1.11.0] /home/pluto/.gradle/caches/8.14.1/transforms/847d8164f95edd4773112c2b46df1064/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [com.google.android.material:material:1.11.0] /home/pluto/.gradle/caches/8.14.1/transforms/847d8164f95edd4773112c2b46df1064/transformed/material-1.11.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/5379484f76ac42448d931dbb81afd0f1/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat-resources:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/5379484f76ac42448d931dbb81afd0f1/transformed/jetified-appcompat-resources-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/pluto/.gradle/caches/8.14.1/transforms/c74b1c3cc0c37bfcf6699684ed89b82f/transformed/constraintlayout-2.0.1/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/pluto/.gradle/caches/8.14.1/transforms/c74b1c3cc0c37bfcf6699684ed89b82f/transformed/constraintlayout-2.0.1/AndroidManifest.xml:5:5-7:41
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/9fe3b44f7d3c948555599893628277d0/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.appcompat:appcompat:1.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/9fe3b44f7d3c948555599893628277d0/transformed/appcompat-1.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/pluto/.gradle/caches/8.14.1/transforms/bd121d946e88ce5573e53afe2ce61ece/transformed/jetified-viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager2:viewpager2:1.1.0-beta02] /home/pluto/.gradle/caches/8.14.1/transforms/bd121d946e88ce5573e53afe2ce61ece/transformed/jetified-viewpager2-1.1.0-beta02/AndroidManifest.xml:5:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/pluto/.gradle/caches/8.14.1/transforms/96ceb15be2296f4c8f55dd09481a8415/transformed/recyclerview-1.3.2/AndroidManifest.xml:20:5-44
+MERGED from [androidx.recyclerview:recyclerview:1.3.2] /home/pluto/.gradle/caches/8.14.1/transforms/96ceb15be2296f4c8f55dd09481a8415/transformed/recyclerview-1.3.2/AndroidManifest.xml:20:5-44
+MERGED from [io.noties.markwon:core:4.6.2] /home/pluto/.gradle/caches/8.14.1/transforms/5a1561ee7b4143fd462d1a8bd0585440/transformed/jetified-core-4.6.2/AndroidManifest.xml:7:5-9:41
+MERGED from [io.noties.markwon:core:4.6.2] /home/pluto/.gradle/caches/8.14.1/transforms/5a1561ee7b4143fd462d1a8bd0585440/transformed/jetified-core-4.6.2/AndroidManifest.xml:7:5-9:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pluto/.gradle/caches/8.14.1/transforms/e1ffd49d270193a704018a5d26e2b088/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.fragment:fragment:1.3.6] /home/pluto/.gradle/caches/8.14.1/transforms/e1ffd49d270193a704018a5d26e2b088/transformed/fragment-1.3.6/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.activity:activity:1.8.0] /home/pluto/.gradle/caches/8.14.1/transforms/256ca7017c4552bf14339822a0e0f741/transformed/jetified-activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.activity:activity:1.8.0] /home/pluto/.gradle/caches/8.14.1/transforms/256ca7017c4552bf14339822a0e0f741/transformed/jetified-activity-1.8.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/fc6e219fcc7acabdebc59bf48e1b6676/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2-views-helper:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/fc6e219fcc7acabdebc59bf48e1b6676/transformed/jetified-emoji2-views-helper-1.2.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/577b66b35829ef51fe7b784fce95aa27/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.drawerlayout:drawerlayout:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/577b66b35829ef51fe7b784fce95aa27/transformed/drawerlayout-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/1d3b5d6ac8eb9fc1bd20e9c2183d707c/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.coordinatorlayout:coordinatorlayout:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/1d3b5d6ac8eb9fc1bd20e9c2183d707c/transformed/coordinatorlayout-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/7b83ca6b41c12cce49eb8b0d3fb073f9/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.dynamicanimation:dynamicanimation:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/7b83ca6b41c12cce49eb8b0d3fb073f9/transformed/dynamicanimation-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.transition:transition:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/5cc1db86e04c4c741b7026709c278d7d/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.transition:transition:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/5cc1db86e04c4c741b7026709c278d7d/transformed/transition-1.2.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/025d954fa063c3358d15ab50a2fae497/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable-animated:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/025d954fa063c3358d15ab50a2fae497/transformed/vectordrawable-animated-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/943d27ef176348037ee5a5788e070a0c/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.vectordrawable:vectordrawable:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/943d27ef176348037ee5a5788e070a0c/transformed/vectordrawable-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/956602b1501401c86e4c4fb8943beed1/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.customview:customview-poolingcontainer:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/956602b1501401c86e4c4fb8943beed1/transformed/jetified-customview-poolingcontainer-1.0.0/AndroidManifest.xml:20:5-21:38
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/623b734753640db93e68a0d976710b6a/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.legacy:legacy-support-core-utils:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/623b734753640db93e68a0d976710b6a/transformed/legacy-support-core-utils-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/0c24174688e880ab84f1171d6b33d71f/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.loader:loader:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/0c24174688e880ab84f1171d6b33d71f/transformed/loader-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pluto/.gradle/caches/8.14.1/transforms/bbc2f59941685a1bdfdb9199f255d65c/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.savedstate:savedstate:1.2.1] /home/pluto/.gradle/caches/8.14.1/transforms/bbc2f59941685a1bdfdb9199f255d65c/transformed/jetified-savedstate-1.2.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:21:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/d38ca5dfd6b558940b841f10390b4ae9/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/d38ca5dfd6b558940b841f10390b4ae9/transformed/lifecycle-livedata-core-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/0cd054fad3122c9b23f3a0a5a0c74d10/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-livedata:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/0cd054fad3122c9b23f3a0a5a0c74d10/transformed/lifecycle-livedata-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/aaad4f2fb49ac695bf31e16e377c3317/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/aaad4f2fb49ac695bf31e16e377c3317/transformed/lifecycle-viewmodel-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/4b13577d10301894d269521a3198e0e9/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/4b13577d10301894d269521a3198e0e9/transformed/lifecycle-runtime-2.6.1/AndroidManifest.xml:5:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/bff6f011d7b01939a938f5543eaa9f36/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/bff6f011d7b01939a938f5543eaa9f36/transformed/jetified-lifecycle-viewmodel-savedstate-2.6.1/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/d8aecb9780df8f586cebceb9399562f4/transformed/jetified-core-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.core:core-ktx:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/d8aecb9780df8f586cebceb9399562f4/transformed/jetified-core-ktx-1.9.0/AndroidManifest.xml:5:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/5031b0ef94c90e4ba739349aaabbc28a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.viewpager:viewpager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/5031b0ef94c90e4ba739349aaabbc28a/transformed/viewpager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.customview:customview:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/01f3ef8d2c7ecf440b856c57bc283823/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.customview:customview:1.1.0] /home/pluto/.gradle/caches/8.14.1/transforms/01f3ef8d2c7ecf440b856c57bc283823/transformed/customview-1.1.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/1294d056aeadec5cb74f89936eb02cbc/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/1294d056aeadec5cb74f89936eb02cbc/transformed/cursoradapter-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/af874db992960ad7f961d83b966927e9/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.cardview:cardview:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/af874db992960ad7f961d83b966927e9/transformed/cardview-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/3bc4fb1f941d1d6c218c2b1ac12aa73d/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/3bc4fb1f941d1d6c218c2b1ac12aa73d/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:21:5-44
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:21:5-23:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/6304958687dc234c6a7dac7c89bb5660/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.tracing:tracing:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/6304958687dc234c6a7dac7c89bb5660/transformed/jetified-tracing-1.0.0/AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/26cb8ccd8853599466b4898496d7c732/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.interpolator:interpolator:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/26cb8ccd8853599466b4898496d7c732/transformed/interpolator-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/f0249722365d8351682e4a1dba24e23b/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/f0249722365d8351682e4a1dba24e23b/transformed/core-runtime-2.2.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e507443ccb1f3b376ede32428f7b8521/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.documentfile:documentfile:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e507443ccb1f3b376ede32428f7b8521/transformed/documentfile-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e695aad0086e7f75e8529ca66eac94f8/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.localbroadcastmanager:localbroadcastmanager:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/e695aad0086e7f75e8529ca66eac94f8/transformed/localbroadcastmanager-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/442769b51a9b9347bf81d798f28df64e/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.print:print:1.0.0] /home/pluto/.gradle/caches/8.14.1/transforms/442769b51a9b9347bf81d798f28df64e/transformed/print-1.0.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/2a67357eb813da26b74ec675a742897c/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+MERGED from [androidx.annotation:annotation-experimental:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/2a67357eb813da26b74ec675a742897c/transformed/jetified-annotation-experimental-1.3.0/AndroidManifest.xml:20:5-44
+	android:targetSdkVersion
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:5:40-69
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+	android:minSdkVersion
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:5:13-39
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+application
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:6:2-33:16
+INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:6:2-33:16
+MERGED from [com.google.android.material:material:1.11.0] /home/pluto/.gradle/caches/8.14.1/transforms/847d8164f95edd4773112c2b46df1064/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [com.google.android.material:material:1.11.0] /home/pluto/.gradle/caches/8.14.1/transforms/847d8164f95edd4773112c2b46df1064/transformed/material-1.11.0/AndroidManifest.xml:22:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/pluto/.gradle/caches/8.14.1/transforms/c74b1c3cc0c37bfcf6699684ed89b82f/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
+MERGED from [androidx.constraintlayout:constraintlayout:2.0.1] /home/pluto/.gradle/caches/8.14.1/transforms/c74b1c3cc0c37bfcf6699684ed89b82f/transformed/constraintlayout-2.0.1/AndroidManifest.xml:9:5-20
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:23:5-33:19
+MERGED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:28:5-89
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/3bc4fb1f941d1d6c218c2b1ac12aa73d/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/3bc4fb1f941d1d6c218c2b1ac12aa73d/transformed/versionedparcelable-1.1.1/AndroidManifest.xml:24:5-25:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:25:5-31:19
+	android:scaleType
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:9:3-33
+	android:extractNativeLibs
+		INJECTED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml
+	android:appComponentFactory
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:28:18-86
+	android:label
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:7:3-32
+	android:icon
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:8:3-35
+activity#fr.didictateur.inanutshell.MainActivity
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:11:3-23:14
+	android:label
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:15:7-36
+	android:exported
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:16:4-27
+	android:configChanges
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:14:7-42
+	android:theme
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:13:4-62
+	android:name
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:12:4-58
+intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:18:7-21:20
+action#android.intent.action.MAIN
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:19:8-59
+	android:name
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:19:16-57
+category#android.intent.category.LAUNCHER
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:20:8-67
+	android:name
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:20:18-65
+activity#fr.didictateur.inanutshell.EditRecetteActivity
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:25:3-27:64
+	android:theme
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:27:4-62
+	android:name
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:26:4-39
+activity#fr.didictateur.inanutshell.ViewRecetteActivity
+ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:29:3-31:64
+	android:theme
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:31:4-62
+	android:name
+		ADDED from /home/pluto/Desktop/inanutshell/app/src/main/AndroidManifest.xml:30:4-39
+provider#androidx.startup.InitializationProvider
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:24:9-32:20
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+MERGED from [androidx.startup:startup-runtime:1.1.1] /home/pluto/.gradle/caches/8.14.1/transforms/464f0068be57cc2a6a0b10205df526b8/transformed/jetified-startup-runtime-1.1.1/AndroidManifest.xml:26:9-30:34
+	tools:node
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:28:13-31
+	android:authorities
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:26:13-68
+	android:exported
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:27:13-37
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:25:13-67
+meta-data#androidx.emoji2.text.EmojiCompatInitializer
+ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.emoji2:emoji2:1.2.0] /home/pluto/.gradle/caches/8.14.1/transforms/74cd77171a65bdd8a201399d0e0cc9ff/transformed/jetified-emoji2-1.2.0/AndroidManifest.xml:30:17-75
+meta-data#androidx.lifecycle.ProcessLifecycleInitializer
+ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.lifecycle:lifecycle-process:2.6.1] /home/pluto/.gradle/caches/8.14.1/transforms/cdcdf75bd95b8ce8f51b9e92999adff4/transformed/jetified-lifecycle-process-2.6.1/AndroidManifest.xml:30:17-78
+permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+permission#fr.didictateur.inanutshell.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:22:5-24:47
+	android:protectionLevel
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:24:9-44
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:23:9-81
+uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+uses-permission#fr.didictateur.inanutshell.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:26:5-97
+	android:name
+		ADDED from [androidx.core:core:1.9.0] /home/pluto/.gradle/caches/8.14.1/transforms/77253a87f13cf7e617ddfd0f182e45b2/transformed/core-1.9.0/AndroidManifest.xml:26:22-94
+meta-data#androidx.profileinstaller.ProfileInstallerInitializer
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+	android:value
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+receiver#androidx.profileinstaller.ProfileInstallReceiver
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+	android:enabled
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+	android:exported
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+	android:permission
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+	android:directBootAware
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+intent-filter#action:name:androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+action#androidx.profileinstaller.action.INSTALL_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+intent-filter#action:name:androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+action#androidx.profileinstaller.action.SKIP_FILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+intent-filter#action:name:androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+action#androidx.profileinstaller.action.SAVE_PROFILE
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+intent-filter#action:name:androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+action#androidx.profileinstaller.action.BENCHMARK_OPERATION
+ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+	android:name
+		ADDED from [androidx.profileinstaller:profileinstaller:1.3.0] /home/pluto/.gradle/caches/8.14.1/transforms/760934b9d24baf108028005dc031049d/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92

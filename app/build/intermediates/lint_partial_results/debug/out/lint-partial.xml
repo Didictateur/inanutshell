@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<incidents format="6" by="lint 8.2.0" type="partial_results">
+    <map id="UnsafeIntentLaunch">
+            <map id="unprotected">
+                <entry
+                    name="fr.didictateur.inanutshell.MainActivity"
+                    boolean="true"/>
+            </map>
+    </map>
+    <map id="UnusedResources">
+        <entry
+            name="model"
+            string="drawable[appicon(U)],id[textNotes(U),editNotes(U),recipeTitle(U),textTempsPrep(U),recipeImage(U),recipesRecyclerView(U),tabLayout(U),textIngredients(U),textTitre(U),editIngredients(U),editTitre(U),addRecipeButton(U),textTaille(U),editTaille(U),textPreparation(U),btnSave(U),editTempsPrep(U),viewPager(U),editPreparation(U)],layout[activity_view_recette(U),fragment_ingredients(U),fragment_notes(U),item_recipe(U),activity_main(U),fragment_apercu(U),activity_edit_recette(U),fragment_preparation(U)],style[Theme_AppCompat_Light_DarkActionBar(R)];17^0;;;"/>
+    </map>
+
+</incidents>

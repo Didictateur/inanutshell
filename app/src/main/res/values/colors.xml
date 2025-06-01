@@ -1,0 +1,25 @@
+<resources>
+		<color name="toolbar_bg">#CD7F32</color>
+		<color name="statusbar_bg">#944F00</color>
+
+    <color name="toolbar_bg_orange">#FF9800</color>
+		<color name="statusbar_bg_orange">#E26F03</color>
+
+		<color name="toolbar_bg_blue">#2196F3</color>
+		<color name="statusbar_bg_blue">#2205EA</color>
+
+    <color name="toolbar_bg_green">#4CAF50</color>
+		<color name="statusbar_bg_green">#0C840E</color>
+
+    <color name="toolbar_bg_brown">#CD7F32</color>
+		<color name="statusbar_bg_brown">#944F00</color>
+
+    <color name="toolbar_bg_red">#FF4848</color>
+		<color name="statusbar_bg_red">#FF0000</color>
+
+    <color name="toolbar_bg_purple">#F200F0</color>
+		<color name="statusbar_bg_purple">#CA00D1</color>
+
+    <color name="toolbar_title">#FFFFFF</color>
+</resources>
+

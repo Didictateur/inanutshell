@@ -1,0 +1,42 @@
+[
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_item_recipe.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/item_recipe.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_fragment_apercu.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/fragment_apercu.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_activity_view_recette.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/activity_view_recette.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_fragment_notes.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/fragment_notes.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_fragment_ingredients.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/fragment_ingredients.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_activity_main.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/activity_main.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-33:/layout_activity_main.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-34:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_activity_edit_recette.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/activity_edit_recette.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/layout_fragment_preparation.xml.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/layout/fragment_preparation.xml"
+    },
+    {
+        "merged": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-merged_res-33:/drawable_appicon.png.flat",
+        "source": "/home/pluto/.gradle/daemon/8.14.1/fr.didictateur.inanutshell.app-main-34:/drawable/appicon.png"
+    }
+]

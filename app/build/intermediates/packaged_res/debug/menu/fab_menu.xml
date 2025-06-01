@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:id="@+id/action_new_recipe"
+		android:title="Nouvelle recette"
+		android:icon="@android:drawable/ic_input_add"/>
+	<item
+		android:id="@+id/action_new_folder"
+		android:title="Nouveau dossier"
+		android:icon="@android:drawable/ic_menu_add"/>
+</menu>

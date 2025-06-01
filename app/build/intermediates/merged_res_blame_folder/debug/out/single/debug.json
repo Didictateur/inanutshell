@@ -1,0 +1,82 @@
+[
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_fragment_ingredients.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/fragment_ingredients.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_fragment_preparation.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/fragment_preparation.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_purple.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_purple.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_bg_folder.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/bg_folder.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_activity_settings.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_fragment_apercu.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/fragment_apercu.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/menu_main_menu.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/menu/main_menu.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_activity_view_recette.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/activity_view_recette.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_orange.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_orange.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_activity_edit_recette.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/activity_edit_recette.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/menu_fab_menu.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/menu/fab_menu.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_green.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_green.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_item_recipe.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/item_recipe.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_blue.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_blue.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_fragment_notes.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/fragment_notes.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_item_folder.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/item_folder.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_brown.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_brown.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/layout_activity_main.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/layout/activity_main.xml"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_appicon.png.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/appicon.png"
+    },
+    {
+        "merged": "fr.didictateur.inanutshell.app-merged_res-36:/drawable_circle_red.xml.flat",
+        "source": "fr.didictateur.inanutshell.app-main-38:/drawable/circle_red.xml"
+    }
+]
