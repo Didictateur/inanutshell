@@ -11,6 +11,9 @@ public interface RecetteDao {
 	@Insert
 	long insert(Recette recette);
 
+	@Update
+	void update(Recette recette);
+
 	@Delete
 	void delete(Recette recette);
 

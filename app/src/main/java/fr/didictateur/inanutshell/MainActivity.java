@@ -55,6 +55,33 @@ public class MainActivity extends BaseActivity {
             }
         );
 
+    private final ActivityResultLauncher<Intent> editRecipeLauncher =
+        registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    int recetteId = data.getIntExtra("recetteId", 0);
+                    if (recetteId > 0) {
+                        // Mise à jour d'une recette existante
+                        new Thread(() -> {
+                            Recette recette = db.recetteDao().getRecetteById(recetteId);
+                            if (recette != null) {
+                                recette.titre = data.getStringExtra("titre");
+                                recette.taille = data.getStringExtra("taille");
+                                recette.tempsPrep = data.getStringExtra("tempsPrep");
+                                recette.ingredients = data.getStringExtra("ingredients");
+                                recette.preparation = data.getStringExtra("preparation");
+                                recette.notes = data.getStringExtra("notes");
+                                db.recetteDao().update(recette);
+                                runOnUiThread(() -> showFolder(currentFolderId));
+                            }
+                        }).start();
+                    }
+                }
+            }
+        );
+
     private final ActivityResultLauncher<Intent> settingsLauncher =
         registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -172,31 +199,29 @@ public class MainActivity extends BaseActivity {
         }).start();
     }
 
-		private void showRecetteContextMenu(View anchor, Recette recette) {
-    		PopupMenu popup = new PopupMenu(this, anchor);
-    		popup.getMenu().add("Modifier");
-   	 		popup.getMenu().add("Déplacer");
-    		popup.getMenu().add("Supprimer");
-    		popup.setOnMenuItemClickListener(menuItem -> {
-        		String title = menuItem.getTitle().toString();
-        		if (title.equals("Modifier")) {
-            		Intent intent = new Intent(this, EditRecetteActivity.class);
-            		intent.putExtra("recetteId", recette.id);
-            		startActivity(intent);
-            		return true;
-        		} else if (title.equals("Déplacer")) {
-            		showMoveRecetteDialog(recette);
-            		return true;
-        		} else if (title.equals("Supprimer")) {
-            		confirmDeleteRecette(recette);
-            		return true;
-        		}
-        		return false;
-    		});
-    		popup.show();
-		}
-
-
+    private void showRecetteContextMenu(View anchor, Recette recette) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenu().add("Modifier");
+        popup.getMenu().add("Déplacer");
+        popup.getMenu().add("Supprimer");
+        popup.setOnMenuItemClickListener(menuItem -> {
+            String title = menuItem.getTitle().toString();
+            if (title.equals("Modifier")) {
+                Intent intent = new Intent(this, EditRecetteActivity.class);
+                intent.putExtra("recetteId", recette.id);
+                editRecipeLauncher.launch(intent);
+                return true;
+            } else if (title.equals("Déplacer")) {
+                showMoveRecetteDialog(recette);
+                return true;
+            } else if (title.equals("Supprimer")) {
+                confirmDeleteRecette(recette);
+                return true;
+            }
+            return false;
+        });
+        popup.show();
+    }
     private void updateToolbarColor() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String colorName = prefs.getString("toolbar_color", "toolbar_bg_brown");

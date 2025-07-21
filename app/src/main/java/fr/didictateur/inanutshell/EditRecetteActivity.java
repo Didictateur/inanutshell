@@ -11,18 +11,35 @@ import com.google.android.material.tabs.TabLayoutMediator;
 public class EditRecetteActivity extends BaseActivity {
 
     private RecettePagerAdapter adapter;
+    private AppDatabase db;
+    private int recetteId = 0; // 0 = nouvelle recette, > 0 = modification
+    private ViewPager2 viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recette);
 
+        db = androidx.room.Room.databaseBuilder(
+            getApplicationContext(),
+            AppDatabase.class,
+            "recette-db"
+        ).build();
+
+        // Récupération de l'ID de la recette si on modifie une recette existante
+        recetteId = getIntent().getIntExtra("recetteId", 0);
+
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
         Button btnSave = findViewById(R.id.btnSave);
 
+        this.viewPager = viewPager;
+
         adapter = new RecettePagerAdapter(this);
         viewPager.setAdapter(adapter);
+
+        // Forcer la création de tous les fragments
+        viewPager.setOffscreenPageLimit(4);
 
         new TabLayoutMediator(tabLayout, viewPager,
             (tab, position) -> {
@@ -35,6 +52,11 @@ public class EditRecetteActivity extends BaseActivity {
             }
         ).attach();
 
+        // Si on modifie une recette existante, charger ses données
+        if (recetteId > 0) {
+            loadRecetteData();
+        }
+
         btnSave.setOnClickListener(v -> {
             // Récupère les valeurs de chaque fragment
             String titre = adapter.getApercuFragment().getTitre();
@@ -45,6 +67,7 @@ public class EditRecetteActivity extends BaseActivity {
             String notes = adapter.getNotesFragment().getNotes();
 
             Intent resultIntent = new Intent();
+            resultIntent.putExtra("recetteId", recetteId);
             resultIntent.putExtra("titre", titre);
             resultIntent.putExtra("taille", taille);
             resultIntent.putExtra("tempsPrep", tempsPrep);
@@ -54,6 +77,46 @@ public class EditRecetteActivity extends BaseActivity {
             setResult(RESULT_OK, resultIntent);
             finish();
         });
+    }
+
+    private void loadRecetteData() {
+        new Thread(() -> {
+            Recette recette = db.recetteDao().getRecetteById(recetteId);
+            if (recette != null) {
+                runOnUiThread(() -> {
+                    // Stocker les données dans l'adapter pour qu'il les applique quand les fragments sont prêts
+                    adapter.setRecetteData(recette);
+                    
+                    // Aussi essayer d'appliquer directement si les fragments sont déjà créés
+                    trySetFragmentData(recette);
+                });
+            }
+        }).start();
+    }
+    
+    private void trySetFragmentData(Recette recette) {
+        // Attendre un peu et essayer plusieurs fois
+        viewPager.postDelayed(() -> {
+            try {
+                if (adapter.getApercuFragment() != null) {
+                    adapter.getApercuFragment().setTitre(recette.titre);
+                    adapter.getApercuFragment().setTaille(recette.taille);
+                    adapter.getApercuFragment().setTempsPrep(recette.tempsPrep);
+                }
+                if (adapter.getIngredientsFragment() != null) {
+                    adapter.getIngredientsFragment().setIngredients(recette.ingredients);
+                }
+                if (adapter.getPreparationFragment() != null) {
+                    adapter.getPreparationFragment().setPreparation(recette.preparation);
+                }
+                if (adapter.getNotesFragment() != null) {
+                    adapter.getNotesFragment().setNotes(recette.notes);
+                }
+            } catch (Exception e) {
+                // Si ça échoue, réessayer dans 100ms
+                viewPager.postDelayed(() -> trySetFragmentData(recette), 100);
+            }
+        }, 100);
     }
 }
 

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 public class ApercuFragment extends Fragment {
     private EditText editTitre, editTaille, editTempsPrep;
+    private String pendingTitre, pendingTaille, pendingTempsPrep;
 
     @Nullable
     @Override
@@ -19,6 +20,21 @@ public class ApercuFragment extends Fragment {
         editTitre = view.findViewById(R.id.editTitre);
         editTaille = view.findViewById(R.id.editTaille);
         editTempsPrep = view.findViewById(R.id.editTempsPrep);
+        
+        // Appliquer les données en attente si elles existent
+        if (pendingTitre != null) {
+            editTitre.setText(pendingTitre);
+            pendingTitre = null;
+        }
+        if (pendingTaille != null) {
+            editTaille.setText(pendingTaille);
+            pendingTaille = null;
+        }
+        if (pendingTempsPrep != null) {
+            editTempsPrep.setText(pendingTempsPrep);
+            pendingTempsPrep = null;
+        }
+        
         return view;
     }
 
@@ -30,6 +46,30 @@ public class ApercuFragment extends Fragment {
     }
     public String getTempsPrep() {
         return editTempsPrep != null ? editTempsPrep.getText().toString() : "";
+    }
+    
+    public void setTitre(String titre) {
+        if (editTitre != null && titre != null) {
+            editTitre.setText(titre);
+        } else {
+            pendingTitre = titre;
+        }
+    }
+    
+    public void setTaille(String taille) {
+        if (editTaille != null && taille != null) {
+            editTaille.setText(taille);
+        } else {
+            pendingTaille = taille;
+        }
+    }
+    
+    public void setTempsPrep(String tempsPrep) {
+        if (editTempsPrep != null && tempsPrep != null) {
+            editTempsPrep.setText(tempsPrep);
+        } else {
+            pendingTempsPrep = tempsPrep;
+        }
     }
 }
 
