@@ -1,10 +1,5 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_meal_planner"
-        android:icon="@android:drawable/ic_menu_today"
-        android:title="Planificateur de repas"
-        android:showAsAction="always"/>
-    <item
         android:id="@+id/action_settings"
         android:icon="@android:drawable/ic_menu_manage"
         android:title="Réglages"
