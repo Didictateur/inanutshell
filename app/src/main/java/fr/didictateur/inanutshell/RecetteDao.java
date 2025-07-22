@@ -25,4 +25,20 @@ public interface RecetteDao {
 
 	@Query("SELECT * FROM Recette")
 	List<Recette> getAllRecettes();
+
+	// Méthodes de recherche
+	@Query("SELECT * FROM Recette WHERE nom LIKE :query ORDER BY nom ASC")
+	List<Recette> searchByName(String query);
+
+	@Query("SELECT * FROM Recette WHERE ingredients LIKE :query ORDER BY nom ASC")
+	List<Recette> searchByIngredients(String query);
+
+	@Query("SELECT * FROM Recette WHERE nom LIKE :query OR ingredients LIKE :query OR instructions LIKE :query ORDER BY nom ASC")
+	List<Recette> searchAll(String query);
+
+	@Query("SELECT * FROM Recette ORDER BY id DESC LIMIT :limit")
+	List<Recette> getRecentRecipes(int limit);
+
+	@Query("SELECT * FROM Recette")
+	List<Recette> getAllRecipes();
 }

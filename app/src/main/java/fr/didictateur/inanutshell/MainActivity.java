@@ -140,6 +140,12 @@ public class MainActivity extends BaseActivity {
         };
         prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
+        // Bouton de recherche
+        findViewById(R.id.searchButton).setOnClickListener(v -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+        });
+
         // + button
         FloatingActionButton fab = findViewById(R.id.addRecipeButton);
         fab.setOnClickListener(v -> {
