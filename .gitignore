@@ -48,6 +48,29 @@ captures/
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
 
+# Eclipse project files
+.project
+.classpath
+.settings/
+.metadata/
+
+# Generated APK signing reports and resources
+resources.ap_
+*.ap_
+
+# Compiled object files and libraries
+obj/
+libs/armeabi/
+libs/armeabi-v7a/
+libs/arm64-v8a/
+libs/x86/
+libs/x86_64/
+libs/mips/
+libs/mips64/
+
+# External JARs (should be managed by Gradle)
+libs/*.jar
+
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
 #*.jks
