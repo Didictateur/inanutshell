@@ -26,9 +26,9 @@ public class ViewRecetteActivity extends BaseActivity {
 		((TextView)findViewById(R.id.textTempsPrep)).setText(tempsPrep);
 
 		Markwon markdown = Markwon.create(this);
-		markdown.setMarkdown((TextView)findViewById(R.id.textIngredients), ingredients);
-		markdown.setMarkdown((TextView)findViewById(R.id.textPreparation), preparation);
-		markdown.setMarkdown((TextView)findViewById(R.id.textNotes), notes);
+		markdown.setMarkdown((TextView)findViewById(R.id.textIngredients), ingredients != null ? ingredients : "");
+		markdown.setMarkdown((TextView)findViewById(R.id.textPreparation), preparation != null ? preparation : "");
+		markdown.setMarkdown((TextView)findViewById(R.id.textNotes), notes != null ? notes : "");
 
 		int statusBarColor = getStatusBarColor();
 

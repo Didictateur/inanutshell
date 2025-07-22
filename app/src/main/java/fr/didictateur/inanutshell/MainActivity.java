@@ -292,21 +292,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentFolderId != null) {
-            new Thread(() -> {
-                Folder current = db.folderDao().getFolderById(currentFolderId);
-                runOnUiThread(() -> {
-                    if (current != null) {
-                        currentFolderId = current.getParentId();
-                        showFolder(currentFolderId);
-                    } else {
-                        super.onBackPressed();
-                    }
-                });
-            }).start();
-        } else {
-            super.onBackPressed();
+        // Déléguer la gestion du retour arrière au fragment actif
+        if (viewPager.getCurrentItem() == 0) {
+            // Fragment Recettes - vérifier s'il peut gérer le retour arrière
+            RecipesFragment recipesFragment = (RecipesFragment) pagerAdapter.getFragment(0);
+            if (recipesFragment != null && recipesFragment.onBackPressed()) {
+                // Le fragment a géré le retour arrière
+                return;
+            }
         }
+        // Sinon, comportement par défaut (fermer l'app)
+        super.onBackPressed();
     }
 
 		public void showMoveRecetteDialog(Recette recette) {
