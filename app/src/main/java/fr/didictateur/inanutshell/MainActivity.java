@@ -197,6 +197,20 @@ public class MainActivity extends BaseActivity {
             List<Folder> folders = db.folderDao().getFoldersByParent(folderId);
             List<Recette> recettes = db.recetteDao().getRecettesByParent(folderId);
 
+            // Tri alphabétique des dossiers
+            folders.sort((f1, f2) -> {
+                String nom1 = f1.name != null ? f1.name : "";
+                String nom2 = f2.name != null ? f2.name : "";
+                return nom1.compareToIgnoreCase(nom2);
+            });
+
+            // Tri alphabétique des recettes
+            recettes.sort((r1, r2) -> {
+                String titre1 = r1.titre != null ? r1.titre : "";
+                String titre2 = r2.titre != null ? r2.titre : "";
+                return titre1.compareToIgnoreCase(titre2);
+            });
+
             runOnUiThread(() -> {
                 items.clear();
                 items.addAll(folders);

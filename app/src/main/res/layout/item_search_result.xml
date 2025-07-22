@@ -72,7 +72,7 @@
                 android:orientation="horizontal"
                 android:layout_marginTop="4dp">
 
-                <!-- Temps de cuisson -->
+                <!-- Temps de cuisson (masqué) -->
                 <TextView
                     android:id="@+id/cookingTime"
                     android:layout_width="wrap_content"
@@ -82,7 +82,8 @@
                     android:textColor="#E67E22"
                     android:background="@drawable/bg_tag_rounded"
                     android:padding="4dp"
-                    android:layout_marginEnd="6dp" />
+                    android:layout_marginEnd="6dp"
+                    android:visibility="gone" />
 
                 <!-- Tag végétarien (si applicable) -->
                 <TextView

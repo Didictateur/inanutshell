@@ -49,7 +49,6 @@
 
 		<activity
 			android:name=".SearchActivity"
-			android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
 			android:parentActivityName=".MainActivity"/>
 
 	</application>

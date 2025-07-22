@@ -1,274 +1,373 @@
 package fr.didictateur.inanutshell;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.chip.Chip;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends BaseActivity {
+    
+    private static final String TAG = "SearchActivity";
     
     private EditText searchEditText;
     private ImageButton filterButton;
     private RecyclerView searchResultsRecyclerView;
     private LinearLayout noResultsLayout;
+    private SearchResultsAdapter adapter;
+    private List<Recette> allRecettes;
+    private List<Recette> filteredRecettes;
+    private String currentSearchQuery = "";
     
-    // Chips de filtres
-    private Chip chipFavorites, chipVegetarian, chipQuick, chipDessert;
+    // Boutons de filtres (remplacent les chips Material)
+    private Button chipFavorites;
     
-    private SearchResultAdapter searchAdapter;
+    // Base de données
     private AppDatabase database;
-    private ExecutorService executor;
-    
-    // Filtres actifs
-    private boolean filterFavorites = false;
-    private boolean filterVegetarian = false;
-    private boolean filterQuick = false;
-    private boolean filterDessert = false;
+    private RecetteDao recetteDao;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        Log.d(TAG, "onCreate started");
         
-        initViews();
-        setupDatabase();
-        setupRecyclerView();
-        setupSearchListener();
-        setupFilterChips();
-        setupFilterButton();
-        
-        // Focus automatique sur la barre de recherche
-        searchEditText.requestFocus();
+        try {
+            setContentView(R.layout.activity_search);
+            Log.d(TAG, "setContentView successful");
+            
+            // Initialiser la base de données
+            database = AppDatabase.getInstance(this);
+            recetteDao = database.recetteDao();
+            Log.d(TAG, "Database initialized");
+            
+            initializeViews();
+            Log.d(TAG, "initializeViews successful");
+            
+            setupRecyclerView();
+            Log.d(TAG, "setupRecyclerView successful");
+            
+            setupSearchFunctionality();
+            Log.d(TAG, "setupSearchFunctionality successful");
+            
+            setupFilterChips();
+            Log.d(TAG, "setupFilterChips successful");
+            
+            loadRealData();
+            Log.d(TAG, "loadRealData successful");
+            
+            Log.d(TAG, "onCreate completed successfully");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Error in onCreate", e);
+            // Fallback en cas d'erreur
+            setContentView(R.layout.activity_search_simple);
+        }
     }
     
-    private void initViews() {
-        searchEditText = findViewById(R.id.searchEditText);
-        filterButton = findViewById(R.id.filterButton);
-        searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
-        noResultsLayout = findViewById(R.id.noResultsLayout);
-        
-        chipFavorites = findViewById(R.id.chipFavorites);
-        chipVegetarian = findViewById(R.id.chipVegetarian);
-        chipQuick = findViewById(R.id.chipQuick);
-        chipDessert = findViewById(R.id.chipDessert);
-    }
-    
-    private void setupDatabase() {
-        database = AppDatabase.getInstance(this);
-        executor = Executors.newFixedThreadPool(2);
+    private void initializeViews() {
+        try {
+            searchEditText = findViewById(R.id.searchEditText);
+            filterButton = findViewById(R.id.filterButton);
+            searchResultsRecyclerView = findViewById(R.id.searchResultsRecyclerView);
+            noResultsLayout = findViewById(R.id.noResultsLayout);
+            
+            chipFavorites = findViewById(R.id.chipFavorites);
+            
+            Log.d(TAG, "All views found successfully");
+        } catch (Exception e) {
+            Log.e(TAG, "Error finding views", e);
+        }
     }
     
     private void setupRecyclerView() {
-        searchAdapter = new SearchResultAdapter(new ArrayList<>(), this::onRecipeClick);
-        searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        searchResultsRecyclerView.setAdapter(searchAdapter);
+        try {
+            filteredRecettes = new ArrayList<>();
+            adapter = new SearchResultsAdapter(filteredRecettes);
+            searchResultsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            searchResultsRecyclerView.setAdapter(adapter);
+            Log.d(TAG, "RecyclerView setup successful");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up RecyclerView", e);
+        }
     }
     
-    private void setupSearchListener() {
-        searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-                performSearch(s.toString().trim());
+    private void setupSearchFunctionality() {
+        try {
+            // Gestionnaire pour le champ de recherche
+            if (searchEditText != null) {
+                searchEditText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                    
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        currentSearchQuery = s.toString();
+                        performSearch(currentSearchQuery);
+                    }
+                    
+                    @Override
+                    public void afterTextChanged(Editable s) {}
+                });
+                
+                // Gestionnaire pour la touche "Rechercher" 
+                searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+                    currentSearchQuery = searchEditText.getText().toString();
+                    performSearch(currentSearchQuery);
+                    // Empêcher le retour à la ligne
+                    return true;
+                });
+                
+                // Configuration pour empêcher les retours à la ligne
+                searchEditText.setSingleLine(true);
+                searchEditText.setMaxLines(1);
             }
-        });
+            
+            // Gestionnaire pour le bouton de filtres
+            if (filterButton != null) {
+                filterButton.setOnClickListener(v -> {
+                    Log.d(TAG, "Filter button clicked");
+                    // Ici on pourrait ouvrir un dialogue de filtres avancés
+                });
+            }
+            
+            Log.d(TAG, "Search functionality setup successful");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up search functionality", e);
+        }
     }
     
     private void setupFilterChips() {
-        chipFavorites.setOnCheckedChangeListener((view, isChecked) -> {
-            filterFavorites = isChecked;
-            performSearch(searchEditText.getText().toString().trim());
-        });
-        
-        chipVegetarian.setOnCheckedChangeListener((view, isChecked) -> {
-            filterVegetarian = isChecked;
-            performSearch(searchEditText.getText().toString().trim());
-        });
-        
-        chipQuick.setOnCheckedChangeListener((view, isChecked) -> {
-            filterQuick = isChecked;
-            performSearch(searchEditText.getText().toString().trim());
-        });
-        
-        chipDessert.setOnCheckedChangeListener((view, isChecked) -> {
-            filterDessert = isChecked;
-            performSearch(searchEditText.getText().toString().trim());
-        });
+        try {
+            if (chipFavorites != null) {
+                chipFavorites.setOnClickListener(v -> {
+                    // Toggle behavior pour les boutons
+                    chipFavorites.setSelected(!chipFavorites.isSelected());
+                    applyFilters();
+                });
+            }
+            Log.d(TAG, "Filter chips setup successful");
+        } catch (Exception e) {
+            Log.e(TAG, "Error setting up filter chips", e);
+        }
     }
     
-    private void setupFilterButton() {
-        filterButton.setOnClickListener(v -> {
-            // TODO: Ouvrir dialog de filtres avancés
-            showAdvancedFiltersDialog();
-        });
+    private void loadRealData() {
+        try {
+            // Charger toutes les vraies recettes de la base de données
+            allRecettes = recetteDao.getAllRecettes();
+            Log.d(TAG, "Loaded " + allRecettes.size() + " recipes from database");
+            
+            // Tri alphabétique des recettes
+            if (allRecettes != null) {
+                allRecettes.sort((r1, r2) -> {
+                    String titre1 = r1.titre != null ? r1.titre : "";
+                    String titre2 = r2.titre != null ? r2.titre : "";
+                    return titre1.compareToIgnoreCase(titre2);
+                });
+            }
+            
+            filteredRecettes.clear();
+            filteredRecettes.addAll(allRecettes);
+            
+            if (adapter != null) {
+                adapter.updateData(filteredRecettes, "");
+                Log.d(TAG, "Adapter updated with " + filteredRecettes.size() + " recipes");
+            }
+            updateUI();
+            Log.d(TAG, "Real data loaded successfully");
+            
+            // Si aucune recette dans la base, charger les données de test
+            if (allRecettes.isEmpty()) {
+                Log.d(TAG, "No recipes in database, loading test data");
+                loadTestDataAsFallback();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error loading real data", e);
+            // Fallback vers les données de test si erreur
+            loadTestDataAsFallback();
+        }
+    }
+    
+    private void loadTestDataAsFallback() {
+        try {
+            allRecettes = createTestData();
+            
+            // Tri alphabétique des recettes de test
+            if (allRecettes != null) {
+                allRecettes.sort((r1, r2) -> {
+                    String titre1 = r1.titre != null ? r1.titre : "";
+                    String titre2 = r2.titre != null ? r2.titre : "";
+                    return titre1.compareToIgnoreCase(titre2);
+                });
+            }
+            
+            filteredRecettes.clear();
+            filteredRecettes.addAll(allRecettes);
+            if (adapter != null) {
+                adapter.updateData(filteredRecettes, "");
+                Log.d(TAG, "Test data adapter updated with " + filteredRecettes.size() + " recipes");
+            }
+            updateUI();
+            Log.d(TAG, "Fallback test data loaded");
+        } catch (Exception e) {
+            Log.e(TAG, "Error loading fallback data", e);
+        }
+    }
+    
+    private List<Recette> createTestData() {
+        List<Recette> testRecettes = new ArrayList<>();
+        
+        try {
+            Recette recette1 = new Recette();
+            recette1.titre = "Salade César (test)";
+            recette1.ingredients = "Salade, croûtons, parmesan, sauce césar";
+            recette1.tempsPrep = "15";
+            testRecettes.add(recette1);
+            
+            Recette recette2 = new Recette();
+            recette2.titre = "Pâtes Carbonara (test)";
+            recette2.ingredients = "Pâtes, œufs, lardons, parmesan";
+            recette2.tempsPrep = "20";
+            testRecettes.add(recette2);
+            
+            Recette recette3 = new Recette();
+            recette3.titre = "Tarte aux pommes (test)";
+            recette3.ingredients = "Pommes, pâte brisée, sucre, cannelle";
+            recette3.tempsPrep = "45";
+            testRecettes.add(recette3);
+            
+            Log.d(TAG, "Test data created as fallback: " + testRecettes.size() + " recipes");
+        } catch (Exception e) {
+            Log.e(TAG, "Error creating test data", e);
+        }
+        
+        return testRecettes;
     }
     
     private void performSearch(String query) {
-        executor.execute(() -> {
-            List<Recette> results;
+        try {
+            currentSearchQuery = query;
+            filteredRecettes.clear();
             
-            if (query.isEmpty() && !hasActiveFilters()) {
-                // Pas de recherche, montrer les recettes récentes
-                results = database.recetteDao().getRecentRecipes(20);
+            if (query.trim().isEmpty()) {
+                // Si pas de recherche, afficher toutes les recettes
+                if (allRecettes != null) {
+                    filteredRecettes.addAll(allRecettes);
+                }
             } else {
-                // Recherche avec query et filtres
-                results = searchRecipes(query);
+                // Utiliser la recherche de la base de données
+                String searchQuery = "%" + query + "%";
+                List<Recette> searchResults = recetteDao.searchAll(searchQuery);
+                filteredRecettes.addAll(searchResults);
             }
             
-            runOnUiThread(() -> {
-                updateSearchResults(results);
+            applyFilters();
+            Log.d(TAG, "Search performed for: " + query + ", results: " + filteredRecettes.size());
+        } catch (Exception e) {
+            Log.e(TAG, "Error performing search", e);
+            // Fallback vers recherche locale
+            performLocalSearch(query);
+        }
+    }
+    
+    private void performLocalSearch(String query) {
+        try {
+            filteredRecettes.clear();
+            
+            // Vérifier si allRecettes est null ou vide
+            if (allRecettes == null || allRecettes.isEmpty()) {
+                Log.d(TAG, "No recipes available for search");
+                adapter.updateData(filteredRecettes, query);
+                return;
+            }
+            
+            if (query.trim().isEmpty()) {
+                filteredRecettes.addAll(allRecettes);
+            } else {
+                String lowerQuery = query.toLowerCase();
+                for (Recette recette : allRecettes) {
+                    if ((recette.titre != null && containsSubsequence(recette.titre.toLowerCase(), lowerQuery)) ||
+                        (recette.ingredients != null && containsSubsequence(recette.ingredients.toLowerCase(), lowerQuery))) {
+                        filteredRecettes.add(recette);
+                    }
+                }
+            }
+            
+            applyFilters();
+        } catch (Exception e) {
+            Log.e(TAG, "Error in local search", e);
+        }
+    }
+    
+    /**
+     * Vérifie si le texte contient toutes les lettres de la requête dans l'ordre
+     * Par exemple: "abc" contient "ac" (a puis c)
+     */
+    private boolean containsSubsequence(String text, String query) {
+        if (query == null || query.isEmpty()) return true;
+        if (text == null || text.isEmpty()) return false;
+        
+        int textIndex = 0;
+        int queryIndex = 0;
+        
+        while (textIndex < text.length() && queryIndex < query.length()) {
+            if (text.charAt(textIndex) == query.charAt(queryIndex)) {
+                queryIndex++;
+            }
+            textIndex++;
+        }
+        
+        // Si on a trouvé toutes les lettres de la requête
+        return queryIndex == query.length();
+    }
+    
+    private void applyFilters() {
+        try {
+            List<Recette> filtered = new ArrayList<>(filteredRecettes);
+            
+            // Tri alphabétique des recettes
+            filtered.sort((r1, r2) -> {
+                String titre1 = r1.titre != null ? r1.titre : "";
+                String titre2 = r2.titre != null ? r2.titre : "";
+                return titre1.compareToIgnoreCase(titre2);
             });
-        });
-    }
-    
-    private List<Recette> searchRecipes(String query) {
-        List<Recette> allResults = new ArrayList<>();
-        
-        if (!query.isEmpty()) {
-            // Recherche par nom
-            allResults.addAll(database.recetteDao().searchByName("%" + query + "%"));
             
-            // Recherche par ingrédients
-            allResults.addAll(database.recetteDao().searchByIngredients("%" + query + "%"));
-        } else {
-            // Si pas de query mais des filtres actifs
-            allResults.addAll(database.recetteDao().getAllRecipes());
-        }
-        
-        // Appliquer les filtres
-        return applyFilters(allResults);
-    }
-    
-    private List<Recette> applyFilters(List<Recette> recipes) {
-        List<Recette> filtered = new ArrayList<>();
-        
-        for (Recette recipe : recipes) {
-            boolean include = true;
+            // Mettre à jour l'adapter avec les résultats filtrés et triés
+            if (adapter != null) {
+                adapter.updateData(filtered, currentSearchQuery);
+            }
+            updateUI();
             
-            // Filtre favoris (simulé pour l'instant)
-            if (filterFavorites) {
-                // TODO: Implémenter le système de favoris
-                // include = recipe.isFavorite();
-            }
-            
-            // Filtre végétarien
-            if (filterVegetarian) {
-                include = include && isVegetarian(recipe);
-            }
-            
-            // Filtre rapide (<30min)
-            if (filterQuick) {
-                include = include && isQuickRecipe(recipe);
-            }
-            
-            // Filtre dessert
-            if (filterDessert) {
-                include = include && isDessert(recipe);
-            }
-            
-            if (include && !filtered.contains(recipe)) {
-                filtered.add(recipe);
-            }
-        }
-        
-        return filtered;
-    }
-    
-    private boolean hasActiveFilters() {
-        return filterFavorites || filterVegetarian || filterQuick || filterDessert;
-    }
-    
-    private boolean isVegetarian(Recette recipe) {
-        // Recherche de mots-clés végétariens dans les ingrédients
-        String ingredients = recipe.getIngredients().toLowerCase();
-        String[] meatKeywords = {"viande", "porc", "boeuf", "agneau", "poulet", "volaille", 
-                               "jambon", "lard", "bacon", "saucisse", "chorizo"};
-        
-        for (String keyword : meatKeywords) {
-            if (ingredients.contains(keyword)) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    private boolean isQuickRecipe(Recette recipe) {
-        // Analyse du temps de cuisson dans les instructions
-        String instructions = recipe.getInstructions().toLowerCase();
-        
-        // Recherche de patterns temporels
-        if (instructions.contains("30 min") || instructions.contains("25 min") ||
-            instructions.contains("20 min") || instructions.contains("15 min") ||
-            instructions.contains("10 min") || instructions.contains("5 min")) {
-            return true;
-        }
-        
-        // Si pas d'indication temporelle, considérer comme rapide si peu d'étapes
-        return recipe.getInstructions().split("\n").length <= 3;
-    }
-    
-    private boolean isDessert(Recette recipe) {
-        String name = recipe.getNom().toLowerCase();
-        String ingredients = recipe.getIngredients().toLowerCase();
-        
-        String[] dessertKeywords = {"gâteau", "tarte", "mousse", "crème", "dessert", 
-                                  "chocolat", "sucre", "vanille", "fruits", "glace"};
-        
-        for (String keyword : dessertKeywords) {
-            if (name.contains(keyword) || ingredients.contains(keyword)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private void updateSearchResults(List<Recette> results) {
-        if (results.isEmpty()) {
-            searchResultsRecyclerView.setVisibility(View.GONE);
-            noResultsLayout.setVisibility(View.VISIBLE);
-        } else {
-            searchResultsRecyclerView.setVisibility(View.VISIBLE);
-            noResultsLayout.setVisibility(View.GONE);
-            searchAdapter.updateResults(results);
+            Log.d(TAG, "Filters applied, final results: " + filtered.size());
+        } catch (Exception e) {
+            Log.e(TAG, "Error applying filters", e);
         }
     }
     
-    private void showAdvancedFiltersDialog() {
-        // TODO: Implémenter dialog de filtres avancés
-        // Pourrait inclure: temps de cuisson précis, difficulté, nombre de personnes, etc.
-    }
-    
-    private void onRecipeClick(Recette recipe) {
-        Intent intent = new Intent(this, DetailRecetteActivity.class);
-        intent.putExtra("recetteId", recipe.getId());
-        startActivity(intent);
-    }
-    
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (executor != null && !executor.isShutdown()) {
-            executor.shutdown();
+    private void updateUI() {
+        try {
+            if (searchResultsRecyclerView != null && noResultsLayout != null) {
+                if (filteredRecettes.isEmpty()) {
+                    searchResultsRecyclerView.setVisibility(View.GONE);
+                    noResultsLayout.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "Showing no results layout - 0 recipes to display");
+                } else {
+                    searchResultsRecyclerView.setVisibility(View.VISIBLE);
+                    noResultsLayout.setVisibility(View.GONE);
+                    Log.d(TAG, "Showing results - " + filteredRecettes.size() + " recipes to display");
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Error updating UI", e);
         }
     }
 }

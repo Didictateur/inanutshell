@@ -67,37 +67,17 @@
             android:orientation="horizontal"
             android:paddingVertical="8dp">
 
-            <com.google.android.material.chip.Chip
+            <Button
                 android:id="@+id/chipFavorites"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="32dp"
                 android:text="Favoris"
                 android:layout_marginEnd="8dp"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipVegetarian"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Végétarien"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipQuick"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Rapide (<30min)"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipDessert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dessert"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.MaterialComponents.Chip.Filter" />
+                android:textSize="12sp"
+                android:minHeight="32dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                style="?android:attr/borderlessButtonStyle" />
 
         </LinearLayout>
 
