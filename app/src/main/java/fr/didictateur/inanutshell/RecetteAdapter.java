@@ -3,6 +3,8 @@ package fr.didictateur.inanutshell;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import java.io.File;
 import java.util.ArrayList;
 
 public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -101,7 +104,14 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             RecetteViewHolder rHolder = (RecetteViewHolder) holder;
 
             rHolder.title.setText(recette.getTitle());
-            rHolder.image.setImageResource(recette.imageResId);
+            
+            // Utiliser l'image personnalisée si elle existe, sinon l'icône par défaut
+            if (recette.photoPath != null && !recette.photoPath.isEmpty() && new File(recette.photoPath).exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(recette.photoPath);
+                rHolder.image.setImageBitmap(bitmap);
+            } else {
+                rHolder.image.setImageResource(recette.imageResId);
+            }
 
             rHolder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(

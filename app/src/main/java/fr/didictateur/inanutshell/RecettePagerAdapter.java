@@ -15,7 +15,8 @@ public class RecettePagerAdapter extends FragmentStateAdapter {
             new ApercuFragment(),
             new IngredientsFragment(),
             new PreparationFragment(),
-            new NotesFragment()
+            new NotesFragment(),
+            new PhotoFragment()
         };
     }
 
@@ -35,6 +36,7 @@ public class RecettePagerAdapter extends FragmentStateAdapter {
     public IngredientsFragment getIngredientsFragment() { return (IngredientsFragment) fragments[1]; }
     public PreparationFragment getPreparationFragment() { return (PreparationFragment) fragments[2]; }
     public NotesFragment getNotesFragment() { return (NotesFragment) fragments[3]; }
+    public PhotoFragment getPhotoFragment() { return (PhotoFragment) fragments[4]; }
     
     // Pour stocker et appliquer les données de recette
     public void setRecetteData(Recette recette) {
@@ -66,6 +68,11 @@ public class RecettePagerAdapter extends FragmentStateAdapter {
                 NotesFragment notesFragment = getNotesFragment();
                 if (notesFragment != null && notesFragment.getView() != null) {
                     notesFragment.setNotes(recetteData.notes);
+                }
+                
+                PhotoFragment photoFragment = getPhotoFragment();
+                if (photoFragment != null && photoFragment.getView() != null) {
+                    photoFragment.setPhotoPath(recetteData.photoPath);
                 }
             } catch (Exception e) {
                 // Les fragments ne sont pas encore prêts, on réessaiera plus tard

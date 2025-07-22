@@ -3,6 +3,12 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
   <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="36"/>
+  
+  <!-- Permissions pour la caméra et le stockage -->
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  
 	<application
 		android:label="In a nutshell"
 		android:icon="@drawable/appicon"

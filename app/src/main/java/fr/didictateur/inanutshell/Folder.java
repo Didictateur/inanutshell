@@ -7,17 +7,17 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Folder implements Item {
 	@PrimaryKey(autoGenerate = true)
-	public int id;
+	public long id;
 	public String name;
-	public Integer parentId;
+	public Long parentId;
 
 	public Folder() {}
 
 	@Ignore
 	public Folder(
-			int id,
+			long id,
 			String name,
-			Integer parentId
+			Long parentId
 		) {
 		this.id = id;
 		this.name = name;
@@ -30,7 +30,7 @@ public class Folder implements Item {
 	@Override
 	public String getTitle() { return name; }
 
-	public int getId() { return id; }
-	public Integer getParentId() { return parentId; }
+	public long getId() { return id; }
+	public Long getParentId() { return parentId; }
 
 }

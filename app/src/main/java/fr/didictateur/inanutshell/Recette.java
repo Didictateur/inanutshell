@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity
 public class Recette implements Item {
 		@PrimaryKey(autoGenerate = true)
-		public int id;
+		public long id;
     public String titre;
     public String taille;
     public String tempsPrep;
@@ -15,14 +15,15 @@ public class Recette implements Item {
     public String preparation;
     public String notes;
     public int imageResId;
+    public String photoPath; // Nouveau champ pour le chemin de la photo
 
-		public Integer parentId;
+		public Long parentId;
 
 		public Recette() {}
 
 		@Ignore
     public Recette(
-				int id,
+				long id,
 				String titre,
 				String taille,
 				String tempsPrep,
@@ -30,7 +31,8 @@ public class Recette implements Item {
 				String preparation,
 				String notes,
 				int imageResId,
-				Integer parentId
+				String photoPath,
+				Long parentId
 			) {
 				this.id = id;
         this.titre = titre;
@@ -40,6 +42,7 @@ public class Recette implements Item {
         this.preparation = preparation;
         this.notes = notes;
         this.imageResId = imageResId;
+        this.photoPath = photoPath;
 				this.parentId = parentId;
     }
 
@@ -49,8 +52,8 @@ public class Recette implements Item {
 		@Override
 		public String getTitle() { return titre; }
 
-		public Integer getParentId() { return parentId; }
+		public Long getParentId() { return parentId; }
 
-		public int getId() { return id; }
+		public long getId() { return id; }
 }
 

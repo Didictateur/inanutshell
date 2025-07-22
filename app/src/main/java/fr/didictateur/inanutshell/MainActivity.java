@@ -25,7 +25,7 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     private ArrayList<Item> items;
     private RecetteAdapter adapter;
-    private Integer currentFolderId = null;
+    private Long currentFolderId = null;
 
     private SharedPreferences.OnSharedPreferenceChangeListener preferenceChangeListener;
     private AppDatabase db;
@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity {
                         data.getStringExtra("preparation"),
                         data.getStringExtra("notes"),
                         R.drawable.appicon,
+                        data.getStringExtra("photoPath"),
                         currentFolderId
                     );
                     new Thread(() -> {
@@ -61,7 +62,7 @@ public class MainActivity extends BaseActivity {
             result -> {
                 if (result.getResultCode() == RESULT_OK && result.getData() != null) {
                     Intent data = result.getData();
-                    int recetteId = data.getIntExtra("recetteId", 0);
+                    long recetteId = data.getLongExtra("recetteId", 0);
                     if (recetteId > 0) {
                         // Mise à jour d'une recette existante
                         new Thread(() -> {
@@ -73,6 +74,7 @@ public class MainActivity extends BaseActivity {
                                 recette.ingredients = data.getStringExtra("ingredients");
                                 recette.preparation = data.getStringExtra("preparation");
                                 recette.notes = data.getStringExtra("notes");
+                                recette.photoPath = data.getStringExtra("photoPath");
                                 db.recetteDao().update(recette);
                                 runOnUiThread(() -> showFolder(currentFolderId));
                             }
@@ -185,7 +187,7 @@ public class MainActivity extends BaseActivity {
     }
 
     // Affiche le contenu du dossier courant (dossiers + recettes)
-    public void showFolder(Integer folderId) {
+    public void showFolder(Long folderId) {
         new Thread(() -> {
             List<Folder> folders = db.folderDao().getFoldersByParent(folderId);
             List<Recette> recettes = db.recetteDao().getRecettesByParent(folderId);

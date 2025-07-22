@@ -6,7 +6,7 @@ import java.util.List;
 @Dao
 public interface FolderDao {
 	@Query("SELECT * FROM Folder WHERE parentId IS :parentId")
-	List<Folder> getFoldersByParent(Integer parentId);
+	List<Folder> getFoldersByParent(Long parentId);
 
 	@Insert
 	long insert(Folder folder);
@@ -15,7 +15,7 @@ public interface FolderDao {
 	void delete(Folder folder);
 
 	@Query("SELECT * FROM Folder WHERE id = :id")
-	Folder getFolderById(int id);
+	Folder getFolderById(long id);
 
 	@Query("SELECT * FROM Folder")
 	List<Folder> getAllFolders();

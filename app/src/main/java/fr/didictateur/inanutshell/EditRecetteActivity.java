@@ -12,7 +12,7 @@ public class EditRecetteActivity extends BaseActivity {
 
     private RecettePagerAdapter adapter;
     private AppDatabase db;
-    private int recetteId = 0; // 0 = nouvelle recette, > 0 = modification
+    private long recetteId = 0; // 0 = nouvelle recette, > 0 = modification
     private ViewPager2 viewPager;
 
     @Override
@@ -27,7 +27,7 @@ public class EditRecetteActivity extends BaseActivity {
         ).build();
 
         // Récupération de l'ID de la recette si on modifie une recette existante
-        recetteId = getIntent().getIntExtra("recetteId", 0);
+        recetteId = getIntent().getLongExtra("recetteId", 0);
 
         TabLayout tabLayout = findViewById(R.id.tabLayout);
         ViewPager2 viewPager = findViewById(R.id.viewPager);
@@ -39,7 +39,7 @@ public class EditRecetteActivity extends BaseActivity {
         viewPager.setAdapter(adapter);
 
         // Forcer la création de tous les fragments
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
 
         new TabLayoutMediator(tabLayout, viewPager,
             (tab, position) -> {
@@ -48,6 +48,7 @@ public class EditRecetteActivity extends BaseActivity {
                     case 1: tab.setText("Ingrédients"); break;
                     case 2: tab.setText("Préparation"); break;
                     case 3: tab.setText("Notes"); break;
+                    case 4: tab.setText("Photo"); break;
                 }
             }
         ).attach();
@@ -65,6 +66,7 @@ public class EditRecetteActivity extends BaseActivity {
             String ingredients = adapter.getIngredientsFragment().getIngredients();
             String preparation = adapter.getPreparationFragment().getPreparation();
             String notes = adapter.getNotesFragment().getNotes();
+            String photoPath = adapter.getPhotoFragment().getPhotoPath();
 
             Intent resultIntent = new Intent();
             resultIntent.putExtra("recetteId", recetteId);
@@ -74,6 +76,7 @@ public class EditRecetteActivity extends BaseActivity {
             resultIntent.putExtra("ingredients", ingredients);
             resultIntent.putExtra("preparation", preparation);
             resultIntent.putExtra("notes", notes);
+            resultIntent.putExtra("photoPath", photoPath);
             setResult(RESULT_OK, resultIntent);
             finish();
         });
@@ -111,6 +114,9 @@ public class EditRecetteActivity extends BaseActivity {
                 }
                 if (adapter.getNotesFragment() != null) {
                     adapter.getNotesFragment().setNotes(recette.notes);
+                }
+                if (adapter.getPhotoFragment() != null) {
+                    adapter.getPhotoFragment().setPhotoPath(recette.photoPath);
                 }
             } catch (Exception e) {
                 // Si ça échoue, réessayer dans 100ms
