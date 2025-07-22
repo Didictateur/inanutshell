@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -26,6 +28,61 @@ public class RecipesFragment extends Fragment {
     private RecetteAdapter adapter;
     private TextView emptyStateText;
     private LinearLayout emptyStateLayout;
+    
+    // ActivityResultLaunchers pour gérer les retours d'EditRecetteActivity
+    private final ActivityResultLauncher<Intent> addRecipeLauncher =
+        registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == requireActivity().RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    Recette recette = new Recette(
+                        0,
+                        data.getStringExtra("titre"),
+                        data.getStringExtra("taille"),
+                        data.getStringExtra("tempsPrep"),
+                        data.getStringExtra("ingredients"),
+                        data.getStringExtra("preparation"),
+                        data.getStringExtra("notes"),
+                        R.drawable.appicon,
+                        data.getStringExtra("photoPath"),
+                        0L // currentFolderId - à adapter selon vos besoins
+                    );
+                    new Thread(() -> {
+                        db.recetteDao().insert(recette);
+                        requireActivity().runOnUiThread(this::loadRecettes);
+                    }).start();
+                }
+            }
+        );
+
+    private final ActivityResultLauncher<Intent> editRecipeLauncher =
+        registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == requireActivity().RESULT_OK && result.getData() != null) {
+                    Intent data = result.getData();
+                    long recetteId = data.getLongExtra("recetteId", 0);
+                    if (recetteId > 0) {
+                        // Mise à jour d'une recette existante
+                        new Thread(() -> {
+                            Recette recette = db.recetteDao().getRecetteById(recetteId);
+                            if (recette != null) {
+                                recette.titre = data.getStringExtra("titre");
+                                recette.taille = data.getStringExtra("taille");
+                                recette.tempsPrep = data.getStringExtra("tempsPrep");
+                                recette.ingredients = data.getStringExtra("ingredients");
+                                recette.preparation = data.getStringExtra("preparation");
+                                recette.notes = data.getStringExtra("notes");
+                                recette.photoPath = data.getStringExtra("photoPath");
+                                db.recetteDao().update(recette);
+                                requireActivity().runOnUiThread(this::loadRecettes);
+                            }
+                        }).start();
+                    }
+                }
+            }
+        );
     
     @Nullable
     @Override
@@ -57,11 +114,20 @@ public class RecipesFragment extends Fragment {
         adapter = new RecetteAdapter(new ArrayList<>(), requireContext());
         recyclerView.setAdapter(adapter);
         
+        // Configuration du listener pour les actions sur les recettes (clic long)
+        adapter.setOnRecetteActionListener((anchor, recette) -> {
+            // Pour l'instant, on lance directement l'édition. 
+            // Plus tard on peut ajouter un menu contextuel
+            Intent intent = new Intent(requireContext(), EditRecetteActivity.class);
+            intent.putExtra("recetteId", recette.id);
+            editRecipeLauncher.launch(intent);
+        });
+        
         // FAB pour ajouter une recette
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             Intent intent = new Intent(requireContext(), EditRecetteActivity.class);
-            startActivity(intent);
+            addRecipeLauncher.launch(intent);
         });
     }
     
