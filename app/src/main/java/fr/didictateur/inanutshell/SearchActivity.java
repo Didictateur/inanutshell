@@ -69,7 +69,7 @@ public class SearchActivity extends BaseActivity {
         } catch (Exception e) {
             Log.e(TAG, "Error in onCreate", e);
             // Fallback en cas d'erreur
-            setContentView(R.layout.activity_search_simple);
+            setContentView(R.layout.activity_search);
         }
     }
     
