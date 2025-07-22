@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:layout_marginVertical="4dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:gravity="center_vertical">
+
+    <!-- Type de repas -->
+    <TextView
+        android:id="@+id/mealTypeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Petit déjeuner"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary" />
+
+    <!-- Nom de la recette -->
+    <TextView
+        android:id="@+id/recipeNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Nom de la recette"
+        android:textSize="14sp"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone" />
+
+    <!-- Bouton Ajouter -->
+    <Button
+        android:id="@+id/addMealButton"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:text="Ajouter"
+        android:textSize="12sp"
+        android:minHeight="36dp"
+        android:textColor="@color/primary_color"
+        android:background="@drawable/bg_tag_rounded"
+        android:paddingHorizontal="12dp"
+        style="?android:attr/borderlessButtonStyle" />
+        android:paddingHorizontal="12dp"
+        style="?android:attr/borderlessButtonStyle"
+        android:textColor="@color/primary_color"
+        android:visibility="visible" />
+
+</LinearLayout>

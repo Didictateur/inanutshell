@@ -301,6 +301,9 @@ public class MainActivity extends BaseActivity {
         if (item.getItemId() == R.id.action_settings) {
             settingsLauncher.launch(new Intent(this, SettingsActivity.class));
             return true;
+        } else if (item.getItemId() == R.id.action_meal_planner) {
+            startActivity(new Intent(this, MealPlannerActivity.class));
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

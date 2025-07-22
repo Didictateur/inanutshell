@@ -6,8 +6,8 @@ import androidx.room.RoomDatabase;
 import android.content.Context;
 
 @Database(
-    entities = {Recette.class, Folder.class},
-    version = 2,  // Incrémenté pour prendre en compte le nouveau champ photoPath
+    entities = {Recette.class, Folder.class, MealPlan.class},
+    version = 3,  // Incrémenté pour prendre en compte le planificateur de repas
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -15,6 +15,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract RecetteDao recetteDao();
     public abstract FolderDao folderDao();
+    public abstract MealPlanDao mealPlanDao();
 
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {

@@ -39,17 +39,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Recette recipe = recipes.get(position);
         
-        holder.recipeName.setText(recipe.getNom());
+        holder.recipeName.setText(recipe.titre);
         
         // Afficher un aperçu des ingrédients (premiers mots)
-        String ingredients = recipe.getIngredients();
-        if (ingredients.length() > 50) {
+        String ingredients = recipe.ingredients;
+        if (ingredients != null && ingredients.length() > 50) {
             ingredients = ingredients.substring(0, 47) + "...";
         }
-        holder.recipeIngredients.setText(ingredients);
+        holder.recipeIngredients.setText(ingredients != null ? ingredients : "");
         
         // Extraire et afficher le temps de cuisson
-        String cookingTime = extractCookingTime(recipe.getInstructions());
+        String cookingTime = extractCookingTime(recipe.preparation);
         if (!cookingTime.isEmpty()) {
             holder.cookingTime.setText(cookingTime);
             holder.cookingTime.setVisibility(View.VISIBLE);
@@ -65,7 +65,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
         
         // Charger l'image si disponible
-        if (recipe.getCheminImage() != null && !recipe.getCheminImage().isEmpty()) {
+        if (recipe.photoPath != null && !recipe.photoPath.isEmpty()) {
             // TODO: Charger l'image avec Glide ou Picasso
             // Pour l'instant, utiliser l'icône par défaut
             holder.recipeImage.setImageResource(R.drawable.appicon);
@@ -110,7 +110,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
     
     private boolean isVegetarian(Recette recipe) {
-        String ingredients = recipe.getIngredients().toLowerCase();
+        String ingredients = recipe.ingredients != null ? recipe.ingredients.toLowerCase() : "";
         String[] meatKeywords = {"viande", "porc", "boeuf", "agneau", "poulet", "volaille", 
                                "jambon", "lard", "bacon", "saucisse", "chorizo"};
         

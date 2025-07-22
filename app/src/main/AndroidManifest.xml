@@ -48,6 +48,10 @@
 			android:name=".SettingsActivity"/>
 
 		<activity
+			android:name=".MealPlannerActivity"
+			android:parentActivityName=".MainActivity"/>
+
+		<activity
 			android:name=".SearchActivity"
 			android:parentActivityName=".MainActivity"/>
 
