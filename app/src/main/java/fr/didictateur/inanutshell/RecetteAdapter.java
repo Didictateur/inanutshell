@@ -1,5 +1,7 @@
 package fr.didictateur.inanutshell;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +36,9 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Handler handler = new Handler(Looper.getMainLooper());
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final long ROTATION_INTERVAL = 3000; // 3 secondes
+    
+    // Gestionnaire de favoris
+    private FavoriteManager favoriteManager;
 
     // Listener pour le clic sur un dossier
     public interface OnFolderClickListener {
@@ -52,8 +58,9 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.onRecetteActionListener = listener;
     }
 
-    public RecetteAdapter(ArrayList<Item> items) {
+    public RecetteAdapter(ArrayList<Item> items, Context context) {
         this.items = items;
+        this.favoriteManager = new FavoriteManager(context);
     }
     
     // Méthode pour obtenir les images des recettes d'un dossier
@@ -82,6 +89,49 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
         
         return imagesPaths;
+    }
+    
+    // Méthode pour compter les recettes dans un dossier
+    private void updateRecipeCount(Context context, FolderViewHolder holder, Folder folder) {
+        executor.execute(() -> {
+            try {
+                AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
+                        AppDatabase.class, "database-name").build();
+                
+                List<Recette> recettes = db.recetteDao().getRecettesByParent(folder.getId());
+                int count = recettes.size();
+                
+                // Retour sur le thread principal pour mettre à jour l'UI
+                handler.post(() -> {
+                    String countText = count == 0 ? "Aucune recette" : 
+                                     count == 1 ? "1 recette" : 
+                                     count + " recettes";
+                    holder.recipeCount.setText(countText);
+                });
+                
+            } catch (Exception e) {
+                Log.e("RecetteAdapter", "Erreur lors du comptage des recettes", e);
+                handler.post(() -> holder.recipeCount.setText("? recettes"));
+            }
+        });
+    }
+    
+    // Méthode pour ajouter une animation de pulse
+    private void addPulseAnimation(View view) {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.05f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.05f, 1f);
+        
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY);
+        animatorSet.setDuration(200);
+        animatorSet.setInterpolator(new DecelerateInterpolator());
+        
+        view.setOnTouchListener((v, event) -> {
+            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
+                animatorSet.start();
+            }
+            return false;
+        });
     }
     
     // Méthode pour démarrer la rotation des images d'un dossier
@@ -241,26 +291,26 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String colorName = prefs.getString("toolbar_color", "toolbar_bg_brown");
             
-            // Choisir le cercle coloré approprié selon le thème
+            // Choisir le cercle coloré approprié selon le thème (nouveaux gradients)
             int backgroundResId;
             switch (colorName) {
                 case "toolbar_bg_orange":
-                    backgroundResId = R.drawable.bg_folder_circle_orange;
+                    backgroundResId = R.drawable.bg_folder_gradient_orange;
                     break;
                 case "toolbar_bg_blue":
-                    backgroundResId = R.drawable.bg_folder_circle_blue;
+                    backgroundResId = R.drawable.bg_folder_gradient_blue;
                     break;
                 case "toolbar_bg_green":
-                    backgroundResId = R.drawable.bg_folder_circle_green;
+                    backgroundResId = R.drawable.bg_folder_gradient_green;
                     break;
                 case "toolbar_bg_red":
-                    backgroundResId = R.drawable.bg_folder_circle_red;
+                    backgroundResId = R.drawable.bg_folder_gradient_red;
                     break;
                 case "toolbar_bg_purple":
-                    backgroundResId = R.drawable.bg_folder_circle_purple;
+                    backgroundResId = R.drawable.bg_folder_gradient_purple;
                     break;
                 default:
-                    backgroundResId = R.drawable.bg_folder_circle_brown;
+                    backgroundResId = R.drawable.bg_folder_gradient_brown;
                     break;
             }
             
@@ -270,11 +320,35 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             // Charger une image simple - juste le logo pour l'instant
             fHolder.folderIcon.setImageResource(R.drawable.appicon);
             fHolder.folderIcon.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            
+            // Mettre à jour le compteur de recettes
+            updateRecipeCount(context, fHolder, folder);
+            
+            // Gérer l'affichage du favori
+            if (favoriteManager.isFolderFavorite(folder.getId())) {
+                fHolder.favoriteIcon.setVisibility(View.VISIBLE);
+            } else {
+                fHolder.favoriteIcon.setVisibility(View.GONE);
+            }
+            
+            // Ajouter l'animation de pulse
+            addPulseAnimation(fHolder.itemView);
 
             fHolder.itemView.setOnClickListener(v -> {
                 if (onFolderClickListener != null) {
                     onFolderClickListener.onFolderClick(folder);
                 }
+            });
+            
+            // Gestion du clic long pour les favoris
+            fHolder.itemView.setOnLongClickListener(v -> {
+                favoriteManager.toggleFolderFavorite(folder.getId());
+                if (favoriteManager.isFolderFavorite(folder.getId())) {
+                    fHolder.favoriteIcon.setVisibility(View.VISIBLE);
+                } else {
+                    fHolder.favoriteIcon.setVisibility(View.GONE);
+                }
+                return true;
             });
 
         } else if (holder instanceof RecetteViewHolder) {
@@ -324,6 +398,8 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     static class FolderViewHolder extends RecyclerView.ViewHolder {
         ImageView folderIcon;
         TextView folderName;
+        TextView recipeCount;
+        ImageView favoriteIcon;
         View folderBackground;
         Handler rotationHandler;
         Runnable rotationRunnable;
@@ -332,6 +408,8 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             folderIcon = itemView.findViewById(R.id.folderIcon);
             folderName = itemView.findViewById(R.id.folderName);
+            recipeCount = itemView.findViewById(R.id.recipeCount);
+            favoriteIcon = itemView.findViewById(R.id.favoriteIcon);
             folderBackground = itemView.findViewById(R.id.folderBackground);
             rotationHandler = new Handler(Looper.getMainLooper());
         }

@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity {
 
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
         items = new ArrayList<>();
-        adapter = new RecetteAdapter(items);
+        adapter = new RecetteAdapter(items, this);
 
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -199,6 +199,10 @@ public class MainActivity extends BaseActivity {
                 adapter.notifyDataSetChanged();
             });
         }).start();
+    }
+
+    public Long getCurrentFolderId() {
+        return currentFolderId;
     }
 
     private void showRecetteContextMenu(View anchor, Recette recette) {

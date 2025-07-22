@@ -28,5 +28,31 @@
 		<color name="statusbar_bg_purple">#9C88C7</color>
 
     <color name="toolbar_title">#FFFFFF</color>
+    
+    <!-- Couleurs primaires pour les thèmes -->
+    <color name="primary_red">#E57373</color>
+    <color name="primary_blue">#5B9BD5</color>
+    <color name="primary_green">#6BB26A</color>
+    <color name="primary_purple">#B39DDB</color>
+    <color name="primary_orange">#E0904C</color>
+    
+    <!-- Couleurs secondaires -->
+    <color name="secondary_red">#FFCDD2</color>
+    <color name="secondary_blue">#BBDEFB</color>
+    <color name="secondary_green">#C8E6C9</color>
+    <color name="secondary_purple">#E1BEE7</color>
+    <color name="secondary_orange">#FFE0B2</color>
+    
+    <!-- Thème clair -->
+    <color name="background_light">#FFFFFF</color>
+    <color name="background_light_high_contrast">#FFFFFF</color>
+    <color name="text_light">#212121</color>
+    <color name="text_light_high_contrast">#000000</color>
+    
+    <!-- Thème sombre -->
+    <color name="background_dark">#121212</color>
+    <color name="background_dark_high_contrast">#000000</color>
+    <color name="text_dark">#FFFFFF</color>
+    <color name="text_dark_high_contrast">#FFFFFF</color>
 </resources>
 
