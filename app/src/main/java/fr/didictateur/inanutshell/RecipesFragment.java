@@ -54,11 +54,7 @@ public class RecipesFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         
         // Configuration de l'adapter
-        adapter = new RecetteAdapter(new ArrayList<>(), recette -> {
-            Intent intent = new Intent(requireContext(), ViewRecetteActivity.class);
-            intent.putExtra("recette_id", recette.id);
-            startActivity(intent);
-        });
+        adapter = new RecetteAdapter(new ArrayList<>(), requireContext());
         recyclerView.setAdapter(adapter);
         
         // FAB pour ajouter une recette
@@ -71,34 +67,22 @@ public class RecipesFragment extends Fragment {
     
     private void loadRecettes() {
         new Thread(() -> {
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(requireContext());
-            String sortOrder = prefs.getString("sort_order", "titre");
+            List<Recette> recettes = db.recetteDao().getAllRecettes();
             
-            List<Recette> recettes;
-            switch (sortOrder) {
-                case "titre":
-                    recettes = db.recetteDao().getAllRecettesSortedByTitle();
-                    break;
-                case "date_creation":
-                    recettes = db.recetteDao().getAllRecettesSortedByDateCreation();
-                    break;
-                case "temps_prep":
-                    recettes = db.recetteDao().getAllRecettesSortedByPrepTime();
-                    break;
-                default:
-                    recettes = db.recetteDao().getAllRecettes();
-                    break;
+            // Conversion en liste d'Items pour l'adapter
+            List<Item> items = new ArrayList<>();
+            for (Recette recette : recettes) {
+                items.add(recette);
             }
             
             requireActivity().runOnUiThread(() -> {
-                adapter.updateRecettes(recettes);
-                
-                if (recettes.isEmpty()) {
-                    recyclerView.setVisibility(View.GONE);
+                adapter.updateItems(items);
+                if (items.isEmpty()) {
                     emptyStateLayout.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                 } else {
-                    recyclerView.setVisibility(View.VISIBLE);
                     emptyStateLayout.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
                 }
             });
         }).start();

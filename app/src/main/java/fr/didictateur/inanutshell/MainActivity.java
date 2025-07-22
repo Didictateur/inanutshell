@@ -20,6 +20,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -47,7 +48,8 @@ public class MainActivity extends BaseActivity {
     private AppDatabase db;
     
     // Vues pour les onglets
-    private View recipesContainer, plannerContainer;
+    private ViewPager2 viewPager;
+    private MainPagerAdapter pagerAdapter;
     private LinearLayout tabRecipes, tabPlanner;
     private ImageView iconRecipes, iconPlanner;
     private TextView labelRecipes, labelPlanner;
@@ -60,7 +62,6 @@ public class MainActivity extends BaseActivity {
     private Calendar currentWeekStart;
     private SimpleDateFormat dateFormat;
     private SimpleDateFormat displayDateFormat;
-    private FloatingActionButton fabAddMeal;
 
     private final ActivityResultLauncher<Intent> addRecipeLauncher =
         registerForActivityResult(
@@ -144,7 +145,7 @@ public class MainActivity extends BaseActivity {
         setupBottomNavigation();
         
         // Initialiser avec l'onglet des recettes
-        showRecipesTab();
+        viewPager.setCurrentItem(0, false);
 
         findViewById(R.id.searchButton).setOnClickListener(v -> {
             Intent intent = new Intent(this, SearchActivity.class);
@@ -166,42 +167,7 @@ public class MainActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        // + button
-        FloatingActionButton fab = findViewById(R.id.addRecipeButton);
-        fab.setOnClickListener(v -> {
-            PopupMenu popup = new PopupMenu(this, v);
-            popup.getMenuInflater().inflate(R.menu.fab_menu, popup.getMenu());
-            popup.setOnMenuItemClickListener(item -> {
-                int id = item.getItemId();
-                // new recipe
-                if (id == R.id.action_new_recipe) {
-                    Intent intent = new Intent(this, EditRecetteActivity.class);
-                    addRecipeLauncher.launch(intent);
-                    return true;
-                // new folder
-                } else if (id == R.id.action_new_folder) {
-                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-                    builder.setTitle("Nom du dossier");
-                    final EditText input = new EditText(this);
-                    builder.setView(input);
-                    builder.setPositiveButton("Créer", (dialog, which) -> {
-                        String folderName = input.getText().toString();
-                        Folder folder = new Folder(0, folderName, currentFolderId);
-                        new Thread(() -> {
-                            db.folderDao().insert(folder);
-                            runOnUiThread(() -> showFolder(currentFolderId));
-                        }).start();
-                    });
-                    builder.setNegativeButton("Annuler", (dialog, which) -> dialog.cancel());
-                    builder.show();
-                    return true;
-                }
-                return false;
-            });
-            popup.show();
-        });
-
-        showFolder(currentFolderId);
+        // Le FAB est maintenant géré dans les fragments
     }
 
     @Override
@@ -411,46 +377,10 @@ public class MainActivity extends BaseActivity {
     }
     
     private void setupViews() {
-        recipesContainer = findViewById(R.id.recipesContainer);
-        plannerContainer = findViewById(R.id.plannerContainer);
+        // Configuration du ViewPager2 et des fragments
+        viewPager = findViewById(R.id.viewPager);
         
-        // Configuration du RecyclerView des recettes
-        RecyclerView recyclerView = findViewById(R.id.recipesRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
-        items = new ArrayList<>();
-        adapter = new RecetteAdapter(items, this);
-
-        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return adapter.getItemViewType(position) == RecetteAdapter.TYPE_FOLDER ? 1 : 3;
-            }
-        });
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-
-        adapter.setOnFolderClickListener(folder -> {
-            currentFolderId = folder.getId();
-            showFolder(currentFolderId);
-        });
-
-        adapter.setOnFolderActionListener((anchor, folder) ->
-            showFolderContextMenu(anchor, folder));
-
-        adapter.setOnRecetteActionListener((anchor, recette) ->
-            showRecetteContextMenu(anchor, recette));
-            
-        FloatingActionButton addRecipeButton = findViewById(R.id.addRecipeButton);
-        addRecipeButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, EditRecetteActivity.class);
-            if (currentFolderId != null) {
-                intent.putExtra("folder_id", currentFolderId);
-            }
-            addRecipeLauncher.launch(intent);
-        });
-        
-        showFolder(null);
+        // Les vues spécifiques sont maintenant gérées dans leurs fragments respectifs
     }
     
     private void setupBottomNavigation() {
@@ -461,30 +391,27 @@ public class MainActivity extends BaseActivity {
         labelRecipes = findViewById(R.id.labelRecipes);
         labelPlanner = findViewById(R.id.labelPlanner);
         
-        tabRecipes.setOnClickListener(v -> showRecipesTab());
-        tabPlanner.setOnClickListener(v -> showPlannerTab());
+        // Configuration du ViewPager2
+        pagerAdapter = new MainPagerAdapter(this);
+        viewPager.setAdapter(pagerAdapter);
+        
+        // Listener pour synchroniser les tabs avec le ViewPager2
+        viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                currentTab = position;
+                updateTabSelection();
+            }
+        });
+        
+        tabRecipes.setOnClickListener(v -> viewPager.setCurrentItem(0, true));
+        tabPlanner.setOnClickListener(v -> viewPager.setCurrentItem(1, true));
         
         updateTabColors();
     }
     
-    private void showRecipesTab() {
-        currentTab = 0;
-        recipesContainer.setVisibility(View.VISIBLE);
-        plannerContainer.setVisibility(View.GONE);
-        updateTabSelection();
-    }
-    
-    private void showPlannerTab() {
-        currentTab = 1;
-        recipesContainer.setVisibility(View.GONE);
-        plannerContainer.setVisibility(View.VISIBLE);
-        updateTabSelection();
-        
-        // Initialiser le planificateur si nécessaire
-        if (currentWeekText == null) {
-            initializePlanner();
-        }
-    }
+    // Supprimer les anciennes méthodes showRecipesTab et showPlannerTab
+    // car maintenant on utilise ViewPager2 pour la navigation
 
     private void initializePlanner() {
         // Initialiser les vues du planificateur
@@ -492,7 +419,6 @@ public class MainActivity extends BaseActivity {
         weekRecyclerView = findViewById(R.id.week_recycler_view);
         Button previousWeekBtn = findViewById(R.id.previous_week_btn);
         Button nextWeekBtn = findViewById(R.id.next_week_btn);
-        fabAddMeal = findViewById(R.id.fab_add_meal);
         
         // Initialiser les formats de date
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -524,9 +450,6 @@ public class MainActivity extends BaseActivity {
             currentWeekStart.add(Calendar.WEEK_OF_YEAR, 1);
             loadCurrentWeek();
         });
-        
-        // FAB pour ajouter rapidement un repas
-        fabAddMeal.setOnClickListener(v -> showQuickAddMealDialog());
         
         // Affichage initial
         loadCurrentWeek();
@@ -601,13 +524,6 @@ public class MainActivity extends BaseActivity {
     
     private void onAddMealClick(String date, String mealType) {
         showSelectRecipeDialog(date, mealType);
-    }
-    
-    private void showQuickAddMealDialog() {
-        // Dialog pour ajouter rapidement un repas pour aujourd'hui
-        Calendar today = Calendar.getInstance();
-        String todayDate = dateFormat.format(today.getTime());
-        showSelectRecipeDialog(todayDate, "lunch");
     }
     
     private void showSelectRecipeDialog(String date, String mealType) {

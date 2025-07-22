@@ -29,47 +29,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
-    <!-- Contenu principal avec FrameLayout pour superposer les vues -->
-    <FrameLayout
+    <!-- Contenu principal avec ViewPager2 pour le swipe -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <!-- Vue des recettes -->
-        <RelativeLayout
-            android:id="@+id/recipesContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#F8F9FA">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recipesRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="8dp"
-                android:clipToPadding="false" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/addRecipeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
-                android:src="@android:drawable/ic_input_add"
-                android:contentDescription="Ajouter une recette" />
-
-        </RelativeLayout>
-
-        <!-- Vue du planificateur -->
-        <include
-            android:id="@+id/plannerContainer"
-            layout="@layout/fragment_meal_planner"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
-
-    </FrameLayout>
+        android:layout_weight="1" />
 
     <!-- Barre de navigation en bas -->
     <LinearLayout
@@ -95,7 +60,7 @@
                 android:id="@+id/iconRecipes"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/appicon"
+                android:src="@android:drawable/ic_menu_sort_by_size"
                 android:scaleType="centerInside" />
 
             <TextView

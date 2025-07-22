@@ -68,6 +68,13 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         this.items = items;
     }
     
+    // Méthode pour mettre à jour les items
+    public void updateItems(List<Item> newItems) {
+        this.items.clear();
+        this.items.addAll(newItems);
+        notifyDataSetChanged();
+    }
+    
     // Méthode pour obtenir les images des recettes d'un dossier
     private List<String> getFolderRecipeImages(Context context, Folder folder) {
         List<String> imagesPaths = new ArrayList<>();
