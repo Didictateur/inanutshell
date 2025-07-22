@@ -9,9 +9,13 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapter.DayViewHolder> {
     
@@ -62,15 +66,28 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
     class DayViewHolder extends RecyclerView.ViewHolder {
         private TextView dayNameText;
         private LinearLayout mealsContainer;
+        private CardView cardView;
         
         public DayViewHolder(@NonNull View itemView) {
             super(itemView);
             dayNameText = itemView.findViewById(R.id.dayNameText);
             mealsContainer = itemView.findViewById(R.id.mealsContainer);
+            cardView = (CardView) itemView;
         }
         
         public void bind(DayMealPlan dayMealPlan) {
             dayNameText.setText(dayMealPlan.getDayName());
+            
+            // Vérifier si c'est le jour actuel
+            boolean isToday = isToday(dayMealPlan.getDate());
+            
+            if (isToday) {
+                // Mettre en évidence le jour actuel
+                highlightCurrentDay();
+            } else {
+                // Style normal
+                resetDayStyle();
+            }
             
             // Appliquer la couleur du thème au nom du jour
             applyThemeColorToText(dayNameText);
@@ -81,6 +98,56 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
             addMealView("Petit déjeuner", dayMealPlan.getBreakfast(), dayMealPlan.getDate(), "breakfast");
             addMealView("Déjeuner", dayMealPlan.getLunch(), dayMealPlan.getDate(), "lunch");
             addMealView("Dîner", dayMealPlan.getDinner(), dayMealPlan.getDate(), "dinner");
+        }
+        
+        private boolean isToday(String date) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                Calendar today = Calendar.getInstance();
+                String todayString = dateFormat.format(today.getTime());
+                return todayString.equals(date);
+            } catch (Exception e) {
+                return false;
+            }
+        }
+        
+        private void highlightCurrentDay() {
+            // Appliquer un style spécial pour le jour actuel
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(itemView.getContext());
+            String colorName = prefs.getString("toolbar_color", "toolbar_bg_brown");
+            
+            int colorResId = itemView.getContext().getResources()
+                    .getIdentifier(colorName, "color", itemView.getContext().getPackageName());
+            
+            if (colorResId != 0) {
+                int themeColor = ContextCompat.getColor(itemView.getContext(), colorResId);
+                
+                // Changer la couleur de fond de la carte pour le jour actuel
+                int lightThemeColor = adjustAlpha(themeColor, 0.1f);
+                cardView.setCardBackgroundColor(lightThemeColor);
+                cardView.setCardElevation(8f);
+                
+                // Nom du jour en gras et plus grand
+                dayNameText.setTypeface(dayNameText.getTypeface(), android.graphics.Typeface.BOLD);
+                dayNameText.setTextSize(20f);
+                dayNameText.setTextColor(themeColor);
+            }
+        }
+        
+        private void resetDayStyle() {
+            // Style normal
+            cardView.setCardBackgroundColor(ContextCompat.getColor(itemView.getContext(), android.R.color.white));
+            cardView.setCardElevation(4f);
+            dayNameText.setTextSize(18f);
+            dayNameText.setTypeface(dayNameText.getTypeface(), android.graphics.Typeface.NORMAL);
+        }
+        
+        private int adjustAlpha(int color, float factor) {
+            int alpha = Math.round(255 * factor);
+            int red = android.graphics.Color.red(color);
+            int green = android.graphics.Color.green(color);
+            int blue = android.graphics.Color.blue(color);
+            return android.graphics.Color.argb(alpha, red, green, blue);
         }
         
         private void addMealView(String mealLabel, MealPlanWithRecette mealPlan, String date, String mealType) {
