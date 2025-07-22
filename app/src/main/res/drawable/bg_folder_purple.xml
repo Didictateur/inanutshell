@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" 
+    android:shape="rectangle">
+    
+    <!-- Gradient violet doux -->
+    <gradient
+        android:startColor="#F3E5F5"
+        android:endColor="#E1BEE7"
+        android:angle="135" />
+    
+    <corners android:radius="20dp" />
+    
+    <stroke
+        android:width="1dp"
+        android:color="#CE93D8" />
+        
+</shape>
