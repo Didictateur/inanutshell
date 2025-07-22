@@ -29,9 +29,12 @@ public class SettingsActivity extends BaseActivity {
     }
 
     private void saveColor(String colorName) {
+        android.util.Log.d("SettingsActivity", "saveColor called with: " + colorName);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.edit().putString("toolbar_color", colorName).apply();
-				setResult(RESULT_OK);
+        boolean success = prefs.edit().putString("toolbar_color", colorName).commit();
+        android.util.Log.d("SettingsActivity", "Color saved: " + success + ", value: " + colorName);
+        setResult(RESULT_OK);
+        android.util.Log.d("SettingsActivity", "Result set to RESULT_OK, finishing activity");
         finish();
     }
 }

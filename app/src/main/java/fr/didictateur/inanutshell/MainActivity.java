@@ -121,8 +121,12 @@ public class MainActivity extends BaseActivity {
         registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+                android.util.Log.d("MainActivity", "Settings result received: " + result.getResultCode());
                 if (result.getResultCode() == RESULT_OK) {
+                    android.util.Log.d("MainActivity", "Result OK, calling updateToolbarColor()");
                     updateToolbarColor();
+                } else {
+                    android.util.Log.d("MainActivity", "Result not OK: " + result.getResultCode());
                 }
             }
         );
@@ -155,7 +159,6 @@ public class MainActivity extends BaseActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         preferenceChangeListener = (sharedPreferences, key) -> {
             if ("toolbar_color".equals(key)) {
-                adapter.notifyDataSetChanged();
                 updateTabColors();
             }
         };
@@ -255,24 +258,49 @@ public class MainActivity extends BaseActivity {
     private void updateToolbarColor() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String colorName = prefs.getString("toolbar_color", "toolbar_bg_brown");
+        android.util.Log.d("MainActivity", "updateToolbarColor: colorName = " + colorName);
+        
         int colorResId = getResources().getIdentifier(colorName, "color", getPackageName());
+        android.util.Log.d("MainActivity", "updateToolbarColor: colorResId = " + colorResId);
+        
+        if (colorResId == 0) {
+            android.util.Log.e("MainActivity", "Color resource not found: " + colorName);
+            return;
+        }
+        
         int toolbarColor = ContextCompat.getColor(this, colorResId);
+        android.util.Log.d("MainActivity", "updateToolbarColor: toolbarColor = " + Integer.toHexString(toolbarColor));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(toolbarColor);
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(toolbarColor);
+            android.util.Log.d("MainActivity", "Toolbar color updated successfully");
+        } else {
+            android.util.Log.e("MainActivity", "Toolbar not found!");
+        }
 
         String statusBarColorName = colorName.replace("toolbar_", "statusbar_");
+        android.util.Log.d("MainActivity", "updateToolbarColor: statusBarColorName = " + statusBarColorName);
+        
         int statusBarColorResId = getResources().getIdentifier(
             statusBarColorName,
             "color",
             getPackageName()
         );
+        android.util.Log.d("MainActivity", "updateToolbarColor: statusBarColorResId = " + statusBarColorResId);
+        
+        if (statusBarColorResId == 0) {
+            android.util.Log.e("MainActivity", "Status bar color resource not found: " + statusBarColorName);
+            return;
+        }
+        
         int statusBarColor = ContextCompat.getColor(this, statusBarColorResId);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(statusBarColor);
+            android.util.Log.d("MainActivity", "Status bar color updated successfully");
         }
     }
 

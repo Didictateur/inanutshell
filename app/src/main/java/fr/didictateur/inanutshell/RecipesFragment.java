@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -36,6 +37,13 @@ public class RecipesFragment extends Fragment {
     private LinearLayout emptyStateLayout;
     private LinearLayout foldersSection;
     private LinearLayout recipesSection;
+    
+    // Éléments de navigation
+    private LinearLayout navigationBar;
+    private TextView breadcrumbText;
+    private TextView currentFolderTitle;
+    private ImageView backButton;
+    
     private Long currentFolderId = null; // null = dossier racine
     private List<Item> folderItems; // Liste des dossiers
     private List<Item> recipeItems; // Liste des recettes
@@ -114,12 +122,22 @@ public class RecipesFragment extends Fragment {
     }
     
     private void setupViews(View view) {
+        // Éléments de navigation
+        navigationBar = view.findViewById(R.id.navigationBar);
+        breadcrumbText = view.findViewById(R.id.breadcrumbText);
+        currentFolderTitle = view.findViewById(R.id.currentFolderTitle);
+        backButton = view.findViewById(R.id.backButton);
+        
+        // RecyclerViews et autres éléments existants
         foldersRecyclerView = view.findViewById(R.id.foldersRecyclerView);
         recipesRecyclerView = view.findViewById(R.id.recipesRecyclerView);
         emptyStateText = view.findViewById(R.id.emptyStateText);
         emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
         foldersSection = view.findViewById(R.id.foldersSection);
         recipesSection = view.findViewById(R.id.recipesSection);
+        
+        // Configuration du bouton retour
+        backButton.setOnClickListener(v -> onBackPressed());
         
         // Configuration des RecyclerViews
         // Pour les dossiers - grille de 3 colonnes
@@ -204,6 +222,9 @@ public class RecipesFragment extends Fragment {
                 } else {
                     emptyStateLayout.setVisibility(View.GONE);
                 }
+                
+                // Mettre à jour l'interface de navigation
+                updateNavigationUI();
             });
         }).start();
     }
@@ -211,6 +232,64 @@ public class RecipesFragment extends Fragment {
     private void navigateToFolder(Folder folder) {
         currentFolderId = folder.id;
         loadFolderContent();
+    }
+    
+    private void updateNavigationUI() {
+        if (currentFolderId == null) {
+            // À la racine - masquer la barre de navigation
+            navigationBar.setVisibility(View.GONE);
+        } else {
+            // Dans un dossier - afficher la barre de navigation
+            navigationBar.setVisibility(View.VISIBLE);
+            
+            // Construire le breadcrumb
+            new Thread(() -> {
+                String breadcrumb = buildBreadcrumb(currentFolderId);
+                String currentFolderName = getCurrentFolderName(currentFolderId);
+                
+                requireActivity().runOnUiThread(() -> {
+                    breadcrumbText.setText(breadcrumb);
+                    currentFolderTitle.setText(currentFolderName);
+                });
+            }).start();
+        }
+    }
+    
+    private String buildBreadcrumb(Long folderId) {
+        if (folderId == null) return "Accueil";
+        
+        StringBuilder breadcrumb = new StringBuilder();
+        Long currentId = folderId;
+        
+        // Construire le chemin en remontant la hiérarchie
+        while (currentId != null) {
+            Folder folder = db.folderDao().getFolderById(currentId);
+            if (folder != null) {
+                if (breadcrumb.length() > 0) {
+                    breadcrumb.insert(0, " > ");
+                }
+                breadcrumb.insert(0, folder.name);
+                currentId = folder.getParentId();
+            } else {
+                break;
+            }
+        }
+        
+        // Ajouter "Accueil" au début
+        if (breadcrumb.length() > 0) {
+            breadcrumb.insert(0, "Accueil > ");
+        } else {
+            breadcrumb.append("Accueil");
+        }
+        
+        return breadcrumb.toString();
+    }
+    
+    private String getCurrentFolderName(Long folderId) {
+        if (folderId == null) return "Mes Recettes";
+        
+        Folder folder = db.folderDao().getFolderById(folderId);
+        return folder != null ? folder.name : "Dossier";
     }
     
     private void showAddMenu(View anchor) {
@@ -264,11 +343,12 @@ public class RecipesFragment extends Fragment {
     }
     
     public boolean onBackPressed() {
-        // Gérer la navigation arrière dans les dossiers
+        // Vérifier si nous sommes dans un dossier et permettre la navigation vers le parent
         if (currentFolderId != null) {
+            // Exécuter la navigation en arrière-plan
             new Thread(() -> {
                 Folder current = db.folderDao().getFolderById(currentFolderId);
-                requireActivity().runOnUiThread(() -> {
+                getActivity().runOnUiThread(() -> {
                     if (current != null && current.getParentId() != null) {
                         // Naviguer vers le dossier parent
                         currentFolderId = current.getParentId();
@@ -278,6 +358,7 @@ public class RecipesFragment extends Fragment {
                         currentFolderId = null;
                         loadFolderContent();
                     }
+                    updateNavigationUI();
                 });
             }).start();
             return true; // Indique que nous avons géré le retour arrière

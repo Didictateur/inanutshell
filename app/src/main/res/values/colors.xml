@@ -1,31 +1,31 @@
 <resources>
-		<!-- Couleurs par défaut (brun doux) -->
-		<color name="toolbar_bg">#A0724A</color>
-		<color name="statusbar_bg">#7A5635</color>
+    <!-- Couleurs par défaut (brun doux) -->
+    <color name="toolbar_bg">#A0724A</color>
+    <color name="statusbar_bg">#7A5635</color>
 
     <!-- Orange doux et chaleureux -->
     <color name="toolbar_bg_orange">#E0904C</color>
-		<color name="statusbar_bg_orange">#CC7A3A</color>
+    <color name="statusbar_bg_orange">#CC7A3A</color>
 
-		<!-- Bleu océan apaisant -->
-		<color name="toolbar_bg_blue">#5B9BD5</color>
-		<color name="statusbar_bg_blue">#4A8BC2</color>
+    <!-- Bleu océan apaisant -->
+    <color name="toolbar_bg_blue">#5B9BD5</color>
+    <color name="statusbar_bg_blue">#4A8BC2</color>
 
     <!-- Vert nature et frais -->
     <color name="toolbar_bg_green">#6BB26A</color>
-		<color name="statusbar_bg_green">#5A9E59</color>
+    <color name="statusbar_bg_green">#5A9E59</color>
 
     <!-- Brun terre chaud -->
     <color name="toolbar_bg_brown">#8B6F4B</color>
-		<color name="statusbar_bg_brown">#6B5539</color>
+    <color name="statusbar_bg_brown">#6B5539</color>
 
     <!-- Rouge corail doux -->
     <color name="toolbar_bg_red">#E57373</color>
-		<color name="statusbar_bg_red">#D45C5C</color>
+    <color name="statusbar_bg_red">#D45C5C</color>
 
     <!-- Lavande élégant -->
     <color name="toolbar_bg_purple">#B39DDB</color>
-		<color name="statusbar_bg_purple">#9C88C7</color>
+    <color name="statusbar_bg_purple">#9C88C7</color>
 
     <color name="toolbar_title">#FFFFFF</color>
     

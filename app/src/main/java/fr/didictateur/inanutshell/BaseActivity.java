@@ -19,7 +19,7 @@ public class BaseActivity extends AppCompatActivity {
 
     protected void applyStatusBarColor() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String colorName = prefs.getString("toolbar_color", "toolbar_bg_orange");
+        String colorName = prefs.getString("toolbar_color", "toolbar_bg_brown");
         String statusBarColorName = colorName.replace("toolbar_", "statusbar_");
         int statusBarColorResId = getResources().getIdentifier(statusBarColorName, "color", getPackageName());
         int statusBarColor = ContextCompat.getColor(this, statusBarColorResId);
@@ -31,10 +31,9 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-		@Override
-		protected void onResume() {
-			super.onResume();
-			applyStatusBarColor();
-		}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        applyStatusBarColor();
+    }
 }
-

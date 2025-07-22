@@ -4,10 +4,67 @@
     android:layout_height="match_parent"
     android:background="#F8F9FA">
 
+    <!-- Barre de navigation / Breadcrumb -->
+    <LinearLayout
+        android:id="@+id/navigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="2dp"
+        android:visibility="gone">
+
+        <!-- Breadcrumb -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <TextView
+                android:id="@+id/breadcrumbText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Accueil > Dossier"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:singleLine="true"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
+        <!-- Titre du dossier actuel -->
+        <TextView
+            android:id="@+id/currentFolderTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mes Recettes"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="12dp" />
+
+    </LinearLayout>
+
     <!-- Conteneur principal avec scroll -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/navigationBar"
         android:layout_above="@+id/fab">
 
         <LinearLayout
