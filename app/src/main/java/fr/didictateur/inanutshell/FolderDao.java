@@ -11,6 +11,9 @@ public interface FolderDao {
 	@Insert
 	long insert(Folder folder);
 
+	@Update
+	void update(Folder folder);
+
 	@Delete
 	void delete(Folder folder);
 

@@ -99,11 +99,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        db = androidx.room.Room.databaseBuilder(
-            getApplicationContext(),
-            AppDatabase.class,
-            "recette-db"
-        ).build();
+        db = AppDatabase.getInstance(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -130,8 +126,11 @@ public class MainActivity extends BaseActivity {
             showFolder(currentFolderId);
         });
 
-				adapter.setOnRecetteActionListener((anchor, recette) ->
-						showRecetteContextMenu(anchor, recette));
+        adapter.setOnFolderActionListener((anchor, folder) ->
+            showFolderContextMenu(anchor, folder));
+
+        adapter.setOnRecetteActionListener((anchor, recette) ->
+            showRecetteContextMenu(anchor, recette));
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         preferenceChangeListener = (sharedPreferences, key) -> {
@@ -203,6 +202,25 @@ public class MainActivity extends BaseActivity {
 
     public Long getCurrentFolderId() {
         return currentFolderId;
+    }
+
+    private void showFolderContextMenu(View anchor, Folder folder) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenu().add("Renommer");
+        popup.getMenu().add("Déplacer");
+        popup.getMenu().add("Supprimer");
+        popup.setOnMenuItemClickListener(menuItem -> {
+            String title = menuItem.getTitle().toString();
+            if (title.equals("Renommer")) {
+                showRenameFolderDialog(folder);
+            } else if (title.equals("Déplacer")) {
+                showMoveFolderDialog(folder);
+            } else if (title.equals("Supprimer")) {
+                confirmDeleteFolder(folder);
+            }
+            return true;
+        });
+        popup.show();
     }
 
     private void showRecetteContextMenu(View anchor, Recette recette) {
@@ -301,6 +319,56 @@ public class MainActivity extends BaseActivity {
         		})
         		.setNegativeButton("Annuler", null)
         		.show();
-		}
+	}
+
+	private void showRenameFolderDialog(Folder folder) {
+		EditText editText = new EditText(this);
+		editText.setText(folder.name);
+		
+		new AlertDialog.Builder(this)
+			.setTitle("Renommer le dossier")
+			.setView(editText)
+			.setPositiveButton("Renommer", (dialog, which) -> {
+				String newName = editText.getText().toString().trim();
+				if (!newName.isEmpty()) {
+					new Thread(() -> {
+						folder.name = newName;
+						db.folderDao().update(folder);
+						runOnUiThread(() -> showFolder(currentFolderId));
+					}).start();
+				}
+			})
+			.setNegativeButton("Annuler", null)
+			.show();
+	}
+
+	private void showMoveFolderDialog(Folder folder) {
+		// Pour l'instant, juste un message - on pourrait implémenter une vraie fonctionnalité plus tard
+		new AlertDialog.Builder(this)
+			.setTitle("Déplacer le dossier")
+			.setMessage("Fonctionnalité à implémenter")
+			.setPositiveButton("OK", null)
+			.show();
+	}
+
+	private void confirmDeleteFolder(Folder folder) {
+		new AlertDialog.Builder(this)
+			.setTitle("Supprimer le dossier")
+			.setMessage("Voulez-vous vraiment supprimer ce dossier et tout son contenu ?")
+			.setPositiveButton("Supprimer", (dialog, which) -> {
+				new Thread(() -> {
+					// Supprimer d'abord toutes les recettes du dossier
+					List<Recette> recettes = db.recetteDao().getRecettesByParent(folder.getId());
+					for (Recette recette : recettes) {
+						db.recetteDao().delete(recette);
+					}
+					// Puis supprimer le dossier lui-même
+					db.folderDao().delete(folder);
+					runOnUiThread(() -> showFolder(currentFolderId));
+				}).start();
+			})
+			.setNegativeButton("Annuler", null)
+			.show();
+	}
 }
 

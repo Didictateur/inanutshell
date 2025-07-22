@@ -5,8 +5,11 @@ import java.util.List;
 
 @Dao
 public interface RecetteDao {
-	@Query("SELECT * FROM Recette Where parentId IS :parentId")
+	@Query("SELECT * FROM Recette WHERE (:parentId IS NULL AND parentId IS NULL) OR parentId = :parentId")
 	List<Recette> getRecettesByParent(Long parentId);
+
+	@Query("SELECT * FROM Recette WHERE parentId IS NULL")
+	List<Recette> getRecettesWithoutParent();
 
 	@Insert
 	long insert(Recette recette);

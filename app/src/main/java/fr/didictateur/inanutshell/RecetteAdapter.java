@@ -36,9 +36,6 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Handler handler = new Handler(Looper.getMainLooper());
     private Executor executor = Executors.newSingleThreadExecutor();
     private static final long ROTATION_INTERVAL = 3000; // 3 secondes
-    
-    // Gestionnaire de favoris
-    private FavoriteManager favoriteManager;
 
     // Listener pour le clic sur un dossier
     public interface OnFolderClickListener {
@@ -47,6 +44,15 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private OnFolderClickListener onFolderClickListener;
     public void setOnFolderClickListener(OnFolderClickListener listener) {
         this.onFolderClickListener = listener;
+    }
+
+    // Listener pour les actions sur les dossiers (clic long)
+    public interface OnFolderActionListener {
+        void onFolderAction(View anchor, Folder folder);
+    }
+    private OnFolderActionListener onFolderActionListener;
+    public void setOnFolderActionListener(OnFolderActionListener listener) {
+        this.onFolderActionListener = listener;
     }
 
     // Listener pour le clic long sur une recette
@@ -60,7 +66,6 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public RecetteAdapter(ArrayList<Item> items, Context context) {
         this.items = items;
-        this.favoriteManager = new FavoriteManager(context);
     }
     
     // Méthode pour obtenir les images des recettes d'un dossier
@@ -95,11 +100,12 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private void updateRecipeCount(Context context, FolderViewHolder holder, Folder folder) {
         executor.execute(() -> {
             try {
-                AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
-                        AppDatabase.class, "database-name").build();
+                AppDatabase db = AppDatabase.getInstance(context);
                 
                 List<Recette> recettes = db.recetteDao().getRecettesByParent(folder.getId());
                 int count = recettes.size();
+                
+                Log.d("RecetteAdapter", "Folder '" + folder.name + "' (id:" + folder.getId() + ") contains " + count + " recettes");
                 
                 // Retour sur le thread principal pour mettre à jour l'UI
                 handler.post(() -> {
@@ -116,32 +122,13 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         });
     }
     
-    // Méthode pour ajouter une animation de pulse
-    private void addPulseAnimation(View view) {
-        ObjectAnimator scaleX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 1.05f, 1f);
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 1.05f, 1f);
-        
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(scaleX, scaleY);
-        animatorSet.setDuration(200);
-        animatorSet.setInterpolator(new DecelerateInterpolator());
-        
-        view.setOnTouchListener((v, event) -> {
-            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN) {
-                animatorSet.start();
-            }
-            return false;
-        });
-    }
-    
     // Méthode pour démarrer la rotation des images d'un dossier
     private void startImageRotation(Context context, FolderViewHolder holder, Folder folder) {
         Log.d("RecetteAdapter", "Starting image rotation for folder: " + folder.getTitle());
         
         executor.execute(() -> {
             try {
-                AppDatabase db = Room.databaseBuilder(context.getApplicationContext(),
-                        AppDatabase.class, "database-name").build();
+                AppDatabase db = AppDatabase.getInstance(context);
                 
                 List<Recette> recettes = db.recetteDao().getRecettesByParent(folder.getId());
                 List<String> validImagePaths = new ArrayList<>();
@@ -324,15 +311,8 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             // Mettre à jour le compteur de recettes
             updateRecipeCount(context, fHolder, folder);
             
-            // Gérer l'affichage du favori
-            if (favoriteManager.isFolderFavorite(folder.getId())) {
-                fHolder.favoriteIcon.setVisibility(View.VISIBLE);
-            } else {
-                fHolder.favoriteIcon.setVisibility(View.GONE);
-            }
-            
-            // Ajouter l'animation de pulse
-            addPulseAnimation(fHolder.itemView);
+            // Masquer l'icône de favori (plus utilisée)
+            fHolder.favoriteIcon.setVisibility(View.GONE);
 
             fHolder.itemView.setOnClickListener(v -> {
                 if (onFolderClickListener != null) {
@@ -340,15 +320,13 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
             
-            // Gestion du clic long pour les favoris
+            // Gestion du clic long pour afficher le menu contextuel
             fHolder.itemView.setOnLongClickListener(v -> {
-                favoriteManager.toggleFolderFavorite(folder.getId());
-                if (favoriteManager.isFolderFavorite(folder.getId())) {
-                    fHolder.favoriteIcon.setVisibility(View.VISIBLE);
-                } else {
-                    fHolder.favoriteIcon.setVisibility(View.GONE);
+                if (onFolderActionListener != null) {
+                    onFolderActionListener.onFolderAction(v, folder);
+                    return true;
                 }
-                return true;
+                return false;
             });
 
         } else if (holder instanceof RecetteViewHolder) {
