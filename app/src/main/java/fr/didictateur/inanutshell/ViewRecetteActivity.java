@@ -235,8 +235,12 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
         // IMPORTANT: Toujours partir du texte original pour éviter les erreurs cumulatives
         String result = originalIngredientsText;
         
-        // Pattern simple et efficace pour capturer quantité + unité
-        String pattern = "\\b(\\d+(?:[.,]\\d+)?|\\d+/\\d+)\\s*(g|kg|mg|l|ml|cl|dl|cuillères?|cuill|c\\.|cs|cc|tasses?|t\\.|sachets?|pincées?|œufs?|blancs?|jaunes?)\\b";
+        // Pattern unique et robuste pour capturer TOUS les nombres :
+        // 1. Nombres en début de ligne/après newline (avec ou sans unité) : "12 sachets", "3 pommes", "250 g"
+        // 2. Nombres isolés avec unité explicite : "250 g", "2 cuillères", "12l d'eau"
+        // Le (?=\\s) assure qu'il y a un espace après le nombre pour éviter les faux positifs
+        String pattern = "(?:^|(?<=\\n))\\s*(\\d+(?:[.,]\\d+)?|\\d+/\\d+)(?=\\s)|\\b(\\d+(?:[.,]\\d+)?|\\d+/\\d+)\\s*(g|gr|kg|mg|l|litre|litres|ml|cl|dl|cuillères?|cuillère|cuill|c\\.|cs|cc|càs|càc|tasses?|tasse|t\\.|sachets?|sachet|pincées?|pincée|œufs?|œuf|blancs?|blanc|jaunes?|jaune|portions?|portion|morceaux?|morceau|tranches?|tranche|gousses?|gousse|feuilles?|feuille|brins?|brin|noix|noisettes?|noisette|amandes?|amande)\\b";
+        
         Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(result);
         
@@ -246,16 +250,37 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
         while (m.find()) {
             sb.append(result.substring(lastEnd, m.start()));
             
-            String quantityStr = m.group(1);
-            String unit = m.group(2);
+            String quantityStr;
+            String unit = "";
             
-            double originalValue = parseQuantity(quantityStr);
-            double newValue = originalValue * multiplier;
-            String formattedValue = formatQuantity(newValue);
+            // Vérifier quel groupe a matché
+            if (m.group(1) != null) {
+                // Nombre en début de ligne (groupe 1)
+                quantityStr = m.group(1);
+                // Préserver l'espacement original
+                String prefix = result.substring(m.start(), m.start() + (m.group().length() - quantityStr.length()));
+                
+                double originalValue = parseQuantity(quantityStr);
+                double newValue = originalValue * multiplier;
+                String formattedValue = formatQuantity(newValue);
+                
+                Log.d("ViewRecette", "Transform (start of line): " + quantityStr + " -> " + formattedValue + " (x" + multiplier + ")");
+                
+                sb.append(prefix).append(formattedValue);
+            } else if (m.group(2) != null && m.group(3) != null) {
+                // Nombre avec unité explicite (groupes 2 et 3)
+                quantityStr = m.group(2);
+                unit = m.group(3);
+                
+                double originalValue = parseQuantity(quantityStr);
+                double newValue = originalValue * multiplier;
+                String formattedValue = formatQuantity(newValue);
+                
+                Log.d("ViewRecette", "Transform (with unit): " + quantityStr + " " + unit + " -> " + formattedValue + " " + unit + " (x" + multiplier + ")");
+                
+                sb.append(formattedValue).append(" ").append(unit);
+            }
             
-            Log.d("ViewRecette", "Transform: " + quantityStr + " " + unit + " -> " + formattedValue + " " + unit + " (x" + multiplier + ")");
-            
-            sb.append(formattedValue).append(" ").append(unit);
             lastEnd = m.end();
         }
         sb.append(result.substring(lastEnd));

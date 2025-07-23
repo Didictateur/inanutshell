@@ -1,7 +1,5 @@
 # TODO Liste - In a Nutshell
 
-## **Problèmes actuels à corriger**
-
 ### Haute priorité
 - [x] **Migration base de données** - Nouveau champ `portions` ajouté à MealPlan
 - [x] **Dialog de sélection de recette avec quantité** - TERMINÉ - Interface ajoutée avec boutons +/-
