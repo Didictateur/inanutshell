@@ -458,7 +458,7 @@ public class MainActivity extends BaseActivity {
         
         // Configuration du RecyclerView
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        weekAdapter = new MealPlanWeekAdapter(new ArrayList<>(), this::onMealPlanClick, this::onAddMealClick);
+        weekAdapter = new MealPlanWeekAdapter(new ArrayList<>(), this::onMealPlanClick, this::onAddMealClick, this::onDeleteMealClick);
         weekRecyclerView.setAdapter(weekAdapter);
         
         // Appliquer les couleurs du thème
@@ -595,44 +595,33 @@ public class MainActivity extends BaseActivity {
     
     private void addMealPlan(String date, String mealType, Long recetteId) {
         new Thread(() -> {
-            // Vérifier si un repas existe déjà pour cette date et ce type
-            List<MealPlan> existingMeals = db.mealPlanDao().getMealPlansForDate(date);
-            boolean mealExists = false;
-            for (MealPlan meal : existingMeals) {
-                if (meal.getMealType().equals(mealType)) {
-                    mealExists = true;
-                    break;
-                }
-            }
-            
-            if (mealExists) {
-                runOnUiThread(() -> {
-                    androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-                    builder.setTitle("Remplacer le repas ?");
-                    builder.setMessage("Un repas est déjà planifié pour ce moment. Voulez-vous le remplacer ?");
-                    builder.setPositiveButton("Remplacer", (dialog, which) -> {
-                        new Thread(() -> {
-                            db.mealPlanDao().deleteMealPlan(date, mealType);
-                            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
-                            db.mealPlanDao().insert(newMealPlan);
-                            runOnUiThread(() -> {
-                                loadCurrentWeek();
-                                Toast.makeText(this, "Repas mis à jour !", Toast.LENGTH_SHORT).show();
-                            });
-                        }).start();
-                    });
-                    builder.setNegativeButton("Annuler", null);
-                    builder.show();
-                });
-            } else {
-                MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
-                db.mealPlanDao().insert(newMealPlan);
+            // Simplement ajouter le nouveau repas (support des repas multiples)
+            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
+            db.mealPlanDao().insert(newMealPlan);
+            runOnUiThread(() -> {
+                loadCurrentWeek();
+                Toast.makeText(this, "Repas ajouté !", Toast.LENGTH_SHORT).show();
+            });
+        }).start();
+    }
+    
+    private void onDeleteMealClick(MealPlanWithRecette mealPlan) {
+        // Afficher une confirmation avant de supprimer
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
+        builder.setTitle("Supprimer le repas");
+        builder.setMessage("Voulez-vous vraiment supprimer \"" + mealPlan.getRecetteTitre() + "\" ?");
+        builder.setPositiveButton("Supprimer", (dialog, which) -> {
+            // Supprimer de la base de données
+            new Thread(() -> {
+                db.mealPlanDao().delete(mealPlan.getMealPlan());
                 runOnUiThread(() -> {
                     loadCurrentWeek();
-                    Toast.makeText(this, "Repas ajouté !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Repas supprimé", Toast.LENGTH_SHORT).show();
                 });
-            }
-        }).start();
+            }).start();
+        });
+        builder.setNegativeButton("Annuler", null);
+        builder.show();
     }
     
     private void applyThemeColorsToButtons(Button... buttons) {

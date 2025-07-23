@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
     private List<DayMealPlan> dayMealPlans;
     private OnMealPlanClickListener mealPlanClickListener;
     private OnAddMealClickListener addMealClickListener;
+    private OnDeleteMealClickListener deleteMealClickListener;
     
     public interface OnMealPlanClickListener {
         void onMealPlanClick(MealPlanWithRecette mealPlan);
@@ -31,12 +33,18 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
         void onAddMealClick(String date, String mealType);
     }
     
+    public interface OnDeleteMealClickListener {
+        void onDeleteMealClick(MealPlanWithRecette mealPlan);
+    }
+    
     public MealPlanWeekAdapter(List<DayMealPlan> dayMealPlans, 
                               OnMealPlanClickListener mealPlanClickListener,
-                              OnAddMealClickListener addMealClickListener) {
+                              OnAddMealClickListener addMealClickListener,
+                              OnDeleteMealClickListener deleteMealClickListener) {
         this.dayMealPlans = dayMealPlans;
         this.mealPlanClickListener = mealPlanClickListener;
         this.addMealClickListener = addMealClickListener;
+        this.deleteMealClickListener = deleteMealClickListener;
     }
     
     @NonNull
@@ -91,13 +99,13 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
             
             // Appliquer la couleur du thème au nom du jour
             applyThemeColorToText(dayNameText);
-            
+
             mealsContainer.removeAllViews();
-            
-            // Ajouter les repas
-            addMealView("Petit déjeuner", dayMealPlan.getBreakfast(), dayMealPlan.getDate(), "breakfast");
-            addMealView("Déjeuner", dayMealPlan.getLunch(), dayMealPlan.getDate(), "lunch");
-            addMealView("Dîner", dayMealPlan.getDinner(), dayMealPlan.getDate(), "dinner");
+
+            // Ajouter les repas avec support multiple
+            addMealTypeSection("Petit déjeuner", dayMealPlan.getBreakfast(), dayMealPlan.getDate(), "breakfast");
+            addMealTypeSection("Déjeuner", dayMealPlan.getLunch(), dayMealPlan.getDate(), "lunch");
+            addMealTypeSection("Dîner", dayMealPlan.getDinner(), dayMealPlan.getDate(), "dinner");
         }
         
         private boolean isToday(String date) {
@@ -150,7 +158,99 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
             return android.graphics.Color.argb(alpha, red, green, blue);
         }
         
+        private void addMealTypeSection(String mealLabel, List<MealPlanWithRecette> meals, String date, String mealType) {
+            // Créer une section pour ce type de repas
+            View sectionView = LayoutInflater.from(itemView.getContext())
+                    .inflate(R.layout.meal_type_section, mealsContainer, false);
+            
+            TextView sectionTitle = sectionView.findViewById(R.id.mealTypeSectionTitle);
+            LinearLayout sectionContainer = sectionView.findViewById(R.id.mealSectionContainer);
+            
+            sectionTitle.setText(mealLabel);
+            
+            // Ajouter tous les repas de cette catégorie
+            if (meals != null && !meals.isEmpty()) {
+                for (MealPlanWithRecette meal : meals) {
+                    addMealView(null, meal, date, mealType, sectionContainer);
+                }
+            }
+            
+            // Toujours ajouter un bouton pour ajouter un nouveau repas
+            addAddMealButton(date, mealType, sectionContainer);
+            
+            mealsContainer.addView(sectionView);
+        }
+        
+        private void addAddMealButton(String date, String mealType, LinearLayout container) {
+            View addView = LayoutInflater.from(itemView.getContext())
+                    .inflate(R.layout.item_meal_slot, container, false);
+            
+            TextView recipeNameText = addView.findViewById(R.id.recipeNameText);
+            Button addButton = addView.findViewById(R.id.addMealButton);
+            TextView mealTypeText = addView.findViewById(R.id.mealTypeText);
+            
+            // Cacher le type de repas pour le bouton d'ajout
+            if (mealTypeText != null) mealTypeText.setVisibility(View.GONE);
+            
+            recipeNameText.setVisibility(View.GONE);
+            addButton.setVisibility(View.VISIBLE);
+            addButton.setText("+ Ajouter");
+            
+            addButton.setOnClickListener(v -> {
+                if (addMealClickListener != null) {
+                    addMealClickListener.onAddMealClick(date, mealType);
+                }
+            });
+            
+            // Style pour bouton d'ajout
+            addView.setBackgroundColor(itemView.getContext().getColor(R.color.meal_empty));
+            
+            container.addView(addView);
+        }
+        
+        private void addMealView(String mealLabel, MealPlanWithRecette mealPlan, String date, String mealType, LinearLayout container) {
+            View mealView = LayoutInflater.from(itemView.getContext())
+                    .inflate(R.layout.item_meal_slot, container, false);
+            
+            TextView mealTypeText = mealView.findViewById(R.id.mealTypeText);
+            TextView recipeNameText = mealView.findViewById(R.id.recipeNameText);
+            Button addButton = mealView.findViewById(R.id.addMealButton);
+            ImageButton deleteButton = mealView.findViewById(R.id.deleteMealButton);
+            
+            // Cacher le type de repas dans les sections (déjà affiché en titre)
+            if (mealTypeText != null) mealTypeText.setVisibility(View.GONE);
+            
+            if (mealPlan != null && mealPlan.getRecetteTitre() != null) {
+                // Repas planifié
+                recipeNameText.setText(mealPlan.getRecetteTitre());
+                recipeNameText.setVisibility(View.VISIBLE);
+                addButton.setVisibility(View.GONE);
+                deleteButton.setVisibility(View.VISIBLE);
+                
+                mealView.setOnClickListener(v -> {
+                    if (mealPlanClickListener != null) {
+                        mealPlanClickListener.onMealPlanClick(mealPlan);
+                    }
+                });
+                
+                deleteButton.setOnClickListener(v -> {
+                    if (deleteMealClickListener != null) {
+                        deleteMealClickListener.onDeleteMealClick(mealPlan);
+                    }
+                });
+                
+                // Style pour repas planifié
+                mealView.setBackgroundColor(itemView.getContext().getColor(R.color.meal_with_recipe));
+            } else {
+                // S'assurer que le bouton de suppression est caché pour les emplacements vides
+                deleteButton.setVisibility(View.GONE);
+            }
+            
+            container.addView(mealView);
+        }
+        
         private void addMealView(String mealLabel, MealPlanWithRecette mealPlan, String date, String mealType) {
+            // Méthode de compatibilité pour l'ancien système
             View mealView = LayoutInflater.from(itemView.getContext())
                     .inflate(R.layout.item_meal_slot, mealsContainer, false);
             
@@ -158,7 +258,9 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
             TextView recipeNameText = mealView.findViewById(R.id.recipeNameText);
             Button addButton = mealView.findViewById(R.id.addMealButton);
             
-            mealTypeText.setText(mealLabel);
+            if (mealTypeText != null) {
+                mealTypeText.setText(mealLabel);
+            }
             
             if (mealPlan != null && mealPlan.getRecetteTitre() != null) {
                 // Repas planifié

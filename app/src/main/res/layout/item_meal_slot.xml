@@ -30,6 +30,17 @@
         android:textColor="@color/text_secondary"
         android:visibility="gone" />
 
+    <!-- Bouton Supprimer -->
+    <ImageButton
+        android:id="@+id/deleteMealButton"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:src="@android:drawable/ic_menu_delete"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Supprimer"
+        android:visibility="gone" />
+
     <!-- Bouton Ajouter -->
     <Button
         android:id="@+id/addMealButton"
@@ -41,10 +52,7 @@
         android:textColor="@color/primary_color"
         android:background="@drawable/bg_tag_rounded"
         android:paddingHorizontal="12dp"
-        style="?android:attr/borderlessButtonStyle" />
-        android:paddingHorizontal="12dp"
         style="?android:attr/borderlessButtonStyle"
-        android:textColor="@color/primary_color"
         android:visibility="visible" />
 
 </LinearLayout>

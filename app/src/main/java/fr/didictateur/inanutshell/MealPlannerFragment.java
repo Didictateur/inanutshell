@@ -70,7 +70,8 @@ public class MealPlannerFragment extends Fragment {
         weekRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         weekAdapter = new MealPlanWeekAdapter(new ArrayList<>(), 
             this::onMealPlanClick,
-            this::onAddMealClick);
+            this::onAddMealClick,
+            this::onDeleteMealClick);
         weekRecyclerView.setAdapter(weekAdapter);
         
         // Boutons de navigation
@@ -207,44 +208,33 @@ public class MealPlannerFragment extends Fragment {
     
     private void addMealPlan(String date, String mealType, Long recetteId) {
         new Thread(() -> {
-            // Vérifier si un repas existe déjà pour cette date et ce type
-            List<MealPlan> existingMeals = db.mealPlanDao().getMealPlansForDate(date);
-            boolean mealExists = false;
-            for (MealPlan meal : existingMeals) {
-                if (meal.getMealType().equals(mealType)) {
-                    mealExists = true;
-                    break;
-                }
-            }
-            
-            if (mealExists) {
-                requireActivity().runOnUiThread(() -> {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-                    builder.setTitle("Remplacer le repas ?");
-                    builder.setMessage("Un repas est déjà planifié pour ce moment. Voulez-vous le remplacer ?");
-                    builder.setPositiveButton("Remplacer", (dialog, which) -> {
-                        new Thread(() -> {
-                            db.mealPlanDao().deleteMealPlan(date, mealType);
-                            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
-                            db.mealPlanDao().insert(newMealPlan);
-                            requireActivity().runOnUiThread(() -> {
-                                loadCurrentWeek();
-                                Toast.makeText(requireContext(), "Repas mis à jour !", Toast.LENGTH_SHORT).show();
-                            });
-                        }).start();
-                    });
-                    builder.setNegativeButton("Annuler", null);
-                    builder.show();
-                });
-            } else {
-                MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
-                db.mealPlanDao().insert(newMealPlan);
-                requireActivity().runOnUiThread(() -> {
-                    loadCurrentWeek();
-                    Toast.makeText(requireContext(), "Repas ajouté !", Toast.LENGTH_SHORT).show();
-                });
-            }
+            // Simplement ajouter le nouveau repas (support des repas multiples)
+            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
+            db.mealPlanDao().insert(newMealPlan);
+            requireActivity().runOnUiThread(() -> {
+                loadCurrentWeek();
+                Toast.makeText(requireContext(), "Repas ajouté !", Toast.LENGTH_SHORT).show();
+            });
         }).start();
+    }
+    
+    private void onDeleteMealClick(MealPlanWithRecette mealPlan) {
+        // Afficher une confirmation avant de supprimer
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Supprimer le repas")
+            .setMessage("Voulez-vous vraiment supprimer \"" + mealPlan.getRecetteTitre() + "\" ?")
+            .setPositiveButton("Supprimer", (dialog, which) -> {
+                // Supprimer de la base de données
+                new Thread(() -> {
+                    db.mealPlanDao().delete(mealPlan.getMealPlan());
+                    requireActivity().runOnUiThread(() -> {
+                        loadCurrentWeek();
+                        Toast.makeText(requireContext(), "Repas supprimé", Toast.LENGTH_SHORT).show();
+                    });
+                }).start();
+            })
+            .setNegativeButton("Annuler", null)
+            .show();
     }
     
     private void applyThemeColorsToButtons(Button... buttons) {
