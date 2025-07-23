@@ -4,11 +4,11 @@
 
 ### Haute priorité
 - [x] **Migration base de données** - Nouveau champ `portions` ajouté à MealPlan
-- [x] **Affichage des portions dans le planificateur** - Code d'affichage implémenté dans MealPlanWeekAdapter
-- [ ] **Dialog de sélection de recette** - Implémenter la sélection de quantité lors de l'ajout d'un repas
+- [x] **Dialog de sélection de recette avec quantité** - TERMINÉ - Interface ajoutée avec boutons +/-
+- [x] **Affichage des portions dans le planificateur** - EN COURS - Les quantités ne s'affichent pas dans la vue hebdomadaire
 - [ ] **Test complet de la sélection de quantité** - Vérifier que tout fonctionne end-to-end
 
-### Moyenne priorité
+### Faible priorité
 - [ ] **Performance de l'application** - Optimiser les requêtes de base de données
 - [ ] **Gestion d'erreurs** - Améliorer la robustesse générale
 - [ ] **Tests** - Vérifier toutes les fonctionnalités après modifications

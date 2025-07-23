@@ -19,4 +19,49 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp" />
 
+    <!-- Section pour sélectionner le nombre de portions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre de portions :"
+        android:textSize="16sp"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/decreasePortionsButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/btn_minus"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Diminuer les portions" />
+
+        <EditText
+            android:id="@+id/portionsEditText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:inputType="numberDecimal"
+            android:maxLength="4"
+            android:textSize="18sp" />
+
+        <ImageButton
+            android:id="@+id/increasePortionsButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@android:drawable/btn_plus"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Augmenter les portions" />
+
+    </LinearLayout>
+
 </LinearLayout>

@@ -7,7 +7,7 @@ import android.content.Context;
 
 @Database(
     entities = {Recette.class, Folder.class, MealPlan.class},
-    version = 3,  // Incrémenté pour prendre en compte le planificateur de repas
+    version = 4,  // Incrémenté pour le champ portions dans MealPlan
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {

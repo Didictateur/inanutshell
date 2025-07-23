@@ -222,7 +222,21 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
             
             if (mealPlan != null && mealPlan.getRecetteTitre() != null) {
                 // Repas planifié
-                recipeNameText.setText(mealPlan.getRecetteTitre());
+                String displayText = mealPlan.getRecetteTitre();
+                
+                // Ajouter l'information de quantité si disponible
+                if (mealPlan.getMealPlan().getPortions() != null && !mealPlan.getMealPlan().getPortions().isEmpty()) {
+                    try {
+                        double portions = Double.parseDouble(mealPlan.getMealPlan().getPortions());
+                        if (portions != 1.0) {
+                            displayText += " (" + formatPortions(portions) + " pers.)";
+                        }
+                    } catch (NumberFormatException e) {
+                        // Ignore si la conversion échoue
+                    }
+                }
+                
+                recipeNameText.setText(displayText);
                 recipeNameText.setVisibility(View.VISIBLE);
                 addButton.setVisibility(View.GONE);
                 deleteButton.setVisibility(View.VISIBLE);
@@ -306,6 +320,14 @@ public class MealPlanWeekAdapter extends RecyclerView.Adapter<MealPlanWeekAdapte
                 int themeColor = ContextCompat.getColor(itemView.getContext(), colorResId);
                 textView.setTextColor(themeColor);
             }
+        }
+    }
+    
+    private String formatPortions(double portions) {
+        if (portions == Math.floor(portions)) {
+            return String.valueOf((int) portions);
+        } else {
+            return String.format("%.1f", portions).replace(".0", "");
         }
     }
 }

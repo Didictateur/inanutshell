@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -180,6 +182,30 @@ public class MealPlannerFragment extends Fragment {
                 
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_select_recipe, null);
                 Spinner recipeSpinner = dialogView.findViewById(R.id.recipeSpinner);
+                EditText portionsEditText = dialogView.findViewById(R.id.portionsEditText);
+                ImageButton decreaseButton = dialogView.findViewById(R.id.decreasePortionsButton);
+                ImageButton increaseButton = dialogView.findViewById(R.id.increasePortionsButton);
+                
+                // Configuration des boutons de portions
+                decreaseButton.setOnClickListener(v -> {
+                    try {
+                        double currentValue = Double.parseDouble(portionsEditText.getText().toString());
+                        double newValue = Math.max(0.5, currentValue - 0.5);
+                        portionsEditText.setText(formatPortions(newValue));
+                    } catch (NumberFormatException e) {
+                        portionsEditText.setText("1");
+                    }
+                });
+                
+                increaseButton.setOnClickListener(v -> {
+                    try {
+                        double currentValue = Double.parseDouble(portionsEditText.getText().toString());
+                        double newValue = Math.min(20, currentValue + 0.5);
+                        portionsEditText.setText(formatPortions(newValue));
+                    } catch (NumberFormatException e) {
+                        portionsEditText.setText("1");
+                    }
+                });
                 
                 // Adapter pour le spinner
                 List<String> recipeNames = new ArrayList<>();
@@ -196,7 +222,8 @@ public class MealPlannerFragment extends Fragment {
                     int selectedIndex = recipeSpinner.getSelectedItemPosition();
                     if (selectedIndex >= 0 && selectedIndex < recettes.size()) {
                         Recette selectedRecette = recettes.get(selectedIndex);
-                        addMealPlan(date, mealType, selectedRecette.id);
+                        String portions = portionsEditText.getText().toString();
+                        addMealPlan(date, mealType, selectedRecette.id, portions);
                     }
                 });
                 
@@ -206,16 +233,24 @@ public class MealPlannerFragment extends Fragment {
         }).start();
     }
     
-    private void addMealPlan(String date, String mealType, Long recetteId) {
+    private void addMealPlan(String date, String mealType, Long recetteId, String portions) {
         new Thread(() -> {
-            // Simplement ajouter le nouveau repas (support des repas multiples)
-            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null);
+            // Ajouter le nouveau repas avec les portions spécifiées
+            MealPlan newMealPlan = new MealPlan(date, mealType, recetteId, null, portions);
             db.mealPlanDao().insert(newMealPlan);
             requireActivity().runOnUiThread(() -> {
                 loadCurrentWeek();
                 Toast.makeText(requireContext(), "Repas ajouté !", Toast.LENGTH_SHORT).show();
             });
         }).start();
+    }
+    
+    private String formatPortions(double portions) {
+        if (portions == Math.floor(portions)) {
+            return String.valueOf((int) portions);
+        } else {
+            return String.format("%.1f", portions).replace(".0", "");
+        }
     }
     
     private void onDeleteMealClick(MealPlanWithRecette mealPlan) {
