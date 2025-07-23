@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAFAFA"
+    android:keepScreenOn="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- En-tête avec titre et contrôles -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="32dp">
+
+            <ImageButton
+                android:id="@+id/exitReadingModeButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#FF6B35"
+                android:contentDescription="Quitter le mode lecture" />
+
+            <TextView
+                android:id="@+id/recetteTitreReading"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="16dp"
+                android:text="Titre de la recette"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:textColor="#2C3E50"
+                android:gravity="center" />
+
+            <ImageButton
+                android:id="@+id/timerButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_lock_idle_alarm"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#FF6B35"
+                android:contentDescription="Timer" />
+
+        </LinearLayout>
+
+        <!-- Informations de base -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp"
+                android:gravity="center_vertical">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏱️"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tempsPrepReading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="30 min"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2C3E50" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Préparation"
+                        android:textSize="14sp"
+                        android:textColor="#7F8C8D" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="60dp"
+                    android:background="#E0E0E0" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="👥"
+                        android:textSize="24sp" />
+
+                    <TextView
+                        android:id="@+id/tailleReading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 pers."
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="#2C3E50" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Portions"
+                        android:textSize="14sp"
+                        android:textColor="#7F8C8D" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Liste des ingrédients -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🛒 Ingrédients"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#2C3E50"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/ingredientsReading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Liste des ingrédients..."
+                    android:textSize="18sp"
+                    android:lineSpacingExtra="8dp"
+                    android:textColor="#34495E" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Étapes de préparation -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="👨‍🍳 Préparation"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="#2C3E50"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/preparationReading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Étapes de préparation..."
+                    android:textSize="20sp"
+                    android:lineSpacingExtra="12dp"
+                    android:textColor="#34495E" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Timer flottant -->
+        <LinearLayout
+            android:id="@+id/timerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:visibility="gone"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FF6B35">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="⏲️ Timer actif"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/timerDisplay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="05:00"
+                        android:textColor="#FFFFFF"
+                        android:textSize="36sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/pauseTimerButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏸️ Pause"
+                            android:layout_marginEnd="12dp"
+                            android:backgroundTint="#FFFFFF"
+                            android:textColor="#FF6B35" />
+
+                        <Button
+                            android:id="@+id/stopTimerButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏹️ Stop"
+                            android:backgroundTint="#E74C3C"
+                            android:textColor="#FFFFFF" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

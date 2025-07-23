@@ -7,6 +7,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- Barre d'actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:layout_marginBottom="16dp">
+            
+            <Button
+                android:id="@+id/readingModeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📖 Mode lecture"
+                android:backgroundTint="@color/toolbar_bg"
+                android:textColor="@android:color/white"
+                android:layout_marginEnd="8dp"/>
+                
+        </LinearLayout>
+
         <!-- Aperçu -->
         <TextView
             android:id="@+id/textTitre"
