@@ -116,14 +116,45 @@
                         android:text="👥"
                         android:textSize="24sp" />
 
-                    <TextView
-                        android:id="@+id/tailleReading"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4 pers."
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:textColor="#2C3E50" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageButton
+                            android:id="@+id/decreasePortionsButton"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@android:drawable/btn_minus"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:tint="#E74C3C"
+                            android:contentDescription="Diminuer portions" />
+
+                        <EditText
+                            android:id="@+id/currentPortionsText"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:text="4"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#2C3E50"
+                            android:layout_marginHorizontal="8dp"
+                            android:gravity="center"
+                            android:inputType="numberDecimal"
+                            android:background="@android:drawable/editbox_background"
+                            android:selectAllOnFocus="true" />
+
+                        <ImageButton
+                            android:id="@+id/increasePortionsButton"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:src="@android:drawable/btn_plus"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:tint="#27AE60"
+                            android:contentDescription="Augmenter portions" />
+
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"

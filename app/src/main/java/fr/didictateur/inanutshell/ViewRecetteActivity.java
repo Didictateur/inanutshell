@@ -2,8 +2,12 @@ package fr.didictateur.inanutshell;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
@@ -11,6 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +35,18 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
     private TextView textTitre, textTaille, textTempsPrep, textIngredients, textPreparation, textNotes;
     
     // Vues mode lecture
-    private TextView recetteTitreReading, tempsPrepReading, tailleReading;
+    private TextView recetteTitreReading, tempsPrepReading;
     private TextView ingredientsReading, preparationReading;
+    private EditText currentPortionsText;
+    private ImageButton decreasePortionsButton, increasePortionsButton;
     private LinearLayout timerLayout;
     private TextView timerDisplay;
     private Button pauseTimerButton, stopTimerButton;
+    
+    // Gestion des portions
+    private double originalPortions = 1.0;
+    private double currentPortions = 1.0;
+    private String originalIngredientsText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,22 +74,68 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
         // Initialisation des vues mode lecture
         recetteTitreReading = findViewById(R.id.recetteTitreReading);
         tempsPrepReading = findViewById(R.id.tempsPrepReading);
-        tailleReading = findViewById(R.id.tailleReading);
         ingredientsReading = findViewById(R.id.ingredientsReading);
         preparationReading = findViewById(R.id.preparationReading);
+        currentPortionsText = findViewById(R.id.currentPortionsText);
+        decreasePortionsButton = findViewById(R.id.decreasePortionsButton);
+        increasePortionsButton = findViewById(R.id.increasePortionsButton);
         timerLayout = findViewById(R.id.timerLayout);
         timerDisplay = findViewById(R.id.timerDisplay);
         pauseTimerButton = findViewById(R.id.pauseTimerButton);
         stopTimerButton = findViewById(R.id.stopTimerButton);
         
+        // Extraire le nombre de portions original
+        extractOriginalPortions();
+        
         // Remplissage des données
         recetteTitreReading.setText(titre);
         tempsPrepReading.setText(tempsPrep);
-        tailleReading.setText(taille);
-        ingredientsReading.setText(ingredients != null ? ingredients : "");
+        originalIngredientsText = ingredients != null ? ingredients : "";
         preparationReading.setText(preparation != null ? preparation : "");
         
-        // Configuration des boutons
+        // Mise à jour de l'affichage des portions
+        updatePortionsDisplay();
+        
+        // Configuration de l'EditText pour les portions
+        currentPortionsText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    if (!s.toString().isEmpty()) {
+                        double newPortions = Double.parseDouble(s.toString().replace(",", "."));
+                        if (newPortions > 0 && newPortions <= 50) { // Limite raisonnable
+                            if (Math.abs(currentPortions - newPortions) > 0.001) { // Éviter les boucles infinies
+                                currentPortions = newPortions;
+                                updateIngredientsOnly();
+                            }
+                        }
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignorer les entrées invalides
+                }
+            }
+        });
+        
+        // Configuration des boutons de portions
+        decreasePortionsButton.setOnClickListener(v -> {
+            double newValue = Math.max(0.1, currentPortions - 0.5);
+            currentPortions = newValue;
+            updatePortionsDisplay();
+        });
+        
+        increasePortionsButton.setOnClickListener(v -> {
+            double newValue = Math.min(50, currentPortions + 0.5);
+            currentPortions = newValue;
+            updatePortionsDisplay();
+        });
+        
+        // Configuration des autres boutons
         ImageButton notesButton = findViewById(R.id.exitReadingModeButton);
         notesButton.setImageResource(android.R.drawable.ic_menu_info_details);
         notesButton.setOnClickListener(v -> showNotesDialog());
@@ -89,6 +148,158 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
         
         // Masquer le timer au début
         timerLayout.setVisibility(View.GONE);
+    }
+    
+    private void extractOriginalPortions() {
+        // Extraire le nombre de portions depuis le texte "taille"
+        if (taille != null && !taille.isEmpty()) {
+            // Chercher des patterns comme "4 pers", "6 personnes", "2.5", etc.
+            String[] patterns = {"(\\d+(?:[.,]\\d+)?)\\s*pers", "(\\d+(?:[.,]\\d+)?)\\s*personnes?", "^(\\d+(?:[.,]\\d+)?)$"};
+            
+            for (String pattern : patterns) {
+                Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(taille.trim());
+                if (m.find()) {
+                    try {
+                        String numberStr = m.group(1).replace(",", ".");
+                        originalPortions = Double.parseDouble(numberStr);
+                        currentPortions = originalPortions;
+                        // Debug: Log des portions extraites
+                        Log.d("ViewRecette", "Portions extraites de '" + taille + "': " + originalPortions);
+                        return;
+                    } catch (NumberFormatException e) {
+                        // Continuer avec le pattern suivant
+                    }
+                }
+            }
+        }
+        
+        // Par défaut, considérer 1 portion
+        originalPortions = 1.0;
+        currentPortions = 1.0;
+        Log.d("ViewRecette", "Aucune portion trouvée dans '" + taille + "', défaut: 1 portion");
+    }
+    
+    private void updatePortionsDisplay() {
+        // Mettre à jour le texte du nombre de portions
+        String formattedPortions = formatPortions(currentPortions);
+        currentPortionsText.setText(formattedPortions);
+        
+        // Calculer et afficher les ingrédients ajustés
+        updateIngredientsOnly();
+        
+        // Mettre à jour l'état des boutons
+        decreasePortionsButton.setEnabled(currentPortions > 0.1);
+        increasePortionsButton.setEnabled(currentPortions < 50);
+    }
+    
+    private void updateIngredientsOnly() {
+        String adjustedIngredients = calculateAdjustedIngredients();
+        ingredientsReading.setText(adjustedIngredients);
+    }
+    
+    private String formatPortions(double portions) {
+        if (portions == Math.floor(portions)) {
+            return String.valueOf((int) portions);
+        } else {
+            return String.format("%.1f", portions).replace(".0", "");
+        }
+    }
+    
+    private String calculateAdjustedIngredients() {
+        if (originalIngredientsText == null || originalIngredientsText.isEmpty()) {
+            return "";
+        }
+        
+        if (Math.abs(currentPortions - originalPortions) < 0.001) {
+            return originalIngredientsText;
+        }
+        
+        // Le ratio correct : multiplier par le nombre de portions actuel
+        // Exemple: recette pour 1 portion, on veut 2 portions -> multiplier par 2
+        double multiplier = currentPortions / originalPortions;
+        
+        // Debug: Log du calcul
+        Log.d("ViewRecette", "Original: " + originalPortions + " portions, Actuel: " + currentPortions + " portions, Multiplier: " + multiplier);
+        
+        // IMPORTANT: Toujours partir du texte original pour éviter les erreurs cumulatives
+        String result = originalIngredientsText;
+        
+        // Pattern simple et efficace pour capturer quantité + unité
+        String pattern = "\\b(\\d+(?:[.,]\\d+)?|\\d+/\\d+)\\s*(g|kg|mg|l|ml|cl|dl|cuillères?|cuill|c\\.|cs|cc|tasses?|t\\.|sachets?|pincées?|œufs?|blancs?|jaunes?)\\b";
+        Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(result);
+        
+        StringBuilder sb = new StringBuilder();
+        int lastEnd = 0;
+        
+        while (m.find()) {
+            sb.append(result.substring(lastEnd, m.start()));
+            
+            String quantityStr = m.group(1);
+            String unit = m.group(2);
+            
+            double originalValue = parseQuantity(quantityStr);
+            double newValue = originalValue * multiplier;
+            String formattedValue = formatQuantity(newValue);
+            
+            Log.d("ViewRecette", "Transform: " + quantityStr + " " + unit + " -> " + formattedValue + " " + unit + " (x" + multiplier + ")");
+            
+            sb.append(formattedValue).append(" ").append(unit);
+            lastEnd = m.end();
+        }
+        sb.append(result.substring(lastEnd));
+        
+        Log.d("ViewRecette", "Final: '" + originalIngredientsText + "' -> '" + sb.toString() + "'");
+        
+        return sb.toString();
+    }
+    
+    private double parseQuantity(String quantity) {
+        try {
+            // Gérer les fractions
+            if (quantity.contains("/")) {
+                String[] parts = quantity.split("/");
+                if (parts.length == 2) {
+                    double numerator = Double.parseDouble(parts[0]);
+                    double denominator = Double.parseDouble(parts[1]);
+                    return numerator / denominator;
+                }
+            }
+            
+            // Gérer les nombres décimaux (avec virgule ou point)
+            String normalizedQuantity = quantity.replace(",", ".");
+            return Double.parseDouble(normalizedQuantity);
+            
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+    
+    private String formatQuantity(double value) {
+        // Arrondir les très petites valeurs à 0
+        if (value < 0.01) {
+            return "0";
+        }
+        
+        // Si c'est un nombre entier, l'afficher sans décimales
+        if (Math.abs(value - Math.round(value)) < 0.01) {
+            return String.valueOf(Math.round(value));
+        }
+        
+        // Pour les fractions simples courantes, les afficher comme telles
+        if (Math.abs(value - 0.5) < 0.01) return "1/2";
+        if (Math.abs(value - 0.25) < 0.01) return "1/4";
+        if (Math.abs(value - 0.75) < 0.01) return "3/4";
+        if (Math.abs(value - 1.5) < 0.01) return "1,5";
+        if (Math.abs(value - 2.5) < 0.01) return "2,5";
+        
+        // Sinon, formater avec 1-2 décimales maximum
+        if (value < 1) {
+            return String.format("%.2f", value).replaceAll("0+$", "").replaceAll("\\.$", "").replace(".", ",");
+        } else {
+            return String.format("%.1f", value).replaceAll("0+$", "").replaceAll("\\.$", "").replace(".", ",");
+        }
     }
     
     private void showNotesDialog() {
