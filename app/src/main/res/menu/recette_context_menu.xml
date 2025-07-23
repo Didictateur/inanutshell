@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/edit_recette"
+        android:title="Modifier"
+        android:icon="@android:drawable/ic_menu_edit" />
+    <item
+        android:id="@+id/move_recette"
+        android:title="Déplacer"
+        android:icon="@android:drawable/ic_menu_send" />
+    <item
+        android:id="@+id/delete_recette"
+        android:title="Supprimer"
+        android:icon="@android:drawable/ic_menu_delete" />
+</menu>

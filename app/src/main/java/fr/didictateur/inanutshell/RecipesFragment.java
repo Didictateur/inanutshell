@@ -158,14 +158,13 @@ public class RecipesFragment extends Fragment {
         
         // Configuration des listeners pour les dossiers
         foldersAdapter.setOnFolderClickListener(this::navigateToFolder);
+        foldersAdapter.setOnFolderActionListener((anchor, folder) -> {
+            showFolderMenu(anchor, folder);
+        });
         
         // Configuration du listener pour les actions sur les recettes (clic long)
         recipesAdapter.setOnRecetteActionListener((anchor, recette) -> {
-            // Pour l'instant, on lance directement l'édition. 
-            // Plus tard on peut ajouter un menu contextuel
-            Intent intent = new Intent(requireContext(), EditRecetteActivity.class);
-            intent.putExtra("recetteId", recette.id);
-            editRecipeLauncher.launch(intent);
+            showRecetteMenu(anchor, recette);
         });
         
         // FAB pour ajouter une recette ou un dossier
@@ -333,6 +332,131 @@ public class RecipesFragment extends Fragment {
             Folder folder = new Folder(0, name, currentFolderId);
             db.folderDao().insert(folder);
             requireActivity().runOnUiThread(this::loadFolderContent);
+        }).start();
+    }
+    
+    private void showFolderMenu(View anchor, Folder folder) {
+        PopupMenu popup = new PopupMenu(requireContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.folder_context_menu, popup.getMenu());
+        
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.edit_folder) {
+                editFolder(folder);
+                return true;
+            } else if (itemId == R.id.delete_folder) {
+                deleteFolder(folder);
+                return true;
+            }
+            return false;
+        });
+        
+        popup.show();
+    }
+    
+    private void showRecetteMenu(View anchor, Recette recette) {
+        PopupMenu popup = new PopupMenu(requireContext(), anchor);
+        popup.getMenuInflater().inflate(R.menu.recette_context_menu, popup.getMenu());
+        
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.edit_recette) {
+                editRecette(recette);
+                return true;
+            } else if (itemId == R.id.delete_recette) {
+                deleteRecette(recette);
+                return true;
+            } else if (itemId == R.id.move_recette) {
+                moveRecette(recette);
+                return true;
+            }
+            return false;
+        });
+        
+        popup.show();
+    }
+    
+    private void editFolder(Folder folder) {
+        EditText editText = new EditText(requireContext());
+        editText.setText(folder.name);
+        editText.selectAll();
+        
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Modifier le dossier")
+            .setView(editText)
+            .setPositiveButton("Modifier", (dialog, which) -> {
+                String newName = editText.getText().toString().trim();
+                if (!newName.isEmpty()) {
+                    new Thread(() -> {
+                        folder.name = newName;
+                        db.folderDao().update(folder);
+                        requireActivity().runOnUiThread(this::loadFolderContent);
+                    }).start();
+                }
+            })
+            .setNegativeButton("Annuler", null)
+            .show();
+    }
+    
+    private void deleteFolder(Folder folder) {
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Supprimer le dossier")
+            .setMessage("Voulez-vous vraiment supprimer \"" + folder.name + "\" et tout son contenu ?")
+            .setPositiveButton("Supprimer", (dialog, which) -> {
+                new Thread(() -> {
+                    db.folderDao().delete(folder);
+                    requireActivity().runOnUiThread(this::loadFolderContent);
+                }).start();
+            })
+            .setNegativeButton("Annuler", null)
+            .show();
+    }
+    
+    private void editRecette(Recette recette) {
+        Intent intent = new Intent(requireContext(), EditRecetteActivity.class);
+        intent.putExtra("recetteId", recette.id);
+        editRecipeLauncher.launch(intent);
+    }
+    
+    private void deleteRecette(Recette recette) {
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Supprimer la recette")
+            .setMessage("Voulez-vous vraiment supprimer \"" + recette.titre + "\" ?")
+            .setPositiveButton("Supprimer", (dialog, which) -> {
+                new Thread(() -> {
+                    db.recetteDao().delete(recette);
+                    requireActivity().runOnUiThread(this::loadFolderContent);
+                }).start();
+            })
+            .setNegativeButton("Annuler", null)
+            .show();
+    }
+    
+    private void moveRecette(Recette recette) {
+        // Charger tous les dossiers disponibles
+        new Thread(() -> {
+            List<Folder> allFolders = db.folderDao().getAllFolders();
+            
+            requireActivity().runOnUiThread(() -> {
+                String[] folderNames = new String[allFolders.size() + 1];
+                folderNames[0] = "Dossier racine";
+                for (int i = 0; i < allFolders.size(); i++) {
+                    folderNames[i + 1] = allFolders.get(i).name;
+                }
+                
+                new AlertDialog.Builder(requireContext())
+                    .setTitle("Déplacer vers...")
+                    .setItems(folderNames, (dialog, which) -> {
+                        Long newParentId = (which == 0) ? null : allFolders.get(which - 1).id;
+                        new Thread(() -> {
+                            recette.parentId = newParentId;
+                            db.recetteDao().update(recette);
+                            requireActivity().runOnUiThread(this::loadFolderContent);
+                        }).start();
+                    })
+                    .setNegativeButton("Annuler", null)
+                    .show();
+            });
         }).start();
     }
     

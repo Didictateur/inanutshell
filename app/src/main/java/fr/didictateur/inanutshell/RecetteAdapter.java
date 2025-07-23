@@ -340,7 +340,7 @@ public class RecetteAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             Recette recette = (Recette) item;
             RecetteViewHolder rHolder = (RecetteViewHolder) holder;
 
-            rHolder.title.setText(recette.getTitle());
+            rHolder.title.setText(recette.titre);
             
             // Utiliser l'image personnalisée si elle existe, sinon l'icône par défaut
             if (recette.photoPath != null && !recette.photoPath.isEmpty() && new File(recette.photoPath).exists()) {

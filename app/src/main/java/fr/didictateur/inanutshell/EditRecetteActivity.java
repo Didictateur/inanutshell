@@ -20,11 +20,7 @@ public class EditRecetteActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recette);
 
-        db = androidx.room.Room.databaseBuilder(
-            getApplicationContext(),
-            AppDatabase.class,
-            "recette-db"
-        ).build();
+        db = AppDatabase.getInstance(this);
 
         // Récupération de l'ID de la recette si on modifie une recette existante
         recetteId = getIntent().getLongExtra("recetteId", 0);
@@ -83,15 +79,34 @@ public class EditRecetteActivity extends BaseActivity {
     }
 
     private void loadRecetteData() {
+        if (recetteId <= 0) {
+            // Nouvelle recette, rien à charger
+            return;
+        }
+        
         new Thread(() -> {
-            Recette recette = db.recetteDao().getRecetteById(recetteId);
-            if (recette != null) {
+            try {
+                Recette recette = db.recetteDao().getRecetteById(recetteId);
+                if (recette != null) {
+                    runOnUiThread(() -> {
+                        // Stocker les données dans l'adapter pour qu'il les applique quand les fragments sont prêts
+                        adapter.setRecetteData(recette);
+                        
+                        // Aussi essayer d'appliquer directement si les fragments sont déjà créés
+                        trySetFragmentData(recette);
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        // Recette non trouvée, peut-être afficher un message d'erreur
+                        android.widget.Toast.makeText(this, "Recette non trouvée", android.widget.Toast.LENGTH_SHORT).show();
+                        finish();
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 runOnUiThread(() -> {
-                    // Stocker les données dans l'adapter pour qu'il les applique quand les fragments sont prêts
-                    adapter.setRecetteData(recette);
-                    
-                    // Aussi essayer d'appliquer directement si les fragments sont déjà créés
-                    trySetFragmentData(recette);
+                    android.widget.Toast.makeText(this, "Erreur lors du chargement de la recette", android.widget.Toast.LENGTH_SHORT).show();
+                    finish();
                 });
             }
         }).start();
