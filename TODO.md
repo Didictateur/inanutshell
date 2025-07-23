@@ -5,8 +5,11 @@
 ### Haute priorité
 - [x] **Migration base de données** - Nouveau champ `portions` ajouté à MealPlan
 - [x] **Dialog de sélection de recette avec quantité** - TERMINÉ - Interface ajoutée avec boutons +/-
-- [x] **Affichage des portions dans le planificateur** - EN COURS - Les quantités ne s'affichent pas dans la vue hebdomadaire
-- [ ] **Test complet de la sélection de quantité** - Vérifier que tout fonctionne end-to-end
+- [x] **Affichage des portions dans le planificateur** - TERMINÉ - Les quantités s'affichent maintenant
+- [x] **Test complet de la sélection de quantité** - TERMINÉ - Tout fonctionne end-to-end
+- [x] **Liste de courses pour une recette** - TERMINÉ - Bouton ajouté dans ViewRecetteActivity
+- [x] **BUG: Multiplicateur de portions cassé** - CORRIGÉ - Code de multiplication des quantités vérifié
+- [x] **BUG: Cases à cocher inactives** - CORRIGÉ - Remplacé par vraies CheckBox interactives
 
 ### Faible priorité
 - [ ] **Performance de l'application** - Optimiser les requêtes de base de données

@@ -50,6 +50,15 @@
                 android:tint="#FF6B35"
                 android:contentDescription="Timer" />
 
+            <ImageButton
+                android:id="@+id/shoppingListButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@android:drawable/ic_menu_agenda"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:tint="#FF6B35"
+                android:contentDescription="Liste de courses" />
+
         </LinearLayout>
 
         <!-- Informations de base -->

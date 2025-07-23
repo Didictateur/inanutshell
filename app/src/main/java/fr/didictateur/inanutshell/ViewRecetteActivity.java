@@ -1,18 +1,25 @@
 package fr.didictateur.inanutshell;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
+import java.util.List;
+import java.util.ArrayList;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import java.util.regex.Pattern;
@@ -142,6 +149,9 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
         
         ImageButton timerButton = findViewById(R.id.timerButton);
         timerButton.setOnClickListener(v -> showTimerDialog());
+        
+        ImageButton shoppingListButton = findViewById(R.id.shoppingListButton);
+        shoppingListButton.setOnClickListener(v -> showShoppingListDialog());
         
         pauseTimerButton.setOnClickListener(v -> toggleTimer());
         stopTimerButton.setOnClickListener(v -> stopCurrentTimer());
@@ -472,6 +482,123 @@ public class ViewRecetteActivity extends BaseActivity implements TimerManager.Ti
                 currentTimerId = null;
                 timerLayout.setVisibility(View.GONE);
             });
+        }
+    }
+    
+    private void showShoppingListDialog() {
+        if (ingredients == null || ingredients.trim().isEmpty()) {
+            new AlertDialog.Builder(this)
+                .setTitle("🛒 Liste de courses")
+                .setMessage("Aucun ingrédient trouvé pour cette recette.")
+                .setPositiveButton("OK", null)
+                .show();
+            return;
+        }
+
+        // Générer la liste de courses basée sur les ingrédients ajustés
+        String adjustedIngredients = calculateAdjustedIngredients();
+        
+        // Créer une ListView avec des CheckBox
+        ListView listView = new ListView(this);
+        
+        // Diviser les ingrédients par ligne et créer la liste
+        String[] lines = adjustedIngredients.split("\n");
+        List<String> ingredientsList = new ArrayList<>();
+        
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue;
+            ingredientsList.add(line.trim());
+        }
+        
+        // Adapter personnalisé avec CheckBox
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.shopping_list_item, R.id.itemText, ingredientsList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                
+                CheckBox checkBox = view.findViewById(R.id.itemCheckBox);
+                TextView textView = view.findViewById(R.id.itemText);
+                
+                checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    // Barrer le texte si coché
+                    if (isChecked) {
+                        textView.setPaintFlags(textView.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
+                        textView.setTextColor(0xFF888888); // Gris
+                    } else {
+                        textView.setPaintFlags(textView.getPaintFlags() & (~android.graphics.Paint.STRIKE_THRU_TEXT_FLAG));
+                        textView.setTextColor(0xFF2C3E50); // Couleur normale
+                    }
+                });
+                
+                return view;
+            }
+        };
+        
+        listView.setAdapter(adapter);
+        
+        // Créer le dialog avec en-tête
+        LinearLayout dialogLayout = new LinearLayout(this);
+        dialogLayout.setOrientation(LinearLayout.VERTICAL);
+        dialogLayout.setPadding(24, 24, 24, 24);
+        
+        // En-tête
+        TextView headerText = new TextView(this);
+        headerText.setText("Portions : " + formatPortions(currentPortions) + " personnes");
+        headerText.setTextSize(16);
+        headerText.setTypeface(headerText.getTypeface(), android.graphics.Typeface.BOLD);
+        headerText.setPadding(0, 0, 0, 16);
+        
+        dialogLayout.addView(headerText);
+        dialogLayout.addView(listView);
+        
+        new AlertDialog.Builder(this)
+            .setTitle("🛒 Liste de courses - " + titre)
+            .setView(dialogLayout)
+            .setPositiveButton("Fermer", null)
+            .setNegativeButton("Partager", (dialog, which) -> {
+                String shoppingList = generateShoppingList(adjustedIngredients);
+                shareShoppingList(shoppingList);
+            })
+            .show();
+    }
+    
+    private String generateShoppingList(String ingredientsText) {
+        if (ingredientsText == null || ingredientsText.trim().isEmpty()) {
+            return "Aucun ingrédient trouvé.";
+        }
+        
+        StringBuilder shoppingList = new StringBuilder();
+        shoppingList.append("Liste de courses pour : ").append(titre).append("\n");
+        shoppingList.append("Portions : ").append(formatPortions(currentPortions)).append("\n\n");
+        
+        // Diviser les ingrédients par ligne
+        String[] lines = ingredientsText.split("\n");
+        
+        shoppingList.append("INGRÉDIENTS NÉCESSAIRES :\n");
+        shoppingList.append("═══════════════════════\n\n");
+        
+        for (String line : lines) {
+            if (line.trim().isEmpty()) continue;
+            
+            // Ajouter une checkbox et formater la ligne
+            shoppingList.append("☐ ").append(line.trim()).append("\n");
+        }
+        
+        shoppingList.append("\n═══════════════════════\n");
+        shoppingList.append("Généré par In a Nutshell");
+        
+        return shoppingList.toString();
+    }
+    
+    private void shareShoppingList(String shoppingList) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shoppingList);
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Liste de courses - " + titre);
+        
+        Intent chooser = Intent.createChooser(shareIntent, "Partager la liste de courses");
+        if (shareIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(chooser);
         }
     }
 
