@@ -9,6 +9,7 @@ public class MealPlanWithRecette {
     public String recetteTitre;
     public String tempsPrep;
     public String taille;
+    public String recetteIngredients;
     
     // Constructeurs
     public MealPlanWithRecette() {}
@@ -25,4 +26,7 @@ public class MealPlanWithRecette {
     
     public String getTaille() { return taille; }
     public void setTaille(String taille) { this.taille = taille; }
+    
+    public String getRecetteIngredients() { return recetteIngredients; }
+    public void setRecetteIngredients(String recetteIngredients) { this.recetteIngredients = recetteIngredients; }
 }

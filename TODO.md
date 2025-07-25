@@ -1,22 +1,5 @@
 # TODO Liste - In a Nutshell
 
-### Haute priorité
-- [x] **Migration base de données** - Nouveau champ `portions` ajouté à MealPlan
-- [x] **Dialog de sélection de recette avec quantité** - TERMINÉ - Interface ajoutée avec boutons +/-
-- [x] **Affichage des portions dans le planificateur** - TERMINÉ - Les quantités s'affichent maintenant
-- [x] **Test complet de la sélection de quantité** - TERMINÉ - Tout fonctionne end-to-end
-- [x] **Liste de courses pour une recette** - TERMINÉ - Bouton ajouté dans ViewRecetteActivity
-- [x] **BUG: Multiplicateur de portions cassé** - CORRIGÉ - Code de multiplication des quantités vérifié
-- [x] **BUG: Cases à cocher inactives** - CORRIGÉ - Remplacé par vraies CheckBox interactives
-
-### Faible priorité
-- [ ] **Performance de l'application** - Optimiser les requêtes de base de données
-- [ ] **Gestion d'erreurs** - Améliorer la robustesse générale
-- [ ] **Tests** - Vérifier toutes les fonctionnalités après modifications
-- [ ] **Code cleanup** - Supprimer les warnings de compilation
-
----
-
 ## **Nouvelles fonctionnalités à implémenter**
 
 ### Phase 1 - Améliorations rapides
@@ -51,12 +34,12 @@
 ### Phase 2 - Fonctionnalités moyennes
 
 #### **Liste de courses automatique**
-- [ ] Génération automatique depuis le planificateur
-- [ ] Regroupement par type d'ingrédient
-- [ ] Calcul des quantités totales
-- [ ] Interface de modification manuelle
-- [ ] Cochage des articles achetés
-- [ ] Sauvegarde des listes
+- [x] Génération automatique depuis le planificateur ✅
+- [x] Regroupement par type d'ingrédient ✅
+- [x] Calcul des quantités totales ✅
+- [x] Interface de modification manuelle ✅
+- [x] Cochage des articles achetés ✅
+- [x] Sauvegarde des listes ✅
 
 #### **Statistiques et analyses**
 - [ ] Recettes les plus cuisinées
@@ -172,8 +155,8 @@
 
 ---
 
-*Dernière mise à jour : 23 juillet 2025*
-*Statut actuel : Développement actif - Finalisation de la sélection de quantité, prêt pour les tests utilisateur*
+*Dernière mise à jour : 25 juillet 2025*
+*Statut actuel : Développement actif - Liste de courses planificateur terminée, fusion des ingrédients identiques, amélioration des boutons portions*
 
 ---
 

@@ -33,34 +33,46 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_tag_rounded"
+        android:padding="8dp">
 
-        <ImageButton
+        <Button
             android:id="@+id/decreasePortionsButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/btn_minus"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Diminuer les portions" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="−"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/circle_red"
+            android:gravity="center"
+            android:layout_marginEnd="12dp" />
 
         <EditText
             android:id="@+id/portionsEditText"
             android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
             android:text="1"
             android:textAlignment="center"
             android:inputType="numberDecimal"
             android:maxLength="4"
-            android:textSize="18sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:background="@android:color/white"
+            android:elevation="2dp" />
 
-        <ImageButton
+        <Button
             android:id="@+id/increasePortionsButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/btn_plus"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Augmenter les portions" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="+"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/circle_green"
+            android:gravity="center"
+            android:layout_marginStart="12dp" />
 
     </LinearLayout>
 

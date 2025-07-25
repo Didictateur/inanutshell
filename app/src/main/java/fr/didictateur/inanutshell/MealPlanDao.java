@@ -16,7 +16,7 @@ public interface MealPlanDao {
     @Query("SELECT * FROM meal_plans WHERE date BETWEEN :startDate AND :endDate ORDER BY date, mealType")
     List<MealPlan> getMealPlansForDateRange(String startDate, String endDate);
     
-    @Query("SELECT mp.*, r.titre as recetteTitre FROM meal_plans mp " +
+    @Query("SELECT mp.*, r.titre as recetteTitre, r.ingredients as recetteIngredients FROM meal_plans mp " +
            "LEFT JOIN recette r ON mp.recetteId = r.id " +
            "WHERE mp.date = :date ORDER BY " +
            "CASE mp.mealType " +
@@ -26,7 +26,7 @@ public interface MealPlanDao {
            "ELSE 4 END")
     List<MealPlanWithRecette> getMealPlansWithRecetteForDate(String date);
     
-    @Query("SELECT mp.*, r.titre as recetteTitre, r.tempsPrep, r.taille " +
+    @Query("SELECT mp.*, r.titre as recetteTitre, r.tempsPrep, r.taille, r.ingredients as recetteIngredients " +
            "FROM meal_plans mp " +
            "LEFT JOIN recette r ON mp.recetteId = r.id " +
            "WHERE mp.date BETWEEN :startDate AND :endDate " +

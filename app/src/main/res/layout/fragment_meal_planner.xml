@@ -46,6 +46,40 @@
 
     </LinearLayout>
 
+    <!-- Boutons pour les listes de courses -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/shopping_list_day_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="Liste de courses - Jour"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@color/primary_color"
+            android:padding="12dp" />
+
+        <Button
+            android:id="@+id/shopping_list_week_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Liste de courses - Semaine"
+            android:textSize="14sp"
+            android:textColor="@android:color/white"
+            android:background="@color/primary_color"
+            android:padding="12dp" />
+
+    </LinearLayout>
+
     <!-- Liste des jours de la semaine -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/week_recycler_view"
