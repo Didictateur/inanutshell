@@ -4,7 +4,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background_secondary">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
@@ -32,20 +33,20 @@
             android:visibility="gone">
 
             <ImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:src="@drawable/ic_recipe"
-                android:alpha="0.3"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@android:drawable/ic_menu_info_details"
                 android:layout_marginBottom="16dp"
-                android:contentDescription="@string/no_recipes" />
+                android:alpha="0.5" />
 
             <TextView
                 android:id="@+id/tv_empty_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_recipes"
-                android:textAppearance="@style/TextAppearance.InANutshell.Headline"
-                android:textAlignment="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
                 android:layout_marginBottom="8dp" />
 
             <TextView
@@ -53,27 +54,38 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_recipes_message"
-                android:textAppearance="@style/TextAppearance.InANutshell.Body"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
                 android:textAlignment="center"
-                android:alpha="0.7"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="16dp" />
 
             <Button
                 android:id="@+id/btn_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/refresh"
-                style="@style/Widget.InANutshell.Button" />
+                android:text="@string/add_recipe"
+                android:backgroundTint="@color/primary" />
 
         </LinearLayout>
 
-        <!-- Loading State -->
+        <!-- Progress Bar -->
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone" />
+
+        <!-- FAB pour ajouter une recette -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add_recipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/ic_input_add"
+            android:contentDescription="@string/add_recipe"
+            app:backgroundTint="@color/primary" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
