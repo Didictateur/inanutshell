@@ -63,4 +63,33 @@ public interface MealPlanDao {
     
     @Query("SELECT * FROM meal_plans WHERE is_completed = 0 AND meal_date <= :currentDate ORDER BY meal_date ASC")
     List<MealPlan> getUpcomingMealPlans(Date currentDate);
+    
+    // Méthodes de synchronisation avec Mealie
+    @Query("SELECT * FROM meal_plans WHERE needs_sync = 1 OR is_synced = 0 ORDER BY created_at ASC")
+    List<MealPlan> getUnsyncedMealPlansSync();
+    
+    @Query("SELECT * FROM meal_plans WHERE server_id = :serverId")
+    MealPlan getMealPlanByServerIdSync(String serverId);
+    
+    @Query("UPDATE meal_plans SET is_synced = 1, needs_sync = 0, last_sync_date = :syncDate WHERE id = :id")
+    void markAsSynced(int id, Date syncDate);
+    
+    @Query("UPDATE meal_plans SET needs_sync = 1, is_synced = 0 WHERE id = :id")
+    void markAsNeedsSync(int id);
+    
+    @Query("SELECT COUNT(*) FROM meal_plans WHERE needs_sync = 1 OR is_synced = 0")
+    int getUnsyncedCount();
+    
+    @Query("SELECT * FROM meal_plans WHERE last_sync_date IS NULL OR last_sync_date < :since ORDER BY created_at ASC")
+    List<MealPlan> getMealPlansSyncedBefore(Date since);
+    
+    // Méthodes synchrones pour les opérations en arrière-plan
+    @Insert
+    long insertSync(MealPlan mealPlan);
+    
+    @Update
+    void updateSync(MealPlan mealPlan);
+    
+    @Query("SELECT * FROM meal_plans WHERE id = :id")
+    MealPlan getByIdSync(int id);
 }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_presets"
+        android:title="Minuteries prédéfinies"
+        android:icon="@android:drawable/ic_dialog_dialer"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_pause_all"
+        android:title="Tout mettre en pause"
+        android:icon="@android:drawable/ic_media_pause" />
+
+    <item
+        android:id="@+id/action_clear_finished"
+        android:title="Supprimer les terminées"
+        android:icon="@android:drawable/ic_menu_delete" />
+
+</menu>

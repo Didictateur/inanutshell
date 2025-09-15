@@ -2,10 +2,20 @@ package fr.didictateur.inanutshell.data.network;
 
 import fr.didictateur.inanutshell.MealieApplication;
 import fr.didictateur.inanutshell.data.api.MealieApiService;
+import fr.didictateur.inanutshell.config.ServerConfig;
+import fr.didictateur.inanutshell.config.MultiServerManager;
+import fr.didictateur.inanutshell.network.RetryInterceptor;
+import fr.didictateur.inanutshell.network.NetworkStateManager;
+import fr.didictateur.inanutshell.cache.SmartCacheInterceptor;
+import fr.didictateur.inanutshell.network.ErrorHandler;
+import fr.didictateur.inanutshell.performance.PerformanceManager;
+import fr.didictateur.inanutshell.logging.AppLogger;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.Cache;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import android.content.Context;
 
 import java.util.concurrent.TimeUnit;
 
@@ -15,8 +25,61 @@ public class NetworkManager {
     private MealieApiService apiService;
     private Retrofit retrofit;
     
+    // Nouveaux gestionnaires techniques intégrés
+    private MultiServerManager multiServerManager;
+    private RetryInterceptor retryInterceptor;
+    private SmartCacheInterceptor cacheInterceptor;
+    private NetworkStateManager networkStateManager;
+    private ErrorHandler errorHandler;
+    private PerformanceManager performanceManager;
+    private AppLogger logger;
+    private Context context;
+    
     private NetworkManager() {
+        // L'initialisation sera faite dans initialize()
+    }
+    
+    /**
+     * Initialise NetworkManager avec le contexte (à appeler depuis l'Application)
+     */
+    public void initialize(Context context) {
+        this.context = context.getApplicationContext();
+        
+        // Initialiser tous les gestionnaires techniques avec fallback sécurisé
+        try {
+            this.logger = AppLogger.getInstance(context);
+            this.performanceManager = PerformanceManager.getInstance();
+            this.networkStateManager = NetworkStateManager.getInstance(context);
+            this.errorHandler = new ErrorHandler(context);
+            this.multiServerManager = MultiServerManager.getInstance(context);
+            
+            // Intercepteurs avec constructeurs corrects
+            this.retryInterceptor = new RetryInterceptor(); // Constructor par défaut
+            this.cacheInterceptor = new SmartCacheInterceptor(context, SmartCacheInterceptor.CacheStrategy.BALANCED);
+            
+            logger.logInfo("NetworkManager", "Tous les composants techniques initialisés");
+        } catch (Exception e) {
+            // Fallback si les composants techniques ne sont pas disponibles
+            android.util.Log.w("NetworkManager", "Composants techniques non disponibles, mode legacy: " + e.getMessage());
+            this.logger = null;
+            this.performanceManager = null;
+            this.networkStateManager = null;
+            this.errorHandler = null;
+            this.multiServerManager = null;
+            this.retryInterceptor = null;
+            this.cacheInterceptor = null;
+        }
+        
+        // Observer les changements de serveur pour reconfigurer
+        multiServerManager.getCurrentServerLiveData().observeForever(serverConfig -> {
+            if (serverConfig != null) {
+                logger.logInfo("NetworkManager", "Server changed to: " + serverConfig.getName());
+                setupRetrofitWithServer(serverConfig);
+            }
+        });
+        
         setupRetrofit();
+        logger.logInfo("NetworkManager", "NetworkManager initialized with technical infrastructure");
     }
     
     public static synchronized NetworkManager getInstance() {
@@ -26,71 +89,125 @@ public class NetworkManager {
         return instance;
     }
     
+    /**
+     * Obtient une instance initialisée avec le contexte
+     */
+    public static NetworkManager getInstance(Context context) {
+        NetworkManager manager = getInstance();
+        if (manager.context == null) {
+            manager.initialize(context);
+        }
+        return manager;
+    }
+    
     private void setupRetrofit() {
-        // Configuration des interceptors
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
-        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        ServerConfig currentServer = null;
+        if (multiServerManager != null) {
+            currentServer = multiServerManager.getCurrentServer();
+        }
         
-        // Log pour déboguer
-        android.util.Log.d("NetworkManager", "Configuration Retrofit...");
+        if (currentServer != null) {
+            setupRetrofitWithServer(currentServer);
+        } else {
+            // Fallback à l'ancienne méthode pour compatibilité
+            setupRetrofitLegacy();
+        }
+    }
+    
+    /**
+     * Configuration de Retrofit avec un serveur spécifique (nouvelle méthode intégrée)
+     */
+    private void setupRetrofitWithServer(ServerConfig server) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Setting up Retrofit with server: " + server.getName());
+        }
         
-        // DNS personnalisé avec fallback vers IP pour cook.cosmoris.fr
-        okhttp3.Dns customDns = hostname -> {
-            android.util.Log.d("NetworkManager", "DNS lookup pour: " + hostname);
-            if ("cook.cosmoris.fr".equals(hostname)) {
-                try {
-                    java.net.InetAddress address = java.net.InetAddress.getByName("83.228.206.105");
-                    android.util.Log.d("NetworkManager", "DNS fallback vers IP: " + address.getHostAddress());
-                    return java.util.Collections.singletonList(address);
-                } catch (java.net.UnknownHostException e) {
-                    android.util.Log.e("NetworkManager", "Fallback IP failed: " + e.getMessage());
-                }
-            }
-            return okhttp3.Dns.SYSTEM.lookup(hostname);
-        };
-
-        // Configuration SSL permissive pour debug
-        javax.net.ssl.X509TrustManager trustAllCerts = new javax.net.ssl.X509TrustManager() {
-            @Override
-            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {}
-            
-            @Override
-            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {}
-            
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return new java.security.cert.X509Certificate[]{};
-            }
-        };
-
+        // Configuration du client HTTP avec tous les intercepteurs techniques
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .writeTimeout(30, TimeUnit.SECONDS)
-            .dns(customDns)
-            .hostnameVerifier((hostname, session) -> true)
-            .addInterceptor(loggingInterceptor);
-
-        try {
-            javax.net.ssl.SSLContext sslContext = javax.net.ssl.SSLContext.getInstance("SSL");
-            sslContext.init(null, new javax.net.ssl.TrustManager[]{trustAllCerts}, new java.security.SecureRandom());
-            httpClient.sslSocketFactory(sslContext.getSocketFactory(), trustAllCerts);
-        } catch (Exception e) {
-            android.util.Log.e("NetworkManager", "Erreur SSL Config: " + e.getMessage());
+            .connectTimeout(server.getTimeoutSeconds(), TimeUnit.SECONDS)
+            .readTimeout(server.getTimeoutSeconds(), TimeUnit.SECONDS)
+            .writeTimeout(server.getTimeoutSeconds(), TimeUnit.SECONDS);
+        
+        // Ajouter le cache intelligent
+        if (cacheInterceptor != null && context != null) {
+            Cache cache = SmartCacheInterceptor.createOptimizedCache(context);
+            httpClient.cache(cache);
+            httpClient.addInterceptor(cacheInterceptor);
         }
         
-        // URL de base du serveur Mealie
-        String baseUrl = MealieApplication.getInstance().getMealieServerUrl();
-        if (baseUrl.isEmpty()) {
-            baseUrl = "http://localhost:9000/"; // URL par défaut
+        // Ajouter le retry automatique
+        if (retryInterceptor != null) {
+            httpClient.addInterceptor(retryInterceptor);
         }
         
-        // Assurer que l'URL se termine par un slash
+        // Logging (uniquement en debug)
+        if (android.util.Log.isLoggable("NetworkManager", android.util.Log.DEBUG)) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(loggingInterceptor);
+        }
+        
+        // Certificats auto-signés si autorisés
+        if (server.isAllowSelfSigned()) {
+            // TODO: Ajouter la configuration SSL pour certificats auto-signés
+        }
+        
+        String baseUrl = server.getApiUrl();
         if (!baseUrl.endsWith("/")) {
             baseUrl += "/";
         }
         
-        android.util.Log.d("NetworkManager", "Base URL: " + baseUrl);
+        if (logger != null) {
+            logger.logDebug("NetworkManager", "Base URL: " + baseUrl);
+        }
+        
+        // Create Gson with custom deserializer for Recipe
+        com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
+            .registerTypeAdapter(fr.didictateur.inanutshell.data.model.Recipe.class, 
+                new fr.didictateur.inanutshell.data.model.RecipeDeserializer())
+            .create();
+        
+        // Configuration de Retrofit
+        retrofit = new Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(httpClient.build())
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build();
+        
+        apiService = retrofit.create(MealieApiService.class);
+        
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Retrofit configured successfully for server: " + server.getName());
+        }
+    }
+    
+    /**
+     * Configuration Retrofit legacy pour compatibilité
+     */
+    private void setupRetrofitLegacy() {
+        // Configuration du client HTTP
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS);
+        
+        // Logging (uniquement en debug)
+        if (android.util.Log.isLoggable("NetworkManager", android.util.Log.DEBUG)) {
+            HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+            loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(loggingInterceptor);
+        }
+        
+        // URL de base
+        String baseUrl = MealieApplication.getInstance().getMealieServerUrl();
+        if (baseUrl.isEmpty()) {
+            baseUrl = "http://localhost:9000/"; // URL par défaut
+        }
+        if (!baseUrl.endsWith("/")) {
+            baseUrl += "/";
+        }
+        
+        android.util.Log.d("NetworkManager", "Base URL (legacy): " + baseUrl);
         
         // Create Gson with custom deserializer for Recipe
         com.google.gson.Gson gson = new com.google.gson.GsonBuilder()
@@ -122,22 +239,73 @@ public class NetworkManager {
     }
     
     public String getAuthHeader() {
+        // Utiliser le serveur actuel si disponible
+        if (multiServerManager != null) {
+            ServerConfig currentServer = multiServerManager.getCurrentServer();
+            if (currentServer != null && currentServer.getApiKey() != null) {
+                String authHeader = "Bearer " + currentServer.getApiKey();
+                if (logger != null) {
+                    logger.logDebug("NetworkManager", "Auth header from current server: " + 
+                        authHeader.substring(0, Math.min(20, authHeader.length())) + "...");
+                }
+                return authHeader;
+            }
+        }
+        
+        // Fallback à l'ancienne méthode
         String token = MealieApplication.getInstance().getMealieAuthToken();
         String authHeader = token.isEmpty() ? "" : "Bearer " + token;
-        android.util.Log.d("NetworkManager", "Auth header: " + authHeader.substring(0, Math.min(20, authHeader.length())) + "...");
+        android.util.Log.d("NetworkManager", "Auth header (legacy): " + authHeader.substring(0, Math.min(20, authHeader.length())) + "...");
         return authHeader;
     }
     
     public String getAuthToken() {
+        // Utiliser le serveur actuel si disponible
+        if (multiServerManager != null) {
+            ServerConfig currentServer = multiServerManager.getCurrentServer();
+            if (currentServer != null && currentServer.getApiKey() != null) {
+                return currentServer.getApiKey();
+            }
+        }
+        
+        // Fallback
         return MealieApplication.getInstance().getMealieAuthToken();
     }
     
     public String getBaseUrl() {
+        // Utiliser le serveur actuel si disponible
+        if (multiServerManager != null) {
+            ServerConfig currentServer = multiServerManager.getCurrentServer();
+            if (currentServer != null) {
+                return currentServer.getBaseUrl();
+            }
+        }
+        
+        // Fallback
         return MealieApplication.getInstance().getMealieServerUrl();
     }
     
     public boolean isConnected() {
-        // Vérifier si nous avons une URL et un token
+        // Utiliser NetworkStateManager si disponible
+        if (networkStateManager != null) {
+            boolean networkConnected = networkStateManager.getCurrentNetworkState().isConnected;
+            boolean hasValidServer = false;
+            
+            if (multiServerManager != null) {
+                ServerConfig currentServer = multiServerManager.getCurrentServer();
+                hasValidServer = currentServer != null && 
+                    currentServer.getStatus() == ServerConfig.ServerStatus.ONLINE;
+            } else {
+                // Fallback à l'ancienne vérification
+                String url = getBaseUrl();
+                String token = getAuthToken();
+                hasValidServer = url != null && !url.isEmpty() && token != null && !token.isEmpty();
+            }
+            
+            return networkConnected && hasValidServer;
+        }
+        
+        // Fallback à l'ancienne méthode
         String url = getBaseUrl();
         String token = getAuthToken();
         return url != null && !url.isEmpty() && token != null && !token.isEmpty();
@@ -245,8 +413,75 @@ public class NetworkManager {
         });
     }
     
-    // Get recipes method
+    // Get recipes method with technical infrastructure
     public void getRecipes(RecipesCallback callback) {
+        // Utiliser PerformanceManager pour optimiser l'exécution
+        if (performanceManager != null) {
+            performanceManager.executeWithCache("get_recipes", new PerformanceManager.PerformanceTask<java.util.List<fr.didictateur.inanutshell.data.model.Recipe>>() {
+                @Override
+                public java.util.List<fr.didictateur.inanutshell.data.model.Recipe> execute() throws Exception {
+                    return getRecipesSynchronous();
+                }
+                
+                @Override
+                public PerformanceManager.TaskType getType() {
+                    return PerformanceManager.TaskType.IO;
+                }
+                
+                @Override
+                public boolean isCacheable() {
+                    return true; // Les recettes peuvent être mises en cache
+                }
+            }, new PerformanceManager.PerformanceCallback<java.util.List<fr.didictateur.inanutshell.data.model.Recipe>>() {
+                @Override
+                public void onSuccess(java.util.List<fr.didictateur.inanutshell.data.model.Recipe> recipes) {
+                    callback.onSuccess(recipes);
+                }
+                
+                @Override
+                public void onError(Exception error) {
+                    String errorMsg = handleError(error, "Erreur lors du chargement des recettes");
+                    callback.onError(errorMsg);
+                }
+            });
+        } else {
+            // Fallback à l'ancienne méthode
+            getRecipesLegacy(callback);
+        }
+    }
+    
+    /**
+     * Version synchrone pour PerformanceManager
+     */
+    private java.util.List<fr.didictateur.inanutshell.data.model.Recipe> getRecipesSynchronous() throws Exception {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            throw new Exception("Non authentifié");
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.response.RecipeListResponse> call = 
+            apiService.getRecipes(authHeader, 1, 50, "name", "asc", "");
+        
+        retrofit2.Response<fr.didictateur.inanutshell.data.response.RecipeListResponse> response = call.execute();
+        
+        if (response.isSuccessful() && response.body() != null) {
+            java.util.List<fr.didictateur.inanutshell.data.model.Recipe> recipes = response.body().getItems();
+            if (recipes == null) {
+                recipes = new java.util.ArrayList<>();
+            }
+            if (logger != null) {
+                logger.logInfo("NetworkManager", "Loaded " + recipes.size() + " recipes");
+            }
+            return recipes;
+        } else {
+            throw new Exception("Erreur HTTP: " + response.code() + " " + response.message());
+        }
+    }
+    
+    /**
+     * Version legacy pour compatibilité
+     */
+    private void getRecipesLegacy(RecipesCallback callback) {
         String authHeader = getAuthHeader();
         if (authHeader.isEmpty()) {
             callback.onError("Non authentifié");
@@ -323,8 +558,78 @@ public class NetworkManager {
         });
     }
     
-    // Create recipe method
+    // Create recipe method with technical infrastructure
     public void createRecipe(fr.didictateur.inanutshell.data.model.Recipe recipe, CreateRecipeCallback callback) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Creating recipe: " + recipe.getName());
+        }
+        
+        // Utiliser PerformanceManager pour optimiser l'exécution
+        if (performanceManager != null) {
+            performanceManager.executeWithCache("create_recipe", new PerformanceManager.PerformanceTask<fr.didictateur.inanutshell.data.model.Recipe>() {
+                @Override
+                public fr.didictateur.inanutshell.data.model.Recipe execute() throws Exception {
+                    return createRecipeSynchronous(recipe);
+                }
+                
+                @Override
+                public PerformanceManager.TaskType getType() {
+                    return PerformanceManager.TaskType.IO;
+                }
+                
+                @Override
+                public boolean isCacheable() {
+                    return false; // Création n'est pas cacheable
+                }
+            }, new PerformanceManager.PerformanceCallback<fr.didictateur.inanutshell.data.model.Recipe>() {
+                @Override
+                public void onSuccess(fr.didictateur.inanutshell.data.model.Recipe createdRecipe) {
+                    if (logger != null) {
+                        logger.logInfo("NetworkManager", "Recipe created successfully");
+                    }
+                    callback.onSuccess(createdRecipe);
+                }
+                
+                @Override
+                public void onError(Exception error) {
+                    String errorMsg = handleError(error, "Erreur lors de la création de recette");
+                    callback.onError(errorMsg);
+                }
+            });
+        } else {
+            // Fallback à l'ancienne méthode
+            createRecipeLegacy(recipe, callback);
+        }
+    }
+    
+    /**
+     * Version synchrone pour PerformanceManager
+     */
+    private fr.didictateur.inanutshell.data.model.Recipe createRecipeSynchronous(fr.didictateur.inanutshell.data.model.Recipe recipe) throws Exception {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            throw new Exception("Non authentifié");
+        }
+        
+        retrofit2.Call<okhttp3.ResponseBody> call = 
+            apiService.createRecipe(authHeader, recipe);
+        
+        retrofit2.Response<okhttp3.ResponseBody> response = call.execute();
+        
+        if (response.isSuccessful()) {
+            // Créer une recette fictive pour indiquer le succès
+            fr.didictateur.inanutshell.data.model.Recipe dummyRecipe = new fr.didictateur.inanutshell.data.model.Recipe();
+            dummyRecipe.setName("Recette créée avec succès");
+            return dummyRecipe;
+        } else {
+            throw new Exception("Erreur HTTP: " + response.code() + " " + response.message());
+        }
+    }
+    
+    /**
+     * Version legacy pour compatibilité
+     */
+    private void createRecipeLegacy(fr.didictateur.inanutshell.data.model.Recipe recipe, CreateRecipeCallback callback) {
         String authHeader = getAuthHeader();
         if (authHeader.isEmpty()) {
             callback.onError("Non authentifié");
@@ -550,5 +855,346 @@ public class NetworkManager {
                 callback.onError(errorMsg);
             }
         });
+    }
+    
+    /**
+     * Gère les erreurs avec ErrorHandler
+     */
+    private String handleError(Exception error, String defaultMessage) {
+        if (errorHandler != null) {
+            try {
+                // Utiliser ErrorHandler si disponible
+                errorHandler.handleError(error, new ErrorHandler.ErrorCallback() {
+                    @Override
+                    public void onErrorHandled(String message, boolean shouldRetry) {
+                        // Callback géré automatiquement
+                    }
+                });
+                return error.getMessage() != null ? error.getMessage() : defaultMessage;
+            } catch (Exception e) {
+                // Fallback si ErrorHandler échoue
+                android.util.Log.w("NetworkManager", "ErrorHandler failed: " + e.getMessage());
+            }
+        }
+        
+        // Fallback logging standard
+        if (logger != null) {
+            logger.logError("NetworkManager", error.getMessage() != null ? error.getMessage() : defaultMessage, error);
+        } else {
+            android.util.Log.e("NetworkManager", defaultMessage, error);
+        }
+        return error.getMessage() != null ? error.getMessage() : defaultMessage;
+    }
+    
+    /**
+     * Gère les erreurs réseau et multi-serveurs avec auto-failover
+     */
+    private String handleNetworkError(Throwable error, String operation) {
+        String errorMsg = handleError(new Exception(error), "Erreur lors de: " + operation);
+        
+        // Si on a MultiServerManager, tenter un failover automatique
+        if (multiServerManager != null) {
+            try {
+                multiServerManager.switchToNextAvailableServer();
+                ServerConfig currentServer = multiServerManager.getCurrentServer();
+                if (currentServer != null && logger != null) {
+                    logger.logInfo("NetworkManager", "Tentative de failover vers: " + currentServer.getServerUrl());
+                }
+            } catch (Exception e) {
+                if (logger != null) {
+                    logger.logError("NetworkManager", "Erreur during failover: " + e.getMessage(), e);
+                }
+            }
+        }
+        
+        return errorMsg;
+    }
+    
+    // ===== MEAL PLANS API METHODS =====
+    
+    /**
+     * Interface pour les callbacks de meal plans
+     */
+    public interface MealPlansCallback {
+        void onSuccess(java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> mealPlans);
+        void onError(String error);
+    }
+    
+    public interface MealPlanCallback {
+        void onSuccess(fr.didictateur.inanutshell.data.model.MealieMealPlan mealPlan);
+        void onError(String error);
+    }
+    
+    /**
+     * Récupère les meal plans dans une plage de dates avec infrastructure technique
+     */
+    public void getMealPlans(String startDate, String endDate, MealPlansCallback callback) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Getting meal plans from " + startDate + " to " + endDate);
+        }
+        
+        if (performanceManager != null) {
+            String cacheKey = "meal_plans_" + startDate + "_" + endDate;
+            performanceManager.executeWithCache(cacheKey, new PerformanceManager.PerformanceTask<java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan>>() {
+                @Override
+                public java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> execute() throws Exception {
+                    return getMealPlansSynchronous(startDate, endDate);
+                }
+                
+                @Override
+                public PerformanceManager.TaskType getType() {
+                    return PerformanceManager.TaskType.IO;
+                }
+                
+                @Override
+                public boolean isCacheable() {
+                    return true;
+                }
+            }, new PerformanceManager.PerformanceCallback<java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan>>() {
+                @Override
+                public void onSuccess(java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> mealPlans) {
+                    callback.onSuccess(mealPlans);
+                }
+                
+                @Override
+                public void onError(Exception error) {
+                    String errorMsg = handleError(error, "Erreur lors du chargement des meal plans");
+                    callback.onError(errorMsg);
+                }
+            });
+        } else {
+            getMealPlansLegacy(startDate, endDate, callback);
+        }
+    }
+    
+    private java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> getMealPlansSynchronous(String startDate, String endDate) throws Exception {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            throw new Exception("Non authentifié");
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.response.MealPlanListResponse> call = 
+            apiService.getMealPlans(authHeader, 1, 1000, startDate, endDate);
+        
+        retrofit2.Response<fr.didictateur.inanutshell.data.response.MealPlanListResponse> response = call.execute();
+        
+        if (response.isSuccessful() && response.body() != null) {
+            java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> mealPlans = response.body().getItems();
+            if (mealPlans == null) {
+                mealPlans = new java.util.ArrayList<>();
+            }
+            if (logger != null) {
+                logger.logInfo("NetworkManager", "Loaded " + mealPlans.size() + " meal plans");
+            }
+            return mealPlans;
+        } else {
+            throw new Exception("Erreur HTTP: " + response.code() + " " + response.message());
+        }
+    }
+    
+    private void getMealPlansLegacy(String startDate, String endDate, MealPlansCallback callback) {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            callback.onError("Non authentifié");
+            return;
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.response.MealPlanListResponse> call = 
+            apiService.getMealPlans(authHeader, 1, 1000, startDate, endDate);
+        
+        call.enqueue(new retrofit2.Callback<fr.didictateur.inanutshell.data.response.MealPlanListResponse>() {
+            @Override
+            public void onResponse(retrofit2.Call<fr.didictateur.inanutshell.data.response.MealPlanListResponse> call, 
+                                 retrofit2.Response<fr.didictateur.inanutshell.data.response.MealPlanListResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    java.util.List<fr.didictateur.inanutshell.data.model.MealieMealPlan> mealPlans = response.body().getItems();
+                    if (mealPlans == null) {
+                        mealPlans = new java.util.ArrayList<>();
+                    }
+                    android.util.Log.d("NetworkManager", "Loaded " + mealPlans.size() + " meal plans");
+                    callback.onSuccess(mealPlans);
+                } else {
+                    String errorMsg = "Erreur lors du chargement des meal plans: " + response.code();
+                    android.util.Log.e("NetworkManager", errorMsg);
+                    callback.onError(errorMsg);
+                }
+            }
+            
+            @Override
+            public void onFailure(retrofit2.Call<fr.didictateur.inanutshell.data.response.MealPlanListResponse> call, Throwable t) {
+                String errorMsg = handleNetworkError(t, "chargement meal plans");
+                callback.onError(errorMsg);
+            }
+        });
+    }
+    
+    /**
+     * Crée un meal plan avec infrastructure technique
+     */
+    public void createMealPlan(fr.didictateur.inanutshell.data.model.MealieMealPlan mealPlan, MealPlanCallback callback) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Creating meal plan: " + mealPlan.getTitle());
+        }
+        
+        if (performanceManager != null) {
+            performanceManager.executeWithCache("create_meal_plan", new PerformanceManager.PerformanceTask<fr.didictateur.inanutshell.data.model.MealieMealPlan>() {
+                @Override
+                public fr.didictateur.inanutshell.data.model.MealieMealPlan execute() throws Exception {
+                    return createMealPlanSynchronous(mealPlan);
+                }
+                
+                @Override
+                public PerformanceManager.TaskType getType() {
+                    return PerformanceManager.TaskType.IO;
+                }
+                
+                @Override
+                public boolean isCacheable() {
+                    return false; // Création n'est pas cacheable
+                }
+            }, new PerformanceManager.PerformanceCallback<fr.didictateur.inanutshell.data.model.MealieMealPlan>() {
+                @Override
+                public void onSuccess(fr.didictateur.inanutshell.data.model.MealieMealPlan createdPlan) {
+                    if (logger != null) {
+                        logger.logInfo("NetworkManager", "Meal plan created successfully: " + createdPlan.getId());
+                    }
+                    callback.onSuccess(createdPlan);
+                }
+                
+                @Override
+                public void onError(Exception error) {
+                    String errorMsg = handleError(error, "Erreur lors de la création du meal plan");
+                    callback.onError(errorMsg);
+                }
+            });
+        } else {
+            createMealPlanLegacy(mealPlan, callback);
+        }
+    }
+    
+    private fr.didictateur.inanutshell.data.model.MealieMealPlan createMealPlanSynchronous(fr.didictateur.inanutshell.data.model.MealieMealPlan mealPlan) throws Exception {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            throw new Exception("Non authentifié");
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call = 
+            apiService.createMealPlan(authHeader, mealPlan);
+        
+        retrofit2.Response<fr.didictateur.inanutshell.data.model.MealieMealPlan> response = call.execute();
+        
+        if (response.isSuccessful() && response.body() != null) {
+            return response.body();
+        } else {
+            throw new Exception("Erreur HTTP: " + response.code() + " " + response.message());
+        }
+    }
+    
+    private void createMealPlanLegacy(fr.didictateur.inanutshell.data.model.MealieMealPlan mealPlan, MealPlanCallback callback) {
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            callback.onError("Non authentifié");
+            return;
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call = 
+            apiService.createMealPlan(authHeader, mealPlan);
+        
+        call.enqueue(new retrofit2.Callback<fr.didictateur.inanutshell.data.model.MealieMealPlan>() {
+            @Override
+            public void onResponse(retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call, 
+                                 retrofit2.Response<fr.didictateur.inanutshell.data.model.MealieMealPlan> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    String errorMsg = "Erreur lors de la création du meal plan: " + response.code();
+                    android.util.Log.e("NetworkManager", errorMsg);
+                    callback.onError(errorMsg);
+                }
+            }
+            
+            @Override
+            public void onFailure(retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call, Throwable t) {
+                String errorMsg = handleNetworkError(t, "création meal plan");
+                callback.onError(errorMsg);
+            }
+        });
+    }
+    
+    /**
+     * Met à jour un meal plan
+     */
+    public void updateMealPlan(String planId, fr.didictateur.inanutshell.data.model.MealieMealPlan mealPlan, MealPlanCallback callback) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Updating meal plan: " + planId);
+        }
+        
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            callback.onError("Non authentifié");
+            return;
+        }
+        
+        retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call = 
+            apiService.updateMealPlan(authHeader, planId, mealPlan);
+        
+        call.enqueue(new retrofit2.Callback<fr.didictateur.inanutshell.data.model.MealieMealPlan>() {
+            @Override
+            public void onResponse(retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call, 
+                                 retrofit2.Response<fr.didictateur.inanutshell.data.model.MealieMealPlan> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    callback.onSuccess(response.body());
+                } else {
+                    String errorMsg = handleError(new Exception("HTTP " + response.code()), "Erreur mise à jour meal plan");
+                    callback.onError(errorMsg);
+                }
+            }
+            
+            @Override
+            public void onFailure(retrofit2.Call<fr.didictateur.inanutshell.data.model.MealieMealPlan> call, Throwable t) {
+                String errorMsg = handleNetworkError(t, "mise à jour meal plan");
+                callback.onError(errorMsg);
+            }
+        });
+    }
+    
+    /**
+     * Supprime un meal plan
+     */
+    public void deleteMealPlan(String planId, SimpleCallback callback) {
+        if (logger != null) {
+            logger.logInfo("NetworkManager", "Deleting meal plan: " + planId);
+        }
+        
+        String authHeader = getAuthHeader();
+        if (authHeader.isEmpty()) {
+            callback.onError("Non authentifié");
+            return;
+        }
+        
+        retrofit2.Call<Void> call = apiService.deleteMealPlan(authHeader, planId);
+        
+        call.enqueue(new retrofit2.Callback<Void>() {
+            @Override
+            public void onResponse(retrofit2.Call<Void> call, retrofit2.Response<Void> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess("Meal plan supprimé");
+                } else {
+                    String errorMsg = handleError(new Exception("HTTP " + response.code()), "Erreur suppression meal plan");
+                    callback.onError(errorMsg);
+                }
+            }
+            
+            @Override
+            public void onFailure(retrofit2.Call<Void> call, Throwable t) {
+                String errorMsg = handleNetworkError(t, "suppression meal plan");
+                callback.onError(errorMsg);
+            }
+        });
+    }
+    
+    public interface SimpleCallback {
+        void onSuccess(String message);
+        void onError(String error);
     }
 }

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -467,6 +468,13 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
         if (id == R.id.action_meal_planner) {
             startActivity(new Intent(this, fr.didictateur.inanutshell.MealPlannerActivity.class));
             return true;
+        } else if (id == R.id.action_shopping_lists) {
+            Toast.makeText(this, "Listes de courses - Bientôt disponible", Toast.LENGTH_SHORT).show();
+            // startActivity(new Intent(this, fr.didictateur.inanutshell.data.shopping.ShoppingListsActivity.class));
+            return true;
+        } else if (id == R.id.action_timers) {
+            startActivity(new Intent(this, fr.didictateur.inanutshell.TimersActivity.class));
+            return true;
         } else if (id == R.id.action_sync) {
             // TODO: Implement sync
             return true;
@@ -487,6 +495,8 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
             // Minimiser l'app au lieu de la fermer
             moveTaskToBack(true);
         }
+        // Appel optionnel selon le comportement souhaité
+        // super.onBackPressed();
     }
     
     private void toggleSearch() {

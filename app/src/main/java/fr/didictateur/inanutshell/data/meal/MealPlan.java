@@ -44,6 +44,19 @@ public class MealPlan {
     @ColumnInfo(name = "is_completed")
     public boolean isCompleted;
     
+    // Champs de synchronisation avec Mealie
+    @ColumnInfo(name = "server_id")
+    public String serverId; // ID sur le serveur Mealie
+    
+    @ColumnInfo(name = "is_synced")
+    public boolean isSynced; // Indique si synchronisé avec le serveur
+    
+    @ColumnInfo(name = "last_sync_date")
+    public Date lastSyncDate; // Dernière synchronisation
+    
+    @ColumnInfo(name = "needs_sync")
+    public boolean needsSync; // Indique si nécessite synchronisation
+    
     // Enum pour les types de repas
     public enum MealType {
         BREAKFAST("Petit-déjeuner"),
@@ -148,5 +161,49 @@ public class MealPlan {
     
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+    
+    // Getters et Setters pour synchronisation
+    public String getServerId() {
+        return serverId;
+    }
+    
+    public void setServerId(String serverId) {
+        this.serverId = serverId;
+    }
+    
+    public boolean isSynced() {
+        return isSynced;
+    }
+    
+    public void setSynced(boolean synced) {
+        isSynced = synced;
+        if (synced) {
+            needsSync = false;
+        }
+    }
+    
+    public Date getLastSyncDate() {
+        return lastSyncDate;
+    }
+    
+    public void setLastSyncDate(Date lastSyncDate) {
+        this.lastSyncDate = lastSyncDate;
+    }
+    
+    public boolean needsSync() {
+        return needsSync;
+    }
+    
+    public void setNeedsSync(boolean needsSync) {
+        this.needsSync = needsSync;
+    }
+    
+    /**
+     * Marque le meal plan comme modifié et nécessitant une synchronisation
+     */
+    public void markAsModified() {
+        this.needsSync = true;
+        this.isSynced = false;
     }
 }

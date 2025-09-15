@@ -1,10 +1,33 @@
 package fr.didictateur.inanutshell.data.meal;
 
-import android.content.Context;
+import android.c            try {
+                long id = mealPlanDao.insert(mealPlan);
+                
+                // Déclencher la synchronisation automatique
+                if (syncManager != null && networkManager != null) {
+                    mealPlan.setId((int) id); // Mettre l'ID pour la sync
+                    syncManager.syncSingleMealPlan(mealPlan, new MealPlanSyncManager.SyncCallback() {
+                        @Override
+                        public void onSyncComplete(boolean success, String message) {
+                            // La sync se fait en arrière-plan, pas besoin de bloquer l'UI
+                        }
+                    });
+                }
+                
+                if (listener != null) {
+                    listener.onSuccess("Repas planifié avec succès");
+                }
+            } catch (Exception e) {
+                if (listener != null) {
+                    listener.onError("Erreur lors de la planification: " + e.getMessage());
+                }
+            }ext;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import fr.didictateur.inanutshell.data.AppDatabase;
+import fr.didictateur.inanutshell.data.sync.MealPlanSyncManager;
+import fr.didictateur.inanutshell.data.network.NetworkManager;
 
 import java.util.Date;
 import java.util.List;
@@ -22,12 +45,16 @@ public class MealPlanManager {
     private MealPlanDao mealPlanDao;
     private ExecutorService executorService;
     private Context context;
+    private MealPlanSyncManager syncManager;
+    private NetworkManager networkManager;
     
     private MealPlanManager(Context context) {
         this.context = context;
         AppDatabase database = AppDatabase.getInstance(context);
         this.mealPlanDao = database.mealPlanDao();
         this.executorService = Executors.newFixedThreadPool(2);
+        this.networkManager = NetworkManager.getInstance(context);
+        this.syncManager = MealPlanSyncManager.getInstance(context, mealPlanDao);
     }
     
     public static synchronized MealPlanManager getInstance(Context context) {
@@ -73,7 +100,20 @@ public class MealPlanManager {
     public void updateMealPlan(MealPlan mealPlan, OnMealPlanActionListener listener) {
         executorService.execute(() -> {
             try {
+                // Marquer comme modifié avant la mise à jour
+                mealPlan.markAsModified();
                 mealPlanDao.update(mealPlan);
+                
+                // Déclencher la synchronisation automatique
+                if (syncManager != null && networkManager != null) {
+                    syncManager.syncSingleMealPlan(mealPlan, new MealPlanSyncManager.SyncCallback() {
+                        @Override
+                        public void onSyncComplete(boolean success, String message) {
+                            // La sync se fait en arrière-plan
+                        }
+                    });
+                }
+                
                 if (listener != null) {
                     listener.onSuccess("Repas modifié avec succès");
                 }
@@ -89,6 +129,16 @@ public class MealPlanManager {
     public void deleteMealPlan(MealPlan mealPlan, OnMealPlanActionListener listener) {
         executorService.execute(() -> {
             try {
+                // Déclencher la synchronisation de suppression avant de supprimer localement
+                if (syncManager != null && networkManager != null && mealPlan.getServerId() != null) {
+                    syncManager.deleteMealPlanFromServer(mealPlan.getServerId(), new MealPlanSyncManager.SyncCallback() {
+                        @Override
+                        public void onSyncComplete(boolean success, String message) {
+                            // La sync se fait en arrière-plan
+                        }
+                    });
+                }
+                
                 mealPlanDao.delete(mealPlan);
                 if (listener != null) {
                     listener.onSuccess("Repas supprimé du planning");

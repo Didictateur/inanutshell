@@ -15,6 +15,11 @@
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.CAMERA" />
     
+    <!-- Notifications permissions -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
     <!-- Features -->
     <uses-feature android:name="android.hardware.camera" android:required="false" />
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
@@ -116,11 +121,37 @@
             android:parentActivityName=".MealPlannerActivity"
             android:theme="@style/Theme.InANutshell.NoActionBar" />
 
+        <!-- Shopping Lists Activity -->
+        <activity
+            android:name=".data.shopping.ShoppingListsActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.InANutshell.NoActionBar" />
+
+        <!-- Timers Activity -->
+        <activity
+            android:name=".TimersActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.main.MainActivity"
+            android:theme="@style/Theme.InANutshell.NoActionBar" />
+
+        <!-- Edit Timer Activity -->
+        <activity
+            android:name=".EditTimerActivity"
+            android:exported="false"
+            android:parentActivityName=".TimersActivity"
+            android:theme="@style/Theme.InANutshell.NoActionBar" />
+
         <!-- Fullscreen Image Activity -->
         <activity
             android:name=".ui.image.FullscreenImageActivity"
             android:exported="false"
             android:theme="@style/Theme.InANutshell.NoActionBar" />
+
+        <!-- Timer Service -->
+        <service
+            android:name=".TimerService"
+            android:exported="false" />
 
         <!-- File Provider for image handling -->
         <provider
