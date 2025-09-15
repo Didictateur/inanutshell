@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Grid span count pour tablettes: plus de colonnes -->
+    <integer name="recipe_grid_span_count">3</integer>
+    
+    <!-- Dimensions adaptées aux tablettes -->
+    <dimen name="recipe_card_width">240dp</dimen>
+    <dimen name="recipe_card_height">300dp</dimen>
+    <dimen name="recipe_image_height">180dp</dimen>
+    
+    <!-- Marges et padding plus généreux sur tablette -->
+    <dimen name="screen_margin">24dp</dimen>
+    <dimen name="card_margin">12dp</dimen>
+    <dimen name="content_padding">20dp</dimen>
+    
+    <!-- Tailles de texte légèrement plus grandes -->
+    <dimen name="text_size_headline">24sp</dimen>
+    <dimen name="text_size_title">20sp</dimen>
+    <dimen name="text_size_body">16sp</dimen>
+    <dimen name="text_size_caption">14sp</dimen>
+</resources>

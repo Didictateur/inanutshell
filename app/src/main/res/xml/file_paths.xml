@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Dossier pour les images de l'appareil photo -->
+    <external-files-path name="images" path="Pictures" />
+    <!-- Cache pour les images temporaires -->
+    <cache-path name="cache" path="." />
+    <!-- Fichiers externes -->
+    <external-path name="external_files" path="." />
+</paths>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_meal_planner"
+        android:title="Planning repas"
+        android:icon="@drawable/ic_calendar_today"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_sync"
+        android:title="@string/sync"
+        android:icon="@drawable/ic_sync"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings"
+        android:icon="@drawable/ic_settings"
+        app:showAsAction="never" />
+
+</menu>
+

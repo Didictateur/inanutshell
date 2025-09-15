@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">In a Nutshell</string>
+    
+    <!-- Setup Activity -->
+    <string name="setup_title">Configuration Mealie</string>
+    <string name="setup_subtitle">Connectez-vous à votre serveur Mealie</string>
+    <string name="server_url_hint">URL du serveur (ex: https://mealie.example.com)</string>
+    <string name="username_hint">Nom d\'utilisateur</string>
+    <string name="password_hint">Mot de passe</string>
+    <string name="connect_button">Se connecter</string>
+    <string name="connecting">Connexion en cours...</string>
+    <string name="connection_success">Connexion réussie !</string>
+    <string name="connection_successful">Connexion réussie</string>
+    <string name="connection_error">Erreur de connexion</string>
+    <string name="connection_failed">Erreur de connexion: %s</string>
+    <string name="invalid_url">URL invalide</string>
+    <string name="fields_required">Tous les champs sont requis</string>
+    <string name="setup_required">Configuration requise</string>
+    <string name="error_server_url_required">URL du serveur requise</string>
+    <string name="error_invalid_url">URL invalide</string>
+    <string name="error_email_required">Email requis</string>
+    <string name="error_invalid_email">Email invalide</string>
+    <string name="error_password_required">Mot de passe requis</string>
+    
+    <!-- Main Activity -->
+    <string name="recipes">Recettes</string>
+    <string name="categories">Catégories</string>
+    <string name="favorites">Favoris</string>
+    <string name="recipes_tab">Recettes</string>
+    <string name="meal_plan_tab">Planning</string>
+    <string name="shopping_list_tab">Courses</string>
+    <string name="settings_tab">Paramètres</string>
+    
+    <!-- Recipes -->
+    <string name="search_recipes">Rechercher des recettes...</string>
+    <string name="no_recipes_found">Aucune recette trouvée</string>
+    <string name="loading_recipes">Chargement des recettes...</string>
+    <string name="loading_more_recipes">Chargement de plus de recettes...</string>
+    <string name="recipe_error">Erreur lors du chargement des recettes</string>
+    <string name="error_loading_recipes">Erreur lors du chargement: %s</string>
+    <string name="retry">Réessayer</string>
+    
+    <!-- Recipe Detail -->
+    <string name="ingredients_title">Ingrédients</string>
+    <string name="instructions_title">Instructions</string>
+    <string name="nutrition_title">Informations nutritionnelles</string>
+    <string name="tools_title">Outils et Ustensiles</string>
+    <string name="prep_time">Temps de préparation</string>
+    <string name="cook_time">Temps de cuisson</string>
+    <string name="total_time">Temps total</string>
+    <string name="servings">Portions</string>
+    
+    <!-- Categories and Tags -->
+    <string name="categories_and_tags">Catégories et Tags</string>
+    <string name="category">Catégorie</string>
+    <string name="tags">Tags</string>
+    <string name="select_tags">Sélectionner les tags</string>
+    <string name="select_category">Sélectionner une catégorie</string>
+    <string name="no_category">Aucune catégorie</string>
+    <string name="no_tags">Aucun tag</string>
+    <string name="add_tag">Ajouter un tag</string>
+    <string name="remove_tag">Supprimer le tag</string>
+    <string name="tag_selection">Sélection des tags</string>
+    <string name="create_new_tag">Créer un nouveau tag</string>
+    <string name="create">Créer</string>
+    <string name="category_selection">Sélection de la catégorie</string>
+    <string name="create_new_category">Créer une nouvelle catégorie</string>
+    <string name="done">Terminé</string>
+    <string name="cancel">Annuler</string>
+    <string name="rating">Note</string>
+    
+        <!-- Settings -->
+    <string name="settings">Paramètres</string>
+    <string name="appearance">Apparence</string>
+    <string name="theme">Thème</string>
+    <string name="theme_system">Système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="about">À propos</string>
+    <string name="version">Version</string>
+    <string name="developed_by">Développé par</string>
+    
+    <!-- Additional UI strings -->
+    <string name="recipe_image">Image de la recette</string>
+    <string name="toggle_favorite">Basculer favori</string>
+    <string name="added_to_favorites">Ajouté aux favoris</string>
+    <string name="removed_from_favorites">Retiré des favoris</string>
+    <string name="no_recipes_message">Tirez vers le bas pour rafraîchir ou vérifiez votre connexion Mealie</string>
+    <string name="error_loading_recipes_title">Erreur de chargement</string>
+    <string name="setup_required_message">Configurez votre serveur Mealie pour commencer</string>
+    <string name="setup">Configuration</string>
+    <string name="not_configured">Non configuré</string>
+    <string name="reconfigure">Reconfigurer</string>
+    <string name="data_management">Gestion des données</string>
+    <string name="clear_data">Effacer les données</string>
+    <string name="clear_data_description">Supprime toutes les données locales et la configuration du serveur</string>
+    <string name="data_cleared">Données effacées</string>
+    <string name="mealie_server">Serveur Mealie</string>
+    <string name="version_1_0_0">Version 1.0.0</string>
+    <string name="mealie_compatible_app">Application compatible avec Mealie API</string>
+    
+    <!-- Common -->
+    <string name="ok">OK</string>
+    <string name="error">Erreur</string>
+    <string name="loading">Chargement...</string>
+    <string name="no_network">Pas de connexion réseau</string>
+    <string name="server_error">Erreur serveur</string>
+    
+    <!-- Missing strings -->
+    <string name="mealie_server_setup">Configuration du serveur Mealie</string>
+    <string name="server_url">URL du serveur</string>
+    <string name="email">Adresse email</string>
+    <string name="password">Mot de passe</string>
+    <string name="connect">Se connecter</string>
+    <string name="skip_setup">Ignorer la configuration</string>
+    <string name="setup_info">Vous pouvez configurer cela plus tard dans les paramètres</string>
+    <string name="no_recipes">Aucune recette</string>
+    <string name="add_recipe">Ajouter une recette</string>
+    <string name="refresh">Actualiser</string>
+    <string name="search">Rechercher</string>
+    <string name="sync">Synchroniser</string>
+    
+    <!-- Edit Recipe Activity -->
+    <string name="recipe_title">Titre de la recette</string>
+    <string name="recipe_description">Description</string>
+    <string name="prep_time_minutes">Temps de préparation (min)</string>
+    <string name="cook_time_minutes">Temps de cuisson (min)</string>
+    <string name="servings_count">Nombre de portions</string>
+    <string name="ingredients">Ingrédients</string>
+    <string name="ingredients_hint">1 tasse de farine\n2 œufs\n250ml de lait\n...</string>
+    <string name="instructions">Instructions</string>
+    <string name="instructions_hint">1. Mélanger la farine et les œufs\n2. Ajouter le lait progressivement\n3. ...</string>
+    <string name="save_recipe">Sauvegarder la recette</string>
+    <string name="edit_recipe">Modifier la recette</string>
+    <string name="recipe_saved">Recette sauvegardée</string>
+    <string name="error_saving_recipe">Erreur lors de la sauvegarde: %s</string>
+    
+    <!-- Image Management -->
+    <string name="select_from_gallery">Galerie</string>
+    <string name="take_photo">Photo</string>
+    <string name="remove_image">Supprimer</string>
+    <string name="image_selected">Image sélectionnée</string>
+    <string name="image_removed">Image supprimée</string>
+    <string name="permissions_granted">Permissions accordées</string>
+    <string name="permissions_required_for_images">Permissions requises pour gérer les images</string>
+    <string name="error_loading_image">Erreur lors du chargement de l\'image</string>
+    
+    <!-- Rating System -->
+    <string name="rating_saved">Note sauvegardée</string>
+    <string name="rating_removed">Note supprimée</string>
+    <string name="rate_recipe">Noter cette recette</string>
+    <string name="rating_dialog_title">Noter cette recette</string>
+    <string name="rating_dialog_instruction">Appuyez sur les étoiles pour noter</string>
+    <string name="remove_rating">Supprimer</string>
+    <string name="save">Enregistrer</string>
+</resources>

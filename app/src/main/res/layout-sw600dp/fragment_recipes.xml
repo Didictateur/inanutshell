@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_secondary">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Tablette: Layout à deux colonnes -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <!-- Colonne principale: Liste des recettes (70% de l'écran) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    android:padding="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical" />
+
+                <!-- Panneau latéral: Informations et actions rapides (30% de l'écran) -->
+                <ScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.3"
+                    android:background="@drawable/bg_tag_rounded"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Titre du panneau -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Actions rapides"
+                            android:textStyle="bold"
+                            android:textSize="18sp"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="16dp" />
+
+                        <!-- Bouton nouvelle recette -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_add_recipe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Nouvelle recette"
+                            android:layout_marginBottom="12dp"
+                            app:icon="@android:drawable/ic_input_add"
+                            style="@style/Widget.Material3.Button" />
+
+                        <!-- Bouton recherche avancée -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_advanced_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Recherche avancée"
+                            android:layout_marginBottom="12dp"
+                            app:icon="@android:drawable/ic_menu_search"
+                            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                        <!-- Bouton favoris -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_favorites"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mes favoris"
+                            android:layout_marginBottom="16dp"
+                            app:icon="@android:drawable/btn_star"
+                            style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                        <!-- Séparateur -->
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/divider"
+                            android:layout_marginVertical="8dp" />
+
+                        <!-- Statistiques -->
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Statistiques"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="8dp" />
+
+                        <TextView
+                            android:id="@+id/tv_total_recipes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Total: 0 recettes"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="4dp" />
+
+                        <TextView
+                            android:id="@+id/tv_favorites_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Favoris: 0"
+                            android:textColor="@color/text_secondary"
+                            android:layout_marginBottom="8dp" />
+
+                        <!-- État de connexion -->
+                        <TextView
+                            android:id="@+id/tv_connection_status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="En ligne"
+                            android:textColor="@color/success"
+                            android:drawableStart="@android:drawable/presence_online"
+                            android:drawablePadding="8dp"
+                            android:gravity="center_vertical" />
+
+                    </LinearLayout>
+                </ScrollView>
+
+            </LinearLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@android:drawable/ic_menu_info_details"
+                android:layout_marginBottom="16dp"
+                android:alpha="0.5" />
+
+            <TextView
+                android:id="@+id/tv_empty_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_recipes"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/tv_empty_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_recipes_message"
+                android:textSize="14sp"
+                android:textColor="@color/text_secondary"
+                android:textAlignment="center"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btn_action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/refresh"
+                android:background="@color/primary"
+                android:textColor="@color/on_primary"
+                android:paddingHorizontal="24dp" />
+
+        </LinearLayout>
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminateTint="@color/primary" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</layout>

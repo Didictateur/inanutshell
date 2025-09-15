@@ -1,0 +1,77 @@
+<resources>
+    <!-- Primary colors - Material Orange theme -->
+    <color name="primary">#FF7043</color>
+    <color name="primary_variant">#D84315</color>
+    <color name="secondary">#4CAF50</color>
+    <color name="secondary_variant">#2E7D32</color>
+    
+    <!-- Surface colors -->
+    <color name="background">#FAFAFA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="selected_background">#E3F2FD</color>
+    <color name="surface_variant">#F5F5F5</color>
+    <color name="error">#D32F2F</color>
+    
+    <!-- On colors - High contrast for readability -->
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="on_background">#212121</color>
+    <color name="on_surface">#212121</color>
+    <color name="on_surface_variant">#424242</color>
+    <color name="on_error">#FFFFFF</color>
+    
+    <!-- Chip colors -->
+    <color name="chip_background">#E8F5E8</color>
+    <color name="chip_text">#2E7D32</color>
+    
+    <!-- Additional colors -->
+    <color name="card_background">@color/surface</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="ripple">#1FFF7043</color>
+    <color name="outline">#9E9E9E</color>
+    
+    <!-- Text colors - High contrast -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#616161</color>
+    <color name="text_hint">#9E9E9E</color>
+    <color name="text_disabled">#BDBDBD</color>
+    
+    <!-- Recipe rating colors -->
+    <color name="rating_star_filled">#FFC107</color>
+    <color name="rating_star_empty">#E0E0E0</color>
+    
+    <!-- Status colors -->
+    <color name="success">#4CAF50</color>
+    <color name="success_light">#C8E6C9</color>
+    <color name="warning">#FF9800</color>
+    <color name="info">#2196F3</color>
+    
+    <!-- Background variants -->
+    <color name="card_elevated">#FFFFFF</color>
+    <color name="background_secondary">#F8F9FA</color>
+    <color name="background_light">#FAFAFA</color>
+    <color name="primary_dark">#D84315</color>
+    
+    <!-- Recipe categories -->
+    <color name="category_appetizer">#E3F2FD</color>
+    <color name="category_main_course">#FFF3E0</color>
+    <color name="category_dessert">#FCE4EC</color>
+    <color name="category_beverage">#F1F8E9</color>
+    
+    <!-- Navigation colors -->
+    <color name="navigation_background">@color/surface</color>
+    <color name="navigation_text">@color/text_primary</color>
+    <color name="navigation_text_selected">@color/primary</color>
+    <color name="navigation_icon">@color/text_secondary</color>
+    <color name="navigation_icon_selected">@color/primary</color>
+    
+    <!-- Toolbar colors -->
+    <color name="toolbar_bg">@color/primary</color>
+    <color name="toolbar_title">@color/on_primary</color>
+    
+    <!-- Common colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+</resources>
+
