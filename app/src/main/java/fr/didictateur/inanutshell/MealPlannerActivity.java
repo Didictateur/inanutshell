@@ -179,9 +179,9 @@ public class MealPlannerActivity extends AppCompatActivity {
     private void deleteMealPlan(MealPlan mealPlan) {
         mealPlanManager.deleteMealPlan(mealPlan, new MealPlanManager.OnMealPlanActionListener() {
             @Override
-            public void onSuccess(String message) {
+            public void onSuccess(MealPlan deletedMealPlan) {
                 runOnUiThread(() -> {
-                    Toast.makeText(MealPlannerActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MealPlannerActivity.this, "Repas supprimé avec succès", Toast.LENGTH_SHORT).show();
                     loadMealsForSelectedDate();
                 });
             }
@@ -198,9 +198,9 @@ public class MealPlannerActivity extends AppCompatActivity {
     private void markMealAsCompleted(MealPlan mealPlan) {
         mealPlanManager.markMealAsCompleted(mealPlan, new MealPlanManager.OnMealPlanActionListener() {
             @Override
-            public void onSuccess(String message) {
+            public void onSuccess(MealPlan completedMealPlan) {
                 runOnUiThread(() -> {
-                    Toast.makeText(MealPlannerActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MealPlannerActivity.this, "Repas marqué comme terminé", Toast.LENGTH_SHORT).show();
                     loadMealsForSelectedDate();
                 });
             }

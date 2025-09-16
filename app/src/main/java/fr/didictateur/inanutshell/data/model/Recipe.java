@@ -1,9 +1,17 @@
 package fr.didictateur.inanutshell.data.model;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
+import fr.didictateur.inanutshell.data.database.DatabaseConverters;
 import java.util.List;
 
+@Entity(tableName = "recipes")
+@TypeConverters(DatabaseConverters.class)
 public class Recipe {
+    @PrimaryKey
+    @androidx.annotation.NonNull
     @SerializedName("id")
     private String id;
     
@@ -76,6 +84,7 @@ public class Recipe {
     // Local fields (not from API)
     private boolean favorite = false;
     private float userRating = 0f;
+    private Integer difficulty = null; // Niveau de difficulté 1-3
 
     // Constructeurs
     public Recipe() {}
@@ -157,4 +166,9 @@ public class Recipe {
     public void setUserRating(float userRating) { this.userRating = userRating; }
     
     public boolean hasUserRating() { return userRating > 0f; }
+    
+    public Integer getDifficulty() { return difficulty; }
+    public void setDifficulty(Integer difficulty) { this.difficulty = difficulty; }
+    
+    public boolean hasDifficulty() { return difficulty != null && difficulty > 0; }
 }

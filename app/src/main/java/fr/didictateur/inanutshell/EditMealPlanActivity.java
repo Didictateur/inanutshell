@@ -237,9 +237,9 @@ public class EditMealPlanActivity extends AppCompatActivity {
             
             mealPlanManager.updateMealPlan(currentMealPlan, new MealPlanManager.OnMealPlanActionListener() {
                 @Override
-                public void onSuccess(String message) {
+                public void onSuccess(MealPlan mealPlan) {
                     runOnUiThread(() -> {
-                        Toast.makeText(EditMealPlanActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditMealPlanActivity.this, "Repas planifié modifié avec succès", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_OK);
                         finish();
                     });
@@ -254,30 +254,29 @@ public class EditMealPlanActivity extends AppCompatActivity {
             });
         } else {
             // Mode création
-            mealPlanManager.createMealPlan(
-                "manual_" + System.currentTimeMillis(), // ID temporaire
-                recipeName,
-                selectedDate,
-                mealType,
-                servings,
-                notes.isEmpty() ? null : notes,
-                new MealPlanManager.OnMealPlanActionListener() {
-                    @Override
-                    public void onSuccess(String message) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(EditMealPlanActivity.this, message, Toast.LENGTH_SHORT).show();
-                            setResult(RESULT_OK);
-                            finish();
-                        });
-                    }
-                    
-                    @Override
-                    public void onError(String error) {
-                        runOnUiThread(() -> {
-                            Toast.makeText(EditMealPlanActivity.this, error, Toast.LENGTH_SHORT).show();
-                        });
-                    }
+            MealPlan newMealPlan = new MealPlan("manual_" + System.currentTimeMillis(), recipeName, selectedDate, mealType);
+            newMealPlan.setServings(servings);
+            if (!notes.isEmpty()) {
+                newMealPlan.setNotes(notes);
+            }
+            
+            mealPlanManager.createMealPlan(newMealPlan, new MealPlanManager.OnMealPlanActionListener() {
+                @Override
+                public void onSuccess(MealPlan mealPlan) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(EditMealPlanActivity.this, "Repas planifié ajouté avec succès", Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    });
                 }
+                
+                @Override
+                public void onError(String error) {
+                    runOnUiThread(() -> {
+                        Toast.makeText(EditMealPlanActivity.this, error, Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
             );
         }
     }

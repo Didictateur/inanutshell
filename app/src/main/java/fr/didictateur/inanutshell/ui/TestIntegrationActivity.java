@@ -7,10 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import fr.didictateur.inanutshell.R;
 import fr.didictateur.inanutshell.data.model.Recipe;
 import fr.didictateur.inanutshell.data.network.NetworkManager;
-import fr.didictateur.inanutshell.technical.logging.AppLogger;
-import fr.didictateur.inanutshell.technical.performance.PerformanceManager;
-import fr.didictateur.inanutshell.technical.network.NetworkStateManager;
-import fr.didictateur.inanutshell.technical.server.MultiServerManager;
+import fr.didictateur.inanutshell.logging.AppLogger;
+import fr.didictateur.inanutshell.performance.PerformanceManager;
+import fr.didictateur.inanutshell.network.NetworkStateManager;
+import fr.didictateur.inanutshell.config.MultiServerManager;
 import java.util.List;
 
 /**
@@ -105,17 +105,17 @@ public class TestIntegrationActivity extends AppCompatActivity {
         
         // Vérifier l'état du réseau avec NetworkStateManager
         boolean isConnected = networkStateManager.isConnected();
-        boolean isWifi = networkStateManager.isWifiConnected();
+        boolean isWifi = networkStateManager.isWifi();
         
         logger.logInfo("TestIntegration", "État réseau - Connecté: " + isConnected + ", WiFi: " + isWifi);
         
         if (isConnected) {
-            // Tester la connexion Mealie via NetworkManager intégré
-            networkManager.testConnection(new NetworkManager.TestConnectionCallback() {
+            // Tester la connexion Mealie via récupération de recettes
+            networkManager.getRecipes(new NetworkManager.RecipesCallback() {
                 @Override
-                public void onSuccess() {
-                    updateStatus("✓ Connexion réussie avec état réseau vérifié");
-                    logger.logInfo("TestIntegration", "Test connexion réussi");
+                public void onSuccess(java.util.List<fr.didictateur.inanutshell.data.model.Recipe> recipes) {
+                    updateStatus("✓ Connexion réussie - " + recipes.size() + " recettes trouvées");
+                    logger.logInfo("TestIntegration", "Test connexion réussi: " + recipes.size() + " recettes");
                 }
                 
                 @Override
@@ -178,7 +178,7 @@ public class TestIntegrationActivity extends AppCompatActivity {
             
             @Override
             public PerformanceManager.TaskType getType() {
-                return PerformanceManager.TaskType.COMPUTATION;
+                return PerformanceManager.TaskType.COMPUTE;
             }
             
             @Override
@@ -205,27 +205,16 @@ public class TestIntegrationActivity extends AppCompatActivity {
     private void testMultiServerFailover() {
         updateStatus("Test du système multi-serveurs...");
         
-        // Obtenir les serveurs configurés
-        List<fr.didictateur.inanutshell.technical.server.ServerConfig> servers = 
-            multiServerManager.getAllServers();
-        
-        if (servers.isEmpty()) {
-            updateStatus("✗ Aucun serveur configuré pour le test");
-            return;
-        }
-        
-        updateStatus("✓ " + servers.size() + " serveur(s) configuré(s)");
-        
         // Tester le serveur actuel
-        fr.didictateur.inanutshell.technical.server.ServerConfig currentServer = 
+        fr.didictateur.inanutshell.config.ServerConfig currentServer = 
             multiServerManager.getCurrentServer();
         
         if (currentServer != null) {
-            String message = String.format("Serveur actuel: %s (Santé: %s)", 
-                                         currentServer.getServerUrl(),
-                                         multiServerManager.getServerHealth(currentServer.getId()));
+            String message = String.format("Serveur actuel: %s", currentServer.getBaseUrl());
             updateStatus("✓ " + message);
             logger.logInfo("TestIntegration", message);
+        } else {
+            updateStatus("✗ Aucun serveur configuré pour le test");
         }
     }
     

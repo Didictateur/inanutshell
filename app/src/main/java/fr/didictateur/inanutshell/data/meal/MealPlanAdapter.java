@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.ImageButton;
 import androidx.annotation.NonNull;
+import fr.didictateur.inanutshell.data.meal.MealPlan;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.chip.Chip;

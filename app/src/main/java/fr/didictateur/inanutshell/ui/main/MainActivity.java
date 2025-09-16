@@ -249,6 +249,10 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
         
         intent.putExtra("favorites_only", currentFilters.isFavoritesOnly());
         
+        if (currentFilters.getMaxDifficulty() != null) {
+            intent.putExtra("max_difficulty", currentFilters.getMaxDifficulty().name());
+        }
+        
         startActivityForResult(intent, REQUEST_ADVANCED_SEARCH);
     }
     
@@ -651,6 +655,15 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
         // Load favorites filter
         boolean favoritesOnly = data.getBooleanExtra("favorites_only", false);
         currentFilters.setFavoritesOnly(favoritesOnly);
+        
+        // Load difficulty filter
+        String difficultyName = data.getStringExtra("max_difficulty");
+        if (difficultyName != null) {
+            SearchFilters.DifficultyLevel difficulty = SearchFilters.DifficultyLevel.fromName(difficultyName);
+            currentFilters.setMaxDifficulty(difficulty);
+        } else {
+            currentFilters.setMaxDifficulty(null);
+        }
     }
     
     /**

@@ -866,7 +866,7 @@ public class NetworkManager {
                 // Utiliser ErrorHandler si disponible
                 errorHandler.handleError(error, new ErrorHandler.ErrorCallback() {
                     @Override
-                    public void onErrorHandled(String message, boolean shouldRetry) {
+                    public void onError(ErrorHandler.ErrorInfo errorInfo) {
                         // Callback géré automatiquement
                     }
                 });
@@ -898,7 +898,7 @@ public class NetworkManager {
                 multiServerManager.switchToNextAvailableServer();
                 ServerConfig currentServer = multiServerManager.getCurrentServer();
                 if (currentServer != null && logger != null) {
-                    logger.logInfo("NetworkManager", "Tentative de failover vers: " + currentServer.getServerUrl());
+                    logger.logInfo("NetworkManager", "Tentative de failover vers: " + currentServer.getBaseUrl());
                 }
             } catch (Exception e) {
                 if (logger != null) {

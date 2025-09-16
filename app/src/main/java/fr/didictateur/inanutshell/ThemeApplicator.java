@@ -111,8 +111,8 @@ public class ThemeApplicator {
         toolbar.setSubtitleTextColor(textColor);
         
         // Couleur des icônes
-        toolbar.setNavigationIconTint(textColor);
-        toolbar.setOverflowIconTint(textColor);
+        // toolbar.setNavigationIconTint(textColor);
+        // toolbar.setOverflowIconTint(textColor);
     }
 
     /**

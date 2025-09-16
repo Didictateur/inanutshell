@@ -18,6 +18,7 @@ import fr.didictateur.inanutshell.data.model.Recipe;
 import fr.didictateur.inanutshell.data.network.NetworkManager;
 import fr.didictateur.inanutshell.ui.categories.CategorySelectionActivity;
 import fr.didictateur.inanutshell.ui.tags.TagSelectionActivity;
+import fr.didictateur.inanutshell.ui.components.DifficultySelector;
 
 public class AdvancedSearchActivity extends AppCompatActivity implements ActiveFiltersAdapter.OnFilterRemoveListener {
     
@@ -40,6 +41,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         setupFilterDisplay();
         setupTextWatchers();
         setupButtons();
+        setupDifficultySelector();
         
         loadRecipesForPreview();
         
@@ -170,6 +172,24 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         binding.clearButton.setOnClickListener(v -> clearAllFilters());
         
         binding.applyButton.setOnClickListener(v -> applyFiltersAndFinish());
+    }
+    
+    private void setupDifficultySelector() {
+        binding.difficultySelector.setOnDifficultySelectedListener(new DifficultySelector.OnDifficultySelectedListener() {
+            @Override
+            public void onDifficultySelected(SearchFilters.DifficultyLevel difficulty) {
+                currentFilters.setMaxDifficulty(difficulty);
+                updateFilterDisplay();
+                updatePreview();
+            }
+            
+            @Override
+            public void onDifficultyCleared() {
+                currentFilters.setMaxDifficulty(null);
+                updateFilterDisplay();
+                updatePreview();
+            }
+        });
     }
     
     private void loadRecipesForPreview() {
@@ -364,6 +384,14 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
             return false;
         }
         
+        // Difficulty filter
+        if (currentFilters.getMaxDifficulty() != null) {
+            Integer recipeDifficulty = recipe.getDifficulty();
+            if (recipeDifficulty != null && recipeDifficulty > currentFilters.getMaxDifficulty().getLevel()) {
+                return false;
+            }
+        }
+        
         return true;
     }
     
@@ -422,6 +450,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         binding.maxPrepTimeEditText.setText("");
         binding.maxCookTimeEditText.setText("");
         binding.favoritesOnlyCheckBox.setChecked(false);
+        binding.difficultySelector.clearSelection();
         
         currentFilters.clear();
         updateFilterDisplay();
@@ -451,6 +480,10 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         
         if (currentFilters.getMaxCookTime() != null) {
             resultIntent.putExtra("max_cook_time", currentFilters.getMaxCookTime());
+        }
+        
+        if (currentFilters.getMaxDifficulty() != null) {
+            resultIntent.putExtra("max_difficulty", currentFilters.getMaxDifficulty().name());
         }
         
         resultIntent.putExtra("favorites_only", currentFilters.isFavoritesOnly());
@@ -510,6 +543,16 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         if (favoritesOnly) {
             currentFilters.setFavoritesOnly(true);
             binding.favoritesOnlyCheckBox.setChecked(true);
+        }
+        
+        // Load difficulty filter
+        String difficultyName = intent.getStringExtra("max_difficulty");
+        if (difficultyName != null) {
+            SearchFilters.DifficultyLevel difficulty = SearchFilters.DifficultyLevel.fromName(difficultyName);
+            if (difficulty != null) {
+                currentFilters.setMaxDifficulty(difficulty);
+                binding.difficultySelector.setSelectedDifficulty(difficulty);
+            }
         }
         
         // Update display

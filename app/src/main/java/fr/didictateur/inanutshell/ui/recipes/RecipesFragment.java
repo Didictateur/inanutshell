@@ -956,6 +956,14 @@ public class RecipesFragment extends Fragment implements RecipeAdapter.OnRecipeC
             return false;
         }
         
+        // Difficulty filter
+        if (currentFilters.getMaxDifficulty() != null) {
+            Integer recipeDifficulty = recipe.getDifficulty();
+            if (recipeDifficulty != null && recipeDifficulty > currentFilters.getMaxDifficulty().getLevel()) {
+                return false;
+            }
+        }
+        
         return true;
     }
     

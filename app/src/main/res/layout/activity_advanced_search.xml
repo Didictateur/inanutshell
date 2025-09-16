@@ -176,6 +176,13 @@
                 android:text="Favoris seulement"
                 android:layout_marginBottom="16dp" />
 
+            <!-- Sélecteur de difficulté -->
+            <fr.didictateur.inanutshell.ui.components.DifficultySelector
+                android:id="@+id/difficultySelector"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
             <!-- Aperçu des résultats -->
             <TextView
                 android:layout_width="match_parent"

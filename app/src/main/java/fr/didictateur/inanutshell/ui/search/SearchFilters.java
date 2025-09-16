@@ -7,6 +7,51 @@ import java.util.List;
  */
 public class SearchFilters {
     
+    /**
+     * Énumération des niveaux de difficulté
+     */
+    public enum DifficultyLevel {
+        EASY("Facile", 1),
+        MEDIUM("Moyen", 2),
+        HARD("Difficile", 3);
+        
+        private final String displayName;
+        private final int level;
+        
+        DifficultyLevel(String displayName, int level) {
+            this.displayName = displayName;
+            this.level = level;
+        }
+        
+        public String getDisplayName() {
+            return displayName;
+        }
+        
+        public int getLevel() {
+            return level;
+        }
+        
+        public static DifficultyLevel fromLevel(int level) {
+            for (DifficultyLevel difficulty : values()) {
+                if (difficulty.level == level) {
+                    return difficulty;
+                }
+            }
+            return null;
+        }
+        
+        public static DifficultyLevel fromName(String name) {
+            if (name == null) return null;
+            for (DifficultyLevel difficulty : values()) {
+                if (difficulty.name().equalsIgnoreCase(name) || 
+                    difficulty.displayName.equalsIgnoreCase(name)) {
+                    return difficulty;
+                }
+            }
+            return null;
+        }
+    }
+    
     private String textQuery = "";
     private List<String> categories = null;
     private List<String> tags = null;
@@ -14,6 +59,7 @@ public class SearchFilters {
     private Integer maxCookTime = null;
     private Integer maxPrepTime = null;
     private boolean favoritesOnly = false;
+    private DifficultyLevel maxDifficulty = null;
     
     public SearchFilters() {}
     
@@ -46,6 +92,10 @@ public class SearchFilters {
         return favoritesOnly;
     }
     
+    public DifficultyLevel getMaxDifficulty() {
+        return maxDifficulty;
+    }
+
     // Setters
     public void setTextQuery(String textQuery) {
         this.textQuery = textQuery != null ? textQuery : "";
@@ -75,6 +125,10 @@ public class SearchFilters {
         this.favoritesOnly = favoritesOnly;
     }
     
+    public void setMaxDifficulty(DifficultyLevel maxDifficulty) {
+        this.maxDifficulty = maxDifficulty;
+    }
+
     // Utilitaires
     public boolean isEmpty() {
         return textQuery.isEmpty() 
@@ -83,7 +137,8 @@ public class SearchFilters {
             && ingredient.isEmpty()
             && maxCookTime == null
             && maxPrepTime == null
-            && !favoritesOnly;
+            && !favoritesOnly
+            && maxDifficulty == null;
     }
     
     public boolean hasActiveFilters() {
@@ -98,6 +153,7 @@ public class SearchFilters {
         maxCookTime = null;
         maxPrepTime = null;
         favoritesOnly = false;
+        maxDifficulty = null;
     }
     
     @Override
@@ -110,6 +166,7 @@ public class SearchFilters {
                 ", maxCookTime=" + maxCookTime +
                 ", maxPrepTime=" + maxPrepTime +
                 ", favoritesOnly=" + favoritesOnly +
+                ", maxDifficulty=" + maxDifficulty +
                 '}';
     }
 }

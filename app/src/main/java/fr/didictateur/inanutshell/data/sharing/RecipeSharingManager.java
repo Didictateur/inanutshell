@@ -2,14 +2,18 @@ package fr.didictateur.inanutshell.data.sharing;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.util.Log;
 import androidx.core.content.FileProvider;
 
 import fr.didictateur.inanutshell.data.model.Recipe;
+import fr.didictateur.inanutshell.data.model.Ingredient;
+import fr.didictateur.inanutshell.data.model.RecipeIngredient;
 import fr.didictateur.inanutshell.data.export.RecipeExporter;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -319,24 +323,24 @@ public class RecipeSharingManager {
         }
         
         // Informations rapides
-        if (recipe.getPrepTime() > 0 || recipe.getCookTime() > 0 || recipe.getServings() > 0) {
+        if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty() && Integer.parseInt(recipe.getPrepTime()) > 0) || (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty() && Integer.parseInt(recipe.getCookTime()) > 0) || (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty() && Integer.parseInt(recipe.getRecipeYield()) > 0)) {
             text.append("\n⏱️ INFOS:\n");
-            if (recipe.getPrepTime() > 0) {
+            if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty() && Integer.parseInt(recipe.getPrepTime()) > 0)) {
                 text.append("• Préparation: ").append(recipe.getPrepTime()).append(" min\n");
             }
-            if (recipe.getCookTime() > 0) {
+            if ((recipe.getCookTime() != null && !recipe.getCookTime().isEmpty() && Integer.parseInt(recipe.getCookTime()) > 0)) {
                 text.append("• Cuisson: ").append(recipe.getCookTime()).append(" min\n");
             }
-            if (recipe.getServings() > 0) {
-                text.append("• Portions: ").append(recipe.getServings()).append("\n");
+            if ((recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty() && Integer.parseInt(recipe.getRecipeYield()) > 0)) {
+                text.append("• Portions: ").append(recipe.getRecipeYield()).append("\n");
             }
         }
         
         // Ingrédients
-        if (recipe.getIngredients() != null && !recipe.getIngredients().isEmpty()) {
+        if (recipe.getRecipeIngredient() != null && !recipe.getRecipeIngredient().isEmpty()) {
             text.append("\n🛒 INGRÉDIENTS:\n");
-            for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                var ingredient = recipe.getIngredients().get(i);
+            for (int i = 0; i < recipe.getRecipeIngredient().size(); i++) {
+                RecipeIngredient ingredient = recipe.getRecipeIngredient().get(i);
                 text.append("• ");
                 
                 if (ingredient.getQuantity() > 0) {
@@ -345,23 +349,23 @@ public class RecipeSharingManager {
                 if (ingredient.getUnit() != null && !ingredient.getUnit().isEmpty()) {
                     text.append(ingredient.getUnit()).append(" ");
                 }
-                text.append(ingredient.getName()).append("\n");
+                text.append(ingredient.getFood()).append("\n");
             }
         }
         
         // Instructions (limitées pour le partage)
-        if (recipe.getInstructions() != null && !recipe.getInstructions().isEmpty()) {
+        if (recipe.getRecipeInstructions() != null && !recipe.getRecipeInstructions().isEmpty()) {
             text.append("\n👩‍🍳 ÉTAPES:\n");
-            int maxSteps = Math.min(recipe.getInstructions().size(), 5); // Limiter pour partage
+            int maxSteps = Math.min(recipe.getRecipeInstructions().size(), 5); // Limiter pour partage
             
             for (int i = 0; i < maxSteps; i++) {
                 text.append(i + 1).append(". ")
-                    .append(recipe.getInstructions().get(i).getText())
+                    .append(recipe.getRecipeInstructions().get(i).getText())
                     .append("\n");
             }
             
-            if (recipe.getInstructions().size() > 5) {
-                text.append("... (").append(recipe.getInstructions().size() - 5)
+            if (recipe.getRecipeInstructions().size() > 5) {
+                text.append("... (").append(recipe.getRecipeInstructions().size() - 5)
                     .append(" étapes supplémentaires dans l'app)\n");
             }
         }
@@ -376,26 +380,26 @@ public class RecipeSharingManager {
         
         text.append("🍽️ *").append(recipe.getName()).append("*\n\n");
         
-        if (recipe.getPrepTime() > 0) {
+        if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty() && Integer.parseInt(recipe.getPrepTime()) > 0)) {
             text.append("⏱️ ").append(recipe.getPrepTime()).append(" min");
         }
-        if (recipe.getServings() > 0) {
-            text.append(" | 👥 ").append(recipe.getServings()).append(" portions");
+        if ((recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty() && Integer.parseInt(recipe.getRecipeYield()) > 0)) {
+            text.append(" | 👥 ").append(recipe.getRecipeYield()).append(" portions");
         }
         text.append("\n\n");
         
         // Ingrédients principaux seulement
-        if (recipe.getIngredients() != null && !recipe.getIngredients().isEmpty()) {
+        if (recipe.getRecipeIngredient() != null && !recipe.getRecipeIngredient().isEmpty()) {
             text.append("🛒 *Ingrédients:*\n");
-            int maxIngredients = Math.min(recipe.getIngredients().size(), 6);
+            int maxIngredients = Math.min(recipe.getRecipeIngredient().size(), 6);
             
             for (int i = 0; i < maxIngredients; i++) {
-                var ingredient = recipe.getIngredients().get(i);
-                text.append("• ").append(ingredient.getName()).append("\n");
+                RecipeIngredient ingredient = recipe.getRecipeIngredient().get(i);
+                text.append("• ").append(ingredient.getFood()).append("\n");
             }
             
-            if (recipe.getIngredients().size() > 6) {
-                text.append("... et ").append(recipe.getIngredients().size() - 6).append(" autres\n");
+            if (recipe.getRecipeIngredient().size() > 6) {
+                text.append("... et ").append(recipe.getRecipeIngredient().size() - 6).append(" autres\n");
             }
         }
         
@@ -453,9 +457,9 @@ public class RecipeSharingManager {
         shareIntent.setType("text/plain");
         
         List<String> availableApps = new ArrayList<>();
-        var resolveInfos = context.getPackageManager().queryIntentActivities(shareIntent, 0);
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentActivities(shareIntent, 0);
         
-        for (var resolveInfo : resolveInfos) {
+        for (ResolveInfo resolveInfo : resolveInfos) {
             availableApps.add(resolveInfo.activityInfo.packageName);
         }
         

@@ -21,7 +21,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import fr.didictateur.inanutshell.R;
-import fr.didictateur.inanutshell.data.import.RecipeImporter;
+import fr.didictateur.inanutshell.adapters.RecipeImportExportAdapter;
+import fr.didictateur.inanutshell.data.importing.RecipeImporter;
 import fr.didictateur.inanutshell.data.export.RecipeExporter;
 import fr.didictateur.inanutshell.data.model.Recipe;
 import fr.didictateur.inanutshell.data.network.NetworkManager;
@@ -99,29 +100,29 @@ public class ImportExportActivity extends AppCompatActivity {
     }
     
     private void setupRecyclerView() {
-        adapter = new RecipeImportExportAdapter(this, selectedRecipes);
+        adapter = new RecipeImportExportAdapter(this, RecipeImportExportAdapter.Mode.EXPORT);
         recyclerViewImportExport.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewImportExport.setAdapter(adapter);
         
         // Callback pour les actions sur les recettes
-        adapter.setOnRecipeActionListener(new RecipeImportExportAdapter.OnRecipeActionListener() {
-            @Override
-            public void onExportRecipe(Recipe recipe, RecipeExporter.ExportFormat format) {
-                exportSingleRecipe(recipe, format);
-            }
-            
-            @Override
-            public void onShareRecipe(Recipe recipe) {
-                shareRecipe(recipe);
-            }
-            
-            @Override
-            public void onRemoveRecipe(Recipe recipe) {
-                selectedRecipes.remove(recipe);
-                adapter.notifyDataSetChanged();
-                updateStatus();
-            }
-        });
+        // adapter.setOnRecipeActionListener(new RecipeImportExportAdapter.OnRecipeActionListener() {
+        //     @Override
+        //     public void onExportRecipe(Recipe recipe, RecipeExporter.ExportFormat format) {
+        //         exportSingleRecipe(recipe, format);
+        //     }
+        //     
+        //     @Override
+        //     public void onShareRecipe(Recipe recipe) {
+        //         shareRecipe(recipe);
+        //     }
+        //     
+        //     @Override
+        //     public void onRemoveRecipe(Recipe recipe) {
+        //         selectedRecipes.remove(recipe);
+        //         adapter.notifyDataSetChanged();
+        //         updateStatus();
+        //     }
+        // });
     }
     
     private void setupFloatingActionButton() {
@@ -433,10 +434,10 @@ public class ImportExportActivity extends AppCompatActivity {
             text.append(recipe.getDescription()).append("\n\n");
         }
         
-        if (recipe.getIngredients() != null && !recipe.getIngredients().isEmpty()) {
+        if (recipe.getRecipeIngredient() != null && !recipe.getRecipeIngredient().isEmpty()) {
             text.append("📝 Ingrédients:\n");
-            for (int i = 0; i < recipe.getIngredients().size(); i++) {
-                text.append("• ").append(recipe.getIngredients().get(i).getName()).append("\n");
+            for (int i = 0; i < recipe.getRecipeIngredient().size(); i++) {
+                text.append("• ").append(recipe.getRecipeIngredient().get(i).getFood()).append("\n");
             }
             text.append("\n");
         }

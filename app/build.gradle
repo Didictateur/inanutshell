@@ -77,6 +77,9 @@ dependencies {
     // Gson pour parsing JSON
     implementation 'com.google.code.gson:gson:2.10.1'
     
+    // JSoup pour parsing HTML
+    implementation 'org.jsoup:jsoup:1.17.2'
+    
     // Tests
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

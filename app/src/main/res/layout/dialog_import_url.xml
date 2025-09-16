@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <RadioGroup
+        android:id="@+id/radioGroupMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioSingleUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URL unique"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/radioMultipleUrls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="URLs multiples" />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/editTextUrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:hint="URL de la recette"
+        android:inputType="textUri" />
+
+    <EditText
+        android:id="@+id/editTextUrls"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginTop="8dp"
+        android:hint="URLs des recettes (une par ligne)"
+        android:inputType="textMultiLine"
+        android:gravity="top"
+        android:visibility="gone" />
+
+</LinearLayout>

@@ -13,6 +13,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 
 import fr.didictateur.inanutshell.data.model.Recipe;
+import fr.didictateur.inanutshell.data.model.RecipeIngredient;
+import fr.didictateur.inanutshell.data.model.RecipeInstruction;
 import fr.didictateur.inanutshell.data.model.Ingredient;
 import fr.didictateur.inanutshell.data.model.Instruction;
 import fr.didictateur.inanutshell.data.model.MealPlan;
@@ -191,18 +193,18 @@ public class RecipeExporter {
         recipeJson.addProperty("prepTime", recipe.getPrepTime());
         recipeJson.addProperty("cookTime", recipe.getCookTime());
         recipeJson.addProperty("totalTime", recipe.getTotalTime());
-        recipeJson.addProperty("servings", recipe.getServings());
-        recipeJson.addProperty("source", recipe.getSource());
+        recipeJson.addProperty("servings", recipe.getRecipeYield() != null ? recipe.getRecipeYield() : "4");
+        recipeJson.addProperty("source", ""); // Source non disponible dans le modèle actuel
         
         // Ingrédients
         JsonArray ingredientsArray = new JsonArray();
-        if (recipe.getIngredients() != null) {
-            for (Ingredient ingredient : recipe.getIngredients()) {
+        if (recipe.getRecipeIngredient() != null) {
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
                 JsonObject ingJson = new JsonObject();
-                ingJson.addProperty("name", ingredient.getName());
+                ingJson.addProperty("name", ingredient.getFood() != null ? ingredient.getFood() : "");
                 ingJson.addProperty("quantity", ingredient.getQuantity());
-                ingJson.addProperty("unit", ingredient.getUnit());
-                ingJson.addProperty("position", ingredient.getPosition());
+                ingJson.addProperty("unit", ingredient.getUnit() != null ? ingredient.getUnit() : "");
+                ingJson.addProperty("display", ingredient.getDisplay() != null ? ingredient.getDisplay() : "");
                 ingredientsArray.add(ingJson);
             }
         }
@@ -210,11 +212,11 @@ public class RecipeExporter {
         
         // Instructions
         JsonArray instructionsArray = new JsonArray();
-        if (recipe.getInstructions() != null) {
-            for (Instruction instruction : recipe.getInstructions()) {
+        if (recipe.getRecipeInstructions() != null) {
+            for (RecipeInstruction instruction : recipe.getRecipeInstructions()) {
                 JsonObject instJson = new JsonObject();
-                instJson.addProperty("text", instruction.getText());
-                instJson.addProperty("position", instruction.getPosition());
+                instJson.addProperty("text", instruction.getText() != null ? instruction.getText() : "");
+                instJson.addProperty("title", instruction.getTitle() != null ? instruction.getTitle() : "");
                 instructionsArray.add(instJson);
             }
         }
@@ -246,16 +248,16 @@ public class RecipeExporter {
         mealieJson.addProperty("prepTime", recipe.getPrepTime());
         mealieJson.addProperty("cookTime", recipe.getCookTime());
         mealieJson.addProperty("totalTime", recipe.getTotalTime());
-        mealieJson.addProperty("servings", recipe.getServings());
+        mealieJson.addProperty("servings", recipe.getRecipeYield() != null ? recipe.getRecipeYield() : "4");
         
         // Ingrédients format Mealie
         JsonArray recipeIngredient = new JsonArray();
-        if (recipe.getIngredients() != null) {
-            for (Ingredient ingredient : recipe.getIngredients()) {
+        if (recipe.getRecipeIngredient() != null) {
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
                 JsonObject ingJson = new JsonObject();
-                ingJson.addProperty("note", ingredient.getName());
+                ingJson.addProperty("note", ingredient.getFood() != null ? ingredient.getFood() : "");
                 ingJson.addProperty("quantity", ingredient.getQuantity());
-                ingJson.addProperty("unit", ingredient.getUnit());
+                ingJson.addProperty("unit", ingredient.getUnit() != null ? ingredient.getUnit() : "");
                 recipeIngredient.add(ingJson);
             }
         }
@@ -263,8 +265,8 @@ public class RecipeExporter {
         
         // Instructions format Mealie
         JsonArray recipeInstructions = new JsonArray();
-        if (recipe.getInstructions() != null) {
-            for (Instruction instruction : recipe.getInstructions()) {
+        if (recipe.getRecipeInstructions() != null) {
+            for (RecipeInstruction instruction : recipe.getRecipeInstructions()) {
                 JsonObject instJson = new JsonObject();
                 instJson.addProperty("text", instruction.getText());
                 recipeInstructions.add(instJson);
@@ -355,31 +357,33 @@ public class RecipeExporter {
         }
         
         // Informations de temps et portions
-        if (recipe.getPrepTime() > 0 || recipe.getCookTime() > 0 || recipe.getServings() > 0) {
+        if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) || 
+            (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) || 
+            (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty())) {
             canvas.drawText("Informations:", leftMargin, yPos, headerPaint);
             yPos += 25;
             
-            if (recipe.getPrepTime() > 0) {
-                canvas.drawText("Temps de préparation: " + recipe.getPrepTime() + " min", leftMargin + 20, yPos, normalPaint);
+            if (recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) {
+                canvas.drawText("Temps de préparation: " + recipe.getPrepTime(), leftMargin + 20, yPos, normalPaint);
                 yPos += 20;
             }
-            if (recipe.getCookTime() > 0) {
-                canvas.drawText("Temps de cuisson: " + recipe.getCookTime() + " min", leftMargin + 20, yPos, normalPaint);
+            if (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) {
+                canvas.drawText("Temps de cuisson: " + recipe.getCookTime(), leftMargin + 20, yPos, normalPaint);
                 yPos += 20;
             }
-            if (recipe.getServings() > 0) {
-                canvas.drawText("Portions: " + recipe.getServings(), leftMargin + 20, yPos, normalPaint);
+            if (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty()) {
+                canvas.drawText("Portions: " + recipe.getRecipeYield(), leftMargin + 20, yPos, normalPaint);
                 yPos += 20;
             }
             yPos += 10;
         }
         
         // Ingrédients
-        if (recipe.getIngredients() != null && recipe.getIngredients().size() > 0) {
+        if (recipe.getRecipeIngredient() != null && recipe.getRecipeIngredient().size() > 0) {
             canvas.drawText("Ingrédients:", leftMargin, yPos, headerPaint);
             yPos += 25;
             
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
                 String ingredientText = "• ";
                 if (ingredient.getQuantity() > 0) {
                     ingredientText += ingredient.getQuantity() + " ";
@@ -387,7 +391,7 @@ public class RecipeExporter {
                 if (ingredient.getUnit() != null && !ingredient.getUnit().isEmpty()) {
                     ingredientText += ingredient.getUnit() + " ";
                 }
-                ingredientText += ingredient.getName();
+                ingredientText += (ingredient.getFood() != null ? ingredient.getFood() : "");
                 
                 canvas.drawText(ingredientText, leftMargin + 20, yPos, normalPaint);
                 yPos += 20;
@@ -404,12 +408,12 @@ public class RecipeExporter {
         }
         
         // Instructions
-        if (recipe.getInstructions() != null && recipe.getInstructions().size() > 0) {
+        if (recipe.getRecipeInstructions() != null && recipe.getRecipeInstructions().size() > 0) {
             canvas.drawText("Instructions:", leftMargin, yPos, headerPaint);
             yPos += 25;
             
-            for (int i = 0; i < recipe.getInstructions().size(); i++) {
-                Instruction instruction = recipe.getInstructions().get(i);
+            for (int i = 0; i < recipe.getRecipeInstructions().size(); i++) {
+                RecipeInstruction instruction = recipe.getRecipeInstructions().get(i);
                 String instructionText = (i + 1) + ". " + instruction.getText();
                 
                 yPos += drawMultiLineText(canvas, instructionText, leftMargin + 20, yPos, rightMargin, normalPaint);
@@ -485,26 +489,28 @@ public class RecipeExporter {
         }
         
         // Informations
-        if (recipe.getPrepTime() > 0 || recipe.getCookTime() > 0 || recipe.getServings() > 0) {
+        if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) || 
+            (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) || 
+            (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty())) {
             content.append("INFORMATIONS\n");
             content.append("-----------\n");
-            if (recipe.getPrepTime() > 0) {
-                content.append("Temps de préparation: ").append(recipe.getPrepTime()).append(" min\n");
+            if (recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) {
+                content.append("Temps de préparation: ").append(recipe.getPrepTime()).append("\n");
             }
-            if (recipe.getCookTime() > 0) {
-                content.append("Temps de cuisson: ").append(recipe.getCookTime()).append(" min\n");
+            if (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) {
+                content.append("Temps de cuisson: ").append(recipe.getCookTime()).append("\n");
             }
-            if (recipe.getServings() > 0) {
-                content.append("Portions: ").append(recipe.getServings()).append("\n");
+            if (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty()) {
+                content.append("Portions: ").append(recipe.getRecipeYield()).append("\n");
             }
             content.append("\n");
         }
         
         // Ingrédients
-        if (recipe.getIngredients() != null && recipe.getIngredients().size() > 0) {
+        if (recipe.getRecipeIngredient() != null && recipe.getRecipeIngredient().size() > 0) {
             content.append("INGRÉDIENTS\n");
             content.append("-----------\n");
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
                 content.append("• ");
                 if (ingredient.getQuantity() > 0) {
                     content.append(ingredient.getQuantity()).append(" ");
@@ -512,18 +518,18 @@ public class RecipeExporter {
                 if (ingredient.getUnit() != null && !ingredient.getUnit().isEmpty()) {
                     content.append(ingredient.getUnit()).append(" ");
                 }
-                content.append(ingredient.getName()).append("\n");
+                content.append(ingredient.getFood() != null ? ingredient.getFood() : "").append("\n");
             }
             content.append("\n");
         }
         
         // Instructions
-        if (recipe.getInstructions() != null && recipe.getInstructions().size() > 0) {
+        if (recipe.getRecipeInstructions() != null && recipe.getRecipeInstructions().size() > 0) {
             content.append("INSTRUCTIONS\n");
             content.append("------------\n");
-            for (int i = 0; i < recipe.getInstructions().size(); i++) {
+            for (int i = 0; i < recipe.getRecipeInstructions().size(); i++) {
                 content.append(i + 1).append(". ")
-                       .append(recipe.getInstructions().get(i).getText())
+                       .append(recipe.getRecipeInstructions().get(i).getText())
                        .append("\n\n");
             }
         }
@@ -608,26 +614,28 @@ public class RecipeExporter {
         }
         
         // Informations
-        if (recipe.getPrepTime() > 0 || recipe.getCookTime() > 0 || recipe.getServings() > 0) {
+        if ((recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) || 
+            (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) || 
+            (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty())) {
             html.append("<div class='info'>\n");
             html.append("<h2>Informations</h2>\n");
-            if (recipe.getPrepTime() > 0) {
-                html.append("<p><strong>Temps de préparation:</strong> ").append(recipe.getPrepTime()).append(" min</p>\n");
+            if (recipe.getPrepTime() != null && !recipe.getPrepTime().isEmpty()) {
+                html.append("<p><strong>Temps de préparation:</strong> ").append(recipe.getPrepTime()).append("</p>\n");
             }
-            if (recipe.getCookTime() > 0) {
-                html.append("<p><strong>Temps de cuisson:</strong> ").append(recipe.getCookTime()).append(" min</p>\n");
+            if (recipe.getCookTime() != null && !recipe.getCookTime().isEmpty()) {
+                html.append("<p><strong>Temps de cuisson:</strong> ").append(recipe.getCookTime()).append("</p>\n");
             }
-            if (recipe.getServings() > 0) {
-                html.append("<p><strong>Portions:</strong> ").append(recipe.getServings()).append("</p>\n");
+            if (recipe.getRecipeYield() != null && !recipe.getRecipeYield().isEmpty()) {
+                html.append("<p><strong>Portions:</strong> ").append(recipe.getRecipeYield()).append("</p>\n");
             }
             html.append("</div>\n");
         }
         
         // Ingrédients
-        if (recipe.getIngredients() != null && recipe.getIngredients().size() > 0) {
+        if (recipe.getRecipeIngredient() != null && recipe.getRecipeIngredient().size() > 0) {
             html.append("<h2>Ingrédients</h2>\n");
             html.append("<ul>\n");
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
                 html.append("<li>");
                 if (ingredient.getQuantity() > 0) {
                     html.append(ingredient.getQuantity()).append(" ");
@@ -635,16 +643,16 @@ public class RecipeExporter {
                 if (ingredient.getUnit() != null && !ingredient.getUnit().isEmpty()) {
                     html.append(ingredient.getUnit()).append(" ");
                 }
-                html.append(ingredient.getName()).append("</li>\n");
+                html.append(ingredient.getFood() != null ? ingredient.getFood() : "").append("</li>\n");
             }
             html.append("</ul>\n");
         }
         
         // Instructions
-        if (recipe.getInstructions() != null && recipe.getInstructions().size() > 0) {
+        if (recipe.getRecipeInstructions() != null && recipe.getRecipeInstructions().size() > 0) {
             html.append("<h2>Instructions</h2>\n");
             html.append("<ol>\n");
-            for (Instruction instruction : recipe.getInstructions()) {
+            for (RecipeInstruction instruction : recipe.getRecipeInstructions()) {
                 html.append("<li>").append(instruction.getText()).append("</li>\n");
             }
             html.append("</ol>\n");
@@ -728,9 +736,9 @@ public class RecipeExporter {
             csv.append(escapeCsv(recipe.getDescription())).append(",");
             csv.append(recipe.getPrepTime()).append(",");
             csv.append(recipe.getCookTime()).append(",");
-            csv.append(recipe.getServings()).append(",");
-            csv.append(recipe.getIngredients() != null ? recipe.getIngredients().size() : 0).append(",");
-            csv.append(recipe.getInstructions() != null ? recipe.getInstructions().size() : 0);
+            csv.append(recipe.getRecipeYield()).append(",");
+            csv.append(recipe.getRecipeIngredient() != null ? recipe.getRecipeIngredient().size() : 0).append(",");
+            csv.append(recipe.getRecipeInstructions() != null ? recipe.getRecipeInstructions().size() : 0);
             csv.append("\n");
         }
         

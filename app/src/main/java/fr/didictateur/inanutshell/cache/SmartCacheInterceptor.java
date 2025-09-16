@@ -317,13 +317,18 @@ public class SmartCacheInterceptor implements Interceptor {
             return new CacheStats(0, 0, 0, 0, 0);
         }
         
-        return new CacheStats(
-            cache.size(),
-            cache.maxSize(),
-            cache.hitCount(),
-            cache.requestCount(),
-            cache.networkCount()
-        );
+        try {
+            return new CacheStats(
+                cache.size(),
+                cache.maxSize(),
+                cache.hitCount(),
+                cache.requestCount(),
+                cache.networkCount()
+            );
+        } catch (java.io.IOException e) {
+            android.util.Log.w("SmartCacheInterceptor", "Erreur lors de la lecture des stats de cache", e);
+            return new CacheStats(0, cache.maxSize(), 0, 0, 0);
+        }
     }
     
     /**
