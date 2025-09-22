@@ -34,6 +34,10 @@ public class User {
     public boolean allowNotifications;
     public boolean shareRecipesPublically;
     public boolean acceptCollaborationInvites;
+    
+    // Statistiques sociales
+    public int followerCount = 0;
+    public int followingCount = 0;
 
     /**
      * Énumération des rôles utilisateur pour le système de permissions
@@ -191,6 +195,75 @@ public class User {
         } else {
             return username.substring(0, Math.min(2, username.length())).toUpperCase();
         }
+    }
+
+    /**
+     * Vérifie si l'utilisateur peut interagir socialement
+     */
+    public boolean canInteract() {
+        return isActive && role != UserRole.GUEST;
+    }
+
+    /**
+     * Vérifie si l'utilisateur peut gérer d'autres utilisateurs
+     */
+    public boolean canManageUsers() {
+        return role.canManageUsers();
+    }
+
+    /**
+     * Incrémente le nombre de followers
+     */
+    public void incrementFollowerCount() {
+        this.followerCount++;
+    }
+
+    /**
+     * Décrémente le nombre de followers
+     */
+    public void decrementFollowerCount() {
+        if (this.followerCount > 0) {
+            this.followerCount--;
+        }
+    }
+
+    /**
+     * Incrémente le nombre de personnes suivies
+     */
+    public void incrementFollowingCount() {
+        this.followingCount++;
+    }
+
+    /**
+     * Décrémente le nombre de personnes suivies
+     */
+    public void decrementFollowingCount() {
+        if (this.followingCount > 0) {
+            this.followingCount--;
+        }
+    }
+
+    /**
+     * Retourne les paramètres de confidentialité
+     */
+    public PrivacySettings getPrivacySettings() {
+        return new PrivacySettings();
+    }
+
+    /**
+     * Retourne l'ID utilisateur comme String pour compatibilité
+     */
+    public String getId() {
+        return String.valueOf(userId);
+    }
+
+    /**
+     * Classe interne pour les paramètres de confidentialité
+     */
+    public static class PrivacySettings {
+        public boolean allowFollows = true;
+        public boolean allowMessages = true;
+        public boolean showProfile = true;
     }
 
     @Override

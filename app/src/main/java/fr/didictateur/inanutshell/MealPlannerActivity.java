@@ -3,6 +3,10 @@ package fr.didictateur.inanutshell;
 import fr.didictateur.inanutshell.data.meal.MealPlan;
 import fr.didictateur.inanutshell.data.meal.MealPlanAdapter;
 import fr.didictateur.inanutshell.data.meal.MealPlanManager;
+import fr.didictateur.inanutshell.data.meal.MealPlanDao;
+import fr.didictateur.inanutshell.data.AppDatabase;
+import fr.didictateur.inanutshell.data.shopping.ShoppingManager;
+import fr.didictateur.inanutshell.ui.shopping.ShoppingListsActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -263,6 +268,9 @@ public class MealPlannerActivity extends AppCompatActivity {
             // TODO: Implémenter copie de semaine
             Toast.makeText(this, "Copie de semaine - Bientôt disponible", Toast.LENGTH_SHORT).show();
             return true;
+        } else if (id == R.id.action_generate_shopping_list) {
+            generateShoppingListFromPlanning();
+            return true;
         }
         
         return super.onOptionsItemSelected(item);
@@ -276,5 +284,73 @@ public class MealPlannerActivity extends AppCompatActivity {
             // Recharger les repas après modification
             loadMealsForSelectedDate();
         }
+    }
+    
+    /**
+     * Génère une liste de courses depuis le planning de repas
+     */
+    private void generateShoppingListFromPlanning() {
+        // Obtenir la date sélectionnée et calculer la semaine
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(selectedDate);
+        
+        // Aller au début de la semaine (lundi)
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        Date startOfWeek = cal.getTime();
+        
+        // Aller à la fin de la semaine (dimanche)
+        cal.add(Calendar.DAY_OF_WEEK, 6);
+        Date endOfWeek = cal.getTime();
+        
+        // Créer un nom pour la liste
+        SimpleDateFormat weekFormat = new SimpleDateFormat("'Semaine du' dd/MM", Locale.getDefault());
+        String listName = weekFormat.format(startOfWeek);
+        
+        // Récupérer les meal plans de la semaine via DAO
+        MealPlanDao mealPlanDao = AppDatabase.getInstance(this).mealPlanDao();
+        LiveData<List<MealPlan>> mealPlansLiveData = mealPlanDao.getMealPlansForDateRange(startOfWeek, endOfWeek);
+        
+        // Observer une seule fois pour récupérer les données
+        mealPlansLiveData.observe(this, new Observer<List<MealPlan>>() {
+            @Override
+            public void onChanged(List<MealPlan> mealPlans) {
+                // Se désabonner après la première réception
+                mealPlansLiveData.removeObserver(this);
+                
+                if (mealPlans == null || mealPlans.isEmpty()) {
+                    Toast.makeText(MealPlannerActivity.this, 
+                        "Aucun repas planifié pour cette semaine", 
+                        Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                
+                // Générer la liste de courses depuis les meal plans
+                ShoppingManager shoppingManager = new ShoppingManager(MealPlannerActivity.this);
+                
+                shoppingManager.generateListFromMealPlan(
+                    mealPlans,
+                    listName,
+                    new ShoppingManager.ShoppingCallback<Long>() {
+                        @Override
+                        public void onSuccess(Long listId) {
+                            Toast.makeText(MealPlannerActivity.this, 
+                                "Liste de courses créée avec succès !", 
+                                Toast.LENGTH_SHORT).show();
+                            
+                            // Ouvrir l'activité des listes de courses
+                            Intent intent = new Intent(MealPlannerActivity.this, ShoppingListsActivity.class);
+                            startActivity(intent);
+                        }
+                        
+                        @Override
+                        public void onError(Exception error) {
+                            Toast.makeText(MealPlannerActivity.this, 
+                                "Erreur: " + error.getMessage(), 
+                                Toast.LENGTH_LONG).show();
+                        }
+                    }
+                );
+            }
+        });
     }
 }

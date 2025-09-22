@@ -49,4 +49,15 @@ public interface RecipeDao {
     
     @Query("SELECT DISTINCT categories FROM recipes WHERE categories IS NOT NULL ORDER BY categories ASC")
     List<String> getAllCategories();
+    
+    // ===== MÉTHODES POUR LA SYNCHRONISATION =====
+    
+    @Query("SELECT * FROM recipes")
+    List<Recipe> getAllRecipesSync();
+    
+    @Insert
+    void insert(Recipe recipe);
+    
+    @Update  
+    void update(Recipe recipe);
 }

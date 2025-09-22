@@ -18,31 +18,220 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="Import/Export" />
+            app:title="@string/import_export_title" />
 
-        <ProgressBar
-            android:id="@+id/progressBar"
+        <!-- Section de contrôle avec sélection multiple -->
+        <LinearLayout
+            android:id="@+id/layoutSelectionControls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            style="?android:attr/progressBarStyleHorizontal" />
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/textViewStatus"
+            <CheckBox
+                android:id="@+id/checkboxSelectAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/import_export_select_all" />
+
+            <TextView
+                android:id="@+id/textViewSelectedCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="16dp"
+                android:text="@string/import_export_selected_count"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonBatchActions"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="@string/import_export_actions"
+                android:textSize="12sp"
+                android:enabled="false" />
+
+        </LinearLayout>
+
+        <!-- Progress bar avec détails -->
+        <LinearLayout
+            android:id="@+id/layoutProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp"
-            android:text="Prêt pour import/export"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="center" />
+            android:background="?attr/colorSurface"
+            android:elevation="2dp"
+            android:visibility="gone">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewImportExport"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/textViewProgressTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/import_export_progress_title"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewProgressPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/import_export_progress_percent"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/textViewProgressDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/import_export_progress_detail"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:alpha="0.7" />
+
+        </LinearLayout>
+
+        <!-- Mode selector tabs -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/import_export_tab_import" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/import_export_tab_export" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/import_export_tab_backup" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- Container principal avec preview panel -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:padding="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            android:orientation="horizontal">
+
+            <!-- Liste principale -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewImportExport"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- Preview panel (caché par défaut) -->
+            <LinearLayout
+                android:id="@+id/layoutPreviewPanel"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="?attr/colorSurfaceVariant"
+                android:elevation="4dp"
+                android:visibility="gone"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/import_export_preview"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:padding="8dp" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <LinearLayout
+                        android:id="@+id/layoutPreviewContent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <!-- Contenu dynamique de preview -->
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonClosePreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/import_export_close" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Status bar améliorée -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="?attr/colorSurface"
+            android:padding="12dp"
+            android:elevation="2dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/imageViewStatusIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@android:drawable/ic_dialog_info"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/import_export_ready"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <TextView
+                android:id="@+id/textViewLastUpdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:alpha="0.6" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -482,6 +482,10 @@ public class NetworkManager {
      * Version legacy pour compatibilité
      */
     private void getRecipesLegacy(RecipesCallback callback) {
+        if (apiService == null) {
+            callback.onError("Configuration du serveur Mealie incomplète : apiService non initialisé");
+            return;
+        }
         String authHeader = getAuthHeader();
         if (authHeader.isEmpty()) {
             callback.onError("Non authentifié");

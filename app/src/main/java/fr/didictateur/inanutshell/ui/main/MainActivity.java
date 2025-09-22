@@ -32,6 +32,8 @@ import fr.didictateur.inanutshell.ui.tags.TagSelectionActivity;
 import fr.didictateur.inanutshell.utils.MealiePreferences;
 import fr.didictateur.inanutshell.utils.OfflineManager;
 import fr.didictateur.inanutshell.utils.AccessibilityHelper;
+import fr.didictateur.inanutshell.ThemeSettingsActivity;
+import fr.didictateur.inanutshell.ui.shopping.ShoppingListsActivity;
 
 public class MainActivity extends AppCompatActivity implements ActiveFiltersAdapter.OnFilterRemoveListener {
     
@@ -53,10 +55,20 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        
+
         preferences = new MealiePreferences(this);
         offlineManager = OfflineManager.getInstance(this);
-        
+
+        // Vérifier la configuration Mealie
+        if (!preferences.hasValidCredentials()) {
+            Toast.makeText(this, getString(R.string.mealie_setup_required), Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, fr.didictateur.inanutshell.ui.setup.SetupActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         setupToolbar();
         setupSearch();
         setupActiveFilters();
@@ -79,119 +91,138 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
     }
     
     private void setupSearch() {
-        // Setup text search change listener
-        binding.searchEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-                String query = s.toString().trim();
-                currentFilters.setTextQuery(query);
-                AccessibilityHelper.configureSearchFieldAccessibility(
-                    binding.searchEditText, 
-                    "Rechercher des recettes", 
-                    query
-                );
-                notifyFiltersChanged();
-            }
-        });
-        
-        // Setup ingredient search change listener
-        binding.searchIngredientEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-                String ingredient = s.toString().trim();
-                currentFilters.setIngredient(ingredient);
-                AccessibilityHelper.configureSearchFieldAccessibility(
-                    binding.searchIngredientEditText, 
-                    "Rechercher par ingrédient", 
-                    ingredient
-                );
-                notifyFiltersChanged();
-            }
-        });
-        
-        // Setup time filters change listeners
-        binding.maxPrepTimeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-                String time = s.toString().trim();
-                Integer maxPrepTime = null;
-                if (!time.isEmpty()) {
-                    try {
-                        maxPrepTime = Integer.parseInt(time);
-                    } catch (NumberFormatException e) {
-                        // Invalid number, ignore
-                    }
+        // Vérifier que les éléments existent avant de leur ajouter des listeners
+        if (binding.searchEditText != null) {
+            // Setup text search change listener
+            binding.searchEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String query = s.toString().trim();
+                    currentFilters.setTextQuery(query);
+                    AccessibilityHelper.configureSearchFieldAccessibility(
+                        binding.searchEditText, 
+                        "Rechercher des recettes", 
+                        query
+                    );
+                    notifyFiltersChanged();
                 }
-                currentFilters.setMaxPrepTime(maxPrepTime);
-                notifyFiltersChanged();
-            }
-        });
-        
-        binding.maxCookTimeEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            });
             
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
-            @Override
-            public void afterTextChanged(Editable s) {
-                String time = s.toString().trim();
-                Integer maxCookTime = null;
-                if (!time.isEmpty()) {
-                    try {
-                        maxCookTime = Integer.parseInt(time);
-                    } catch (NumberFormatException e) {
-                        // Invalid number, ignore
+            // Handle search actions on keyboard
+            binding.searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
+                    if (binding.searchIngredientEditText != null) {
+                        binding.searchIngredientEditText.requestFocus();
                     }
+                    return true;
                 }
-                currentFilters.setMaxCookTime(maxCookTime);
-                notifyFiltersChanged();
-            }
-        });
+                return false;
+            });
+        }
         
-        // Handle search actions on keyboard
-        binding.searchEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_NEXT) {
-                binding.searchIngredientEditText.requestFocus();
-                return true;
-            }
-            return false;
-        });
+        if (binding.searchIngredientEditText != null) {
+            // Setup ingredient search change listener
+            binding.searchIngredientEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String ingredient = s.toString().trim();
+                    currentFilters.setIngredient(ingredient);
+                    AccessibilityHelper.configureSearchFieldAccessibility(
+                        binding.searchIngredientEditText, 
+                        "Rechercher par ingrédient", 
+                        ingredient
+                    );
+                    notifyFiltersChanged();
+                }
+            });
+            
+            binding.searchIngredientEditText.setOnEditorActionListener((v, actionId, event) -> {
+                if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
+                    hideKeyboard();
+                    return true;
+                }
+                return false;
+            });
+        }
         
-        binding.searchIngredientEditText.setOnEditorActionListener((v, actionId, event) -> {
-            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH) {
-                hideKeyboard();
-                return true;
-            }
-            return false;
-        });
+        if (binding.maxPrepTimeEditText != null) {
+            // Setup time filters change listeners
+            binding.maxPrepTimeEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String time = s.toString().trim();
+                    Integer maxPrepTime = null;
+                    if (!time.isEmpty()) {
+                        try {
+                            maxPrepTime = Integer.parseInt(time);
+                        } catch (NumberFormatException e) {
+                            // Invalid number, ignore
+                        }
+                    }
+                    currentFilters.setMaxPrepTime(maxPrepTime);
+                    notifyFiltersChanged();
+                }
+            });
+        }
         
-        // Setup action buttons
-        binding.clearSearchButton.setOnClickListener(v -> clearAllSearch());
-        binding.advancedSearchButton.setOnClickListener(v -> openAdvancedSearch());
+        if (binding.maxCookTimeEditText != null) {
+            binding.maxCookTimeEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                
+                @Override
+                public void afterTextChanged(Editable s) {
+                    String time = s.toString().trim();
+                    Integer maxCookTime = null;
+                    if (!time.isEmpty()) {
+                        try {
+                            maxCookTime = Integer.parseInt(time);
+                        } catch (NumberFormatException e) {
+                            // Invalid number, ignore
+                        }
+                    }
+                    currentFilters.setMaxCookTime(maxCookTime);
+                    notifyFiltersChanged();
+                }
+            });
+        }
         
-        // Setup category and tag selection buttons
-        binding.selectCategoriesButton.setOnClickListener(v -> openCategorySelection());
-        binding.selectTagsButton.setOnClickListener(v -> openTagSelection());
+        // Setup action buttons - avec vérifications nulles
+        if (binding.clearSearchButton != null) {
+            binding.clearSearchButton.setOnClickListener(v -> clearAllSearch());
+        }
+        if (binding.advancedSearchButton != null) {
+            binding.advancedSearchButton.setOnClickListener(v -> openAdvancedSearch());
+        }
+        
+        // Setup category and tag selection buttons - avec vérifications nulles
+        if (binding.selectCategoriesButton != null) {
+            binding.selectCategoriesButton.setOnClickListener(v -> openCategorySelection());
+        }
+        if (binding.selectTagsButton != null) {
+            binding.selectTagsButton.setOnClickListener(v -> openTagSelection());
+        }
     }
     
     private void setupActiveFilters() {
@@ -473,11 +504,13 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
             startActivity(new Intent(this, fr.didictateur.inanutshell.MealPlannerActivity.class));
             return true;
         } else if (id == R.id.action_shopping_lists) {
-            Toast.makeText(this, "Listes de courses - Bientôt disponible", Toast.LENGTH_SHORT).show();
-            // startActivity(new Intent(this, fr.didictateur.inanutshell.data.shopping.ShoppingListsActivity.class));
+            startActivity(new Intent(this, fr.didictateur.inanutshell.ui.shopping.ShoppingListsActivity.class));
             return true;
         } else if (id == R.id.action_timers) {
             startActivity(new Intent(this, fr.didictateur.inanutshell.TimersActivity.class));
+            return true;
+        } else if (id == R.id.action_themes) {
+            startActivity(new Intent(this, fr.didictateur.inanutshell.ThemeSettingsActivity.class));
             return true;
         } else if (id == R.id.action_sync) {
             // TODO: Implement sync
@@ -499,8 +532,7 @@ public class MainActivity extends AppCompatActivity implements ActiveFiltersAdap
             // Minimiser l'app au lieu de la fermer
             moveTaskToBack(true);
         }
-        // Appel optionnel selon le comportement souhaité
-        // super.onBackPressed();
+        super.onBackPressed();
     }
     
     private void toggleSearch() {

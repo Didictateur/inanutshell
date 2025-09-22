@@ -20,6 +20,16 @@
     <color name="on_surface_variant">#424242</color>
     <color name="on_error">#FFFFFF</color>
     
+    <!-- Border colors -->
+    <color name="border_light">#E0E0E0</color>
+    
+    <!-- Status colors -->
+    <color name="success_light">#E8F5E8</color>
+    <color name="success_dark">#2E7D32</color>
+    <color name="warning_light">#FFF3E0</color>
+    <color name="warning_dark">#F57C00</color>
+    <color name="error_light">#FFEBEE</color>
+    
     <!-- Chip colors -->
     <color name="chip_background">#E8F5E8</color>
     <color name="chip_text">#2E7D32</color>
@@ -35,6 +45,24 @@
     <color name="ripple">#1FFF7043</color>
     <color name="outline">#9E9E9E</color>
     
+    <!-- Dark theme colors for fullscreen timer -->
+    <color name="background_dark">#121212</color>
+    <color name="surface_dark">#1E1E1E</color>
+    <color name="surface_variant_dark">#2D2D2D</color>
+    <color name="outline_dark">#424242</color>
+    <color name="ripple_dark">#33FFFFFF</color>
+    
+    <!-- Dark text colors -->
+    <color name="text_primary_dark">#FFFFFF</color>
+    <color name="text_secondary_dark">#B3FFFFFF</color>
+    <color name="text_hint_dark">#80FFFFFF</color>
+    
+    <!-- Accent colors for timer -->
+    <color name="accent_orange">#FF7043</color>
+    <color name="accent_orange_light">#FFAB91</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="error_red">#F44336</color>
+    
     <!-- Text colors - High contrast -->
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#616161</color>
@@ -45,9 +73,8 @@
     <color name="rating_star_filled">#FFC107</color>
     <color name="rating_star_empty">#E0E0E0</color>
     
-    <!-- Status colors -->
+    <!-- Status colors legacy -->
     <color name="success">#4CAF50</color>
-    <color name="success_light">#C8E6C9</color>
     <color name="warning">#FF9800</color>
     <color name="info">#2196F3</color>
     
@@ -78,5 +105,30 @@
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+    
+    <!-- Notification colors -->
+    <color name="notification_meal">#4CAF50</color>
+    <color name="notification_recipe">#2196F3</color>
+    <color name="notification_timer">#F44336</color>
+    <color name="notification_tip">#FF9800</color>
+    <color name="notification_shopping">#9C27B0</color>
+    <color name="notification_system">#607D8B</color>
+    
+    <!-- Notification chips -->
+    <color name="chip_meal">#E8F5E8</color>
+    <color name="chip_suggestion">#E3F2FD</color>
+    <color name="chip_new">#FFF3E0</color>
+    <color name="chip_timer">#FFEBEE</color>
+    <color name="chip_tip">#FFF8E1</color>
+    <color name="chip_shopping">#F3E5F5</color>
+    <color name="chip_planning">#E0F2F1</color>
+    <color name="chip_system">#ECEFF1</color>
+    <color name="chip_general">#F5F5F5</color>
+    
+    <!-- Priority colors -->
+    <color name="priority_low">#E8F5E8</color>
+    <color name="priority_normal">#E3F2FD</color>
+    <color name="priority_high">#FFF3E0</color>
+    <color name="priority_urgent">#FFEBEE</color>
 </resources>
 

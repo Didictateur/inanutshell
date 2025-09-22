@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitCenter"
-        android:contentDescription="Image de la recette en plein écran" />
+    android:contentDescription="@string/fullscreen_image_content_desc" />
 
     <!-- Overlay du haut avec bouton de fermeture -->
     <LinearLayout
@@ -28,7 +28,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/circle_white"
-            android:text="✕"
+            android:text="@string/fullscreen_image_close"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -55,7 +55,7 @@
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nom de la recette"
+            android:text="@string/fullscreen_image_title"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"

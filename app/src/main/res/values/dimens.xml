@@ -1,0 +1,12 @@
+<resources>
+	<dimen name="recipe_card_width">180dp</dimen>
+	<dimen name="recipe_card_height">240dp</dimen>
+	<dimen name="recipe_image_height">120dp</dimen>
+	<dimen name="screen_margin">8dp</dimen>
+	<dimen name="card_margin">6dp</dimen>
+	<dimen name="content_padding">12dp</dimen>
+	<dimen name="text_size_headline">20sp</dimen>
+	<dimen name="text_size_title">18sp</dimen>
+	<dimen name="text_size_body">14sp</dimen>
+	<dimen name="text_size_caption">12sp</dimen>
+</resources>

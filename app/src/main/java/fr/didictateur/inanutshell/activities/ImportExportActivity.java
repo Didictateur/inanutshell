@@ -16,9 +16,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import android.os.Handler;
 
 import fr.didictateur.inanutshell.R;
 import fr.didictateur.inanutshell.adapters.RecipeImportExportAdapter;
@@ -56,6 +64,21 @@ public class ImportExportActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private TextView textViewStatus;
     
+    // Nouveaux composants UI avancés
+    private CheckBox checkboxSelectAll;
+    private TextView textViewSelectedCount;
+    private MaterialButton buttonBatchActions;
+    private LinearLayout layoutProgress;
+    private TextView textViewProgressTitle;
+    private TextView textViewProgressPercent;
+    private TextView textViewProgressDetail;
+    private TabLayout tabLayoutMode;
+    private LinearLayout layoutPreviewPanel;
+    private LinearLayout layoutPreviewContent;
+    private MaterialButton buttonClosePreview;
+    private ImageView imageViewStatusIcon;
+    private TextView textViewLastUpdate;
+    
     // Gestionnaires
     private RecipeImporter recipeImporter;
     private RecipeExporter recipeExporter;
@@ -64,6 +87,8 @@ public class ImportExportActivity extends AppCompatActivity {
     // Données
     private List<Recipe> selectedRecipes;
     private List<String> importUrls;
+    private Set<Integer> selectedIndices;
+    private int currentMode = 0; // 0=Import, 1=Export, 2=Backup
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +108,10 @@ public class ImportExportActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         textViewStatus = findViewById(R.id.textViewStatus);
         
+        // Interface basique - les composants avancés seront ajoutés progressivement
+        
+        setupAdvancedUI();
+        
         // Configuration de la toolbar
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("Import / Export");
@@ -97,6 +126,7 @@ public class ImportExportActivity extends AppCompatActivity {
         
         selectedRecipes = new ArrayList<>();
         importUrls = new ArrayList<>();
+        selectedIndices = new HashSet<>();
     }
     
     private void setupRecyclerView() {
@@ -127,6 +157,22 @@ public class ImportExportActivity extends AppCompatActivity {
     
     private void setupFloatingActionButton() {
         fabActions.setOnClickListener(v -> showActionsDialog());
+    }
+    
+    // ===== CONFIGURATION UI AVANCÉE =====
+    
+    private void setupAdvancedUI() {
+        // Interface simplifiée - fonctions de base seulement
+        updateLastUpdate();
+    }
+    
+    // ===== GESTION SIMPLIFIÉE =====
+    
+    private void clearSelection() {
+        selectedIndices.clear();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
     
     private void showActionsDialog() {
@@ -548,6 +594,14 @@ public class ImportExportActivity extends AppCompatActivity {
         }
     }
     
+    // ===== MÉTHODES UTILITAIRES =====
+    
+    private void updateLastUpdate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm", Locale.getDefault());
+        // Mise à jour basique sans composant UI avancé
+        Log.d("ImportExport", "Dernière mise à jour: " + sdf.format(new Date()));
+    }
+    
     // ===== UTILITAIRES UI =====
     
     private void showProgress(String message) {
@@ -568,6 +622,7 @@ public class ImportExportActivity extends AppCompatActivity {
         } else {
             textViewStatus.setText(selectedRecipes.size() + " recette(s) prête(s) pour export");
         }
+        updateLastUpdate();
     }
     
     private void showSnackbar(String message) {

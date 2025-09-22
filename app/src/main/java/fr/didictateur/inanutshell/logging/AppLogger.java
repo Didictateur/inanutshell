@@ -594,7 +594,7 @@ public class AppLogger {
         
         @Override
         public String toString() {
-            return String.format("LogStats{total=%d, buffer=%d, files=%d (%.1fKB), enabled=%s, level=%s}",
+            return String.format(java.util.Locale.ROOT, "LogStats{total=%d, buffer=%d, files=%d (%.1fKB), enabled=%s, level=%s}",
                 totalLogs, bufferSize, fileCount, totalFileSize / 1024.0, isEnabled, minLogLevel);
         }
     }

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/toolbar_bg"
-        app:title="Recherche avancée"
+    app:title="@string/advanced_search_title"
         app:titleTextColor="@color/toolbar_title"
         app:navigationIcon="?attr/homeAsUpIndicator" />
 
@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Recherche textuelle"
+                android:text="@string/advanced_search_textual_search"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
@@ -47,7 +47,7 @@
                     android:id="@+id/searchEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Titre ou description..."
+                    android:hint="@string/advanced_search_hint_title_desc"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -64,7 +64,7 @@
                     android:id="@+id/ingredientEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ingrédient..."
+                    android:hint="@string/advanced_search_hint_ingredient"
                     android:inputType="text" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -73,7 +73,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Catégories et Tags"
+                android:text="@string/advanced_search_categories_tags"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
-                    android:text="Sélectionner Catégories"
+                    android:text="@string/advanced_search_select_categories"
                     style="@style/Widget.Material3.Button.OutlinedButton" />
 
                 <Button
@@ -98,7 +98,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sélectionner Tags"
+                    android:text="@string/advanced_search_select_tags"
                     style="@style/Widget.Material3.Button.OutlinedButton" />
 
             </LinearLayout>
@@ -114,7 +114,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Temps de cuisson"
+                android:text="@string/advanced_search_cook_time"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
@@ -137,7 +137,7 @@
                         android:id="@+id/maxPrepTimeEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Temps prépa. max (min)"
+                        android:hint="@string/advanced_search_hint_max_prep_time"
                         android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -153,7 +153,7 @@
                         android:id="@+id/maxCookTimeEditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Temps cuisson max (min)"
+                        android:hint="@string/advanced_search_hint_max_cook_time"
                         android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -164,7 +164,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Options"
+                android:text="@string/advanced_search_options"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
@@ -173,7 +173,7 @@
                 android:id="@+id/favoritesOnlyCheckBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Favoris seulement"
+                android:text="@string/advanced_search_favorites_only"
                 android:layout_marginBottom="16dp" />
 
             <!-- Sélecteur de difficulté -->
@@ -187,7 +187,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Aperçu des résultats"
+                android:text="@string/advanced_search_results_preview"
                 android:textStyle="bold"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
@@ -196,7 +196,7 @@
                 android:id="@+id/resultCountText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0 recettes trouvées"
+                android:text="@string/advanced_search_no_results"
                 android:textColor="@color/text_secondary"
                 android:layout_marginBottom="16dp" />
 
@@ -216,7 +216,7 @@
             android:id="@+id/clearButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Effacer"
+            android:text="@string/advanced_search_clear"
             android:layout_marginEnd="8dp"
             style="@style/Widget.Material3.Button.OutlinedButton" />
 
@@ -224,7 +224,7 @@
             android:id="@+id/applyButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Appliquer"
+            android:text="@string/advanced_search_apply"
             style="@style/Widget.Material3.Button" />
 
     </LinearLayout>

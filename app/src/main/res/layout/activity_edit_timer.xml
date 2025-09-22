@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:hint="Nom de la minuterie">
+                android:hint="@string/edit_timer_hint_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTimerName"
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Durée"
+                android:text="@string/edit_timer_duration"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Heures"
+                        android:text="@string/edit_timer_hours"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />
 
@@ -98,7 +98,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Minutes"
+                        android:text="@string/edit_timer_minutes"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />
 
@@ -121,7 +121,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Secondes"
+                        android:text="@string/edit_timer_seconds"
                         android:textSize="14sp"
                         android:layout_marginBottom="8dp" />
 
@@ -140,7 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:text="Raccourcis courants"
+                android:text="@string/edit_timer_shortcuts"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="1 min"
+                    android:text="@string/edit_timer_1min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -166,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginHorizontal="4dp"
-                    android:text="3 min"
+                    android:text="@string/edit_timer_3min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="5 min"
+                    android:text="@string/edit_timer_5min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -194,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="10 min"
+                    android:text="@string/edit_timer_10min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -204,7 +204,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginHorizontal="4dp"
-                    android:text="15 min"
+                    android:text="@string/edit_timer_15min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -214,7 +214,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="30 min"
+                    android:text="@string/edit_timer_30min"
                     android:textSize="12sp"
                     style="@style/Widget.AppCompat.Button.Borderless" />
 
@@ -230,7 +230,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:text="Sauvegarder"
+        android:text="@string/edit_timer_save"
         android:textSize="16sp"
         android:textStyle="bold"
         style="@style/Widget.AppCompat.Button.Colored" />

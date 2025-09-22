@@ -242,4 +242,242 @@ public class ImageUtils {
         // Le chemin réel n'est plus nécessaire avec les API modernes
         return uri.toString();
     }
+    
+    // ===================== MÉTHODES POUR L'ÉDITION D'IMAGES =====================
+    
+    /**
+     * Créer une miniature optimisée d'une image
+     */
+    public static Bitmap createOptimizedThumbnail(Context context, Uri imageUri, int width, int height) {
+        try {
+            InputStream input = context.getContentResolver().openInputStream(imageUri);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(input, null, options);
+            input.close();
+            
+            // Calculer le facteur de réduction pour la miniature
+            int scaleFactor = calculateInSampleSize(options, width, height);
+            
+            // Décoder avec la taille optimisée
+            input = context.getContentResolver().openInputStream(imageUri);
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scaleFactor;
+            options.inPreferredConfig = Bitmap.Config.RGB_565; // Utiliser moins de mémoire
+            Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
+            input.close();
+            
+            if (bitmap != null) {
+                // Redimensionner exactement à la taille demandée
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, true);
+                if (scaledBitmap != bitmap) {
+                    bitmap.recycle(); // Libérer la mémoire de l'original
+                }
+                return scaledBitmap;
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    /**
+     * Sauvegarder une miniature dans le cache
+     */
+    public static File saveThumbnailToCache(Context context, Bitmap thumbnail, String recipeId) {
+        try {
+            File cacheDir = new File(context.getCacheDir(), "thumbnails");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            
+            File thumbnailFile = new File(cacheDir, "thumb_" + recipeId + ".jpg");
+            FileOutputStream out = new FileOutputStream(thumbnailFile);
+            
+            // Utiliser une compression plus élevée pour les miniatures
+            thumbnail.compress(Bitmap.CompressFormat.JPEG, 75, out);
+            out.flush();
+            out.close();
+            
+            return thumbnailFile;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    /**
+     * Charger une miniature depuis le cache
+     */
+    public static Bitmap loadThumbnailFromCache(Context context, String recipeId) {
+        try {
+            File thumbnailFile = new File(context.getCacheDir(), "thumbnails/thumb_" + recipeId + ".jpg");
+            if (thumbnailFile.exists()) {
+                return BitmapFactory.decodeFile(thumbnailFile.getAbsolutePath());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    /**
+     * Nettoyer le cache des miniatures
+     */
+    public static void clearThumbnailCache(Context context) {
+        try {
+            File cacheDir = new File(context.getCacheDir(), "thumbnails");
+            if (cacheDir.exists()) {
+                File[] files = cacheDir.listFiles();
+                if (files != null) {
+                    for (File file : files) {
+                        file.delete();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Appliquer un filtre ou effet à une image
+     */
+    public static Bitmap applyImageFilter(Bitmap original, ImageFilter filter) {
+        if (original == null) return null;
+        
+        Bitmap filtered = original.copy(original.getConfig(), true);
+        
+        switch (filter) {
+            case BRIGHTNESS_UP:
+                return adjustBrightness(filtered, 20);
+            case BRIGHTNESS_DOWN:
+                return adjustBrightness(filtered, -20);
+            case CONTRAST_UP:
+                return adjustContrast(filtered, 1.2f);
+            case CONTRAST_DOWN:
+                return adjustContrast(filtered, 0.8f);
+            case SEPIA:
+                return applySepia(filtered);
+            case GRAYSCALE:
+                return applyGrayscale(filtered);
+            default:
+                return filtered;
+        }
+    }
+    
+    /**
+     * Ajuster la luminosité d'une image
+     */
+    private static Bitmap adjustBrightness(Bitmap bitmap, int brightness) {
+        android.graphics.ColorMatrix colorMatrix = new android.graphics.ColorMatrix();
+        colorMatrix.set(new float[] {
+            1, 0, 0, 0, brightness,
+            0, 1, 0, 0, brightness,
+            0, 0, 1, 0, brightness,
+            0, 0, 0, 1, 0
+        });
+        
+        return applyColorMatrix(bitmap, colorMatrix);
+    }
+    
+    /**
+     * Ajuster le contraste d'une image
+     */
+    private static Bitmap adjustContrast(Bitmap bitmap, float contrast) {
+        float translate = (1.0f - contrast) * 128.0f;
+        
+        android.graphics.ColorMatrix colorMatrix = new android.graphics.ColorMatrix();
+        colorMatrix.set(new float[] {
+            contrast, 0, 0, 0, translate,
+            0, contrast, 0, 0, translate,
+            0, 0, contrast, 0, translate,
+            0, 0, 0, 1, 0
+        });
+        
+        return applyColorMatrix(bitmap, colorMatrix);
+    }
+    
+    /**
+     * Appliquer un effet sépia
+     */
+    private static Bitmap applySepia(Bitmap bitmap) {
+        android.graphics.ColorMatrix colorMatrix = new android.graphics.ColorMatrix();
+        colorMatrix.set(new float[] {
+            0.393f, 0.769f, 0.189f, 0, 0,
+            0.349f, 0.686f, 0.168f, 0, 0,
+            0.272f, 0.534f, 0.131f, 0, 0,
+            0, 0, 0, 1, 0
+        });
+        
+        return applyColorMatrix(bitmap, colorMatrix);
+    }
+    
+    /**
+     * Appliquer un effet de niveaux de gris
+     */
+    private static Bitmap applyGrayscale(Bitmap bitmap) {
+        android.graphics.ColorMatrix colorMatrix = new android.graphics.ColorMatrix();
+        colorMatrix.setSaturation(0);
+        
+        return applyColorMatrix(bitmap, colorMatrix);
+    }
+    
+    /**
+     * Appliquer une matrice de couleur à un bitmap
+     */
+    private static Bitmap applyColorMatrix(Bitmap bitmap, android.graphics.ColorMatrix colorMatrix) {
+        Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        android.graphics.Canvas canvas = new android.graphics.Canvas(result);
+        android.graphics.Paint paint = new android.graphics.Paint();
+        paint.setColorFilter(new android.graphics.ColorMatrixColorFilter(colorMatrix));
+        canvas.drawBitmap(bitmap, 0, 0, paint);
+        return result;
+    }
+    
+    /**
+     * Énumération des filtres d'image disponibles
+     */
+    public enum ImageFilter {
+        NONE,
+        BRIGHTNESS_UP,
+        BRIGHTNESS_DOWN,
+        CONTRAST_UP,
+        CONTRAST_DOWN,
+        SEPIA,
+        GRAYSCALE
+    }
+    
+    /**
+     * Compresser une image pour réduire sa taille
+     */
+    public static Bitmap compressImage(Bitmap bitmap, int maxSizeKB) {
+        int quality = 90;
+        Bitmap compressed = bitmap;
+        
+        while (quality > 10) {
+            java.io.ByteArrayOutputStream stream = new java.io.ByteArrayOutputStream();
+            compressed.compress(Bitmap.CompressFormat.JPEG, quality, stream);
+            byte[] byteArray = stream.toByteArray();
+            
+            if (byteArray.length <= maxSizeKB * 1024) {
+                // La taille est acceptable
+                break;
+            }
+            
+            quality -= 10;
+        }
+        
+        return compressed;
+    }
+    
+    /**
+     * Lancer l'éditeur d'image
+     */
+    public static void launchImageEditor(Activity activity, Uri imageUri, int requestCode) {
+        Intent intent = new Intent(activity, fr.didictateur.inanutshell.ui.image.ImageEditorActivity.class);
+        intent.putExtra(fr.didictateur.inanutshell.ui.image.ImageEditorActivity.EXTRA_IMAGE_URI, imageUri);
+        activity.startActivityForResult(intent, requestCode);
+    }
 }

@@ -17,6 +17,13 @@
         android:contentDescription="Copier une semaine" />
 
     <item
+        android:id="@+id/action_generate_shopping_list"
+        android:title="Créer liste de courses"
+        android:icon="@drawable/ic_shopping_cart"
+        app:showAsAction="ifRoom"
+        android:contentDescription="Générer une liste de courses depuis le planning" />
+
+    <item
         android:id="@+id/action_settings"
         android:title="Paramètres"
         android:icon="@drawable/ic_settings"

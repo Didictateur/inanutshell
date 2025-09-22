@@ -28,6 +28,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         void onStartPauseClick(Timer timer);
         void onResetClick(Timer timer);
         void onDeleteClick(Timer timer);
+        void onFullscreenClick(Timer timer);
     }
     
     public TimersAdapter(List<Timer> timers, TimerClickListener clickListener) {
@@ -66,6 +67,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
         private final TextView tvOriginalDuration;
         private final TextView tvTimerState;
         private final ProgressBar progressBar;
+        private final ImageButton btnFullscreen;
         private final ImageButton btnStartPause;
         private final ImageButton btnReset;
         private final ImageButton btnDelete;
@@ -78,6 +80,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             tvOriginalDuration = itemView.findViewById(R.id.tvOriginalDuration);
             tvTimerState = itemView.findViewById(R.id.tvTimerState);
             progressBar = itemView.findViewById(R.id.progressBar);
+            btnFullscreen = itemView.findViewById(R.id.btnFullscreen);
             btnStartPause = itemView.findViewById(R.id.btnStartPause);
             btnReset = itemView.findViewById(R.id.btnReset);
             btnDelete = itemView.findViewById(R.id.btnDelete);
@@ -124,6 +127,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.TimerViewH
             
             // Click listeners
             cardView.setOnClickListener(v -> clickListener.onTimerClick(timer));
+            
+            btnFullscreen.setOnClickListener(v -> clickListener.onFullscreenClick(timer));
             
             btnStartPause.setOnClickListener(v -> {
                 if (timer.state != Timer.TimerState.FINISHED && timer.state != Timer.TimerState.CANCELLED) {

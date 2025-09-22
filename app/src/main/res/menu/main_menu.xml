@@ -19,6 +19,11 @@
         android:icon="@android:drawable/ic_lock_idle_alarm" />
 
     <item
+        android:id="@+id/action_themes"
+        android:title="Thèmes"
+        android:icon="@drawable/ic_palette" />
+
+    <item
         android:id="@+id/action_sync"
         android:title="@string/sync"
         android:icon="@drawable/ic_sync"

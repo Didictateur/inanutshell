@@ -98,6 +98,17 @@
             android:gravity="end">
 
             <ImageButton
+                android:id="@+id/btnFullscreen"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_fullscreen"
+                android:contentDescription="Mode plein écran"
+                android:padding="8dp"
+                app:tint="@color/accent_orange" />
+
+            <ImageButton
                 android:id="@+id/btnStartPause"
                 android:layout_width="48dp"
                 android:layout_height="48dp"

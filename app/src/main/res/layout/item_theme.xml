@@ -153,7 +153,7 @@
                 android:layout_marginEnd="8dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_edit"
-                android:contentDescription="Edit theme" />
+                android:contentDescription="@string/theme_edit" />
 
             <ImageButton
                 android:id="@+id/deleteButton"
@@ -161,18 +161,20 @@
                 android:layout_height="32dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_delete"
-                android:contentDescription="Delete theme" />
+                android:contentDescription="@string/theme_delete" />
 
         </LinearLayout>
 
     </LinearLayout>
 
     <!-- Card click overlay -->
-    <View
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/themeCard"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?android:attr/selectableItemBackground"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:strokeWidth="0dp"
+        app:cardElevation="0dp"
         android:clickable="true"
         android:focusable="true" />
 

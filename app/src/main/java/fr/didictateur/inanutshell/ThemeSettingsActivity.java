@@ -103,85 +103,85 @@ public class ThemeSettingsActivity extends AppCompatActivity implements ThemeMan
     
     private void initializeViews() {
         // Toolbar
-        // toolbar = findViewById(R.id.toolbar); // Resource ID not found
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Personnalisation");
+        toolbar = findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Personnalisation");
+        }
         
         // RecyclerView pour les thèmes
-        // themeRecyclerView = findViewById(R.id.themeRecyclerView); // Resource ID not found
-        // fabCreateTheme = findViewById(R.id.fabCreateTheme); // Resource ID not found
+        themeRecyclerView = findViewById(R.id.themeRecyclerView);
+        fabCreateTheme = findViewById(R.id.fabCreateTheme);
         
         // Cartes de paramètres
-        // accessibilityCard = findViewById(R.id.accessibilityCard); // Resource ID not found
-        // interfaceCard = findViewById(R.id.interfaceCard); // Resource ID not found
-        // autoCard = findViewById(R.id.autoCard); // Resource ID not found
-        // colorCard = findViewById(R.id.colorCard); // Resource ID not found
+        accessibilityCard = findViewById(R.id.accessibilityCard);
+        interfaceCard = findViewById(R.id.interfaceCard);
+        autoCard = findViewById(R.id.autoCard);
+        colorCard = findViewById(R.id.colorCard);
         
         // Paramètres d'accessibilité
-        // textScaleSeeker = findViewById(R.id.textScaleSeeker); // Resource ID not found
-        // textScaleValue = findViewById(R.id.textScaleValue); // Resource ID not found
-        // highContrastSwitch = findViewById(R.id.highContrastSwitch); // Resource ID not found
-        // boldTextSwitch = findViewById(R.id.boldTextSwitch); // Resource ID not found
-        // reducedMotionSwitch = findViewById(R.id.reducedMotionSwitch); // Resource ID not found
+        textScaleSeeker = findViewById(R.id.textScaleSeeker);
+        textScaleValue = findViewById(R.id.textScaleValue);
+        highContrastSwitch = findViewById(R.id.highContrastSwitch);
+        boldTextSwitch = findViewById(R.id.boldTextSwitch);
+        reducedMotionSwitch = findViewById(R.id.reducedMotionSwitch);
         
         // Paramètres d'interface
-        // roundedCornersSwitch = findViewById(R.id.roundedCornersSwitch); // Resource ID not found
-        // cornerRadiusSeeker = findViewById(R.id.cornerRadiusSeeker); // Resource ID not found
-        // cornerRadiusValue = findViewById(R.id.cornerRadiusValue); // Resource ID not found
-        // elevationSeeker = findViewById(R.id.elevationSeeker); // Resource ID not found
-        // elevationValue = findViewById(R.id.elevationValue); // Resource ID not found
+        roundedCornersSwitch = findViewById(R.id.roundedCornersSwitch);
+        cornerRadiusSeeker = findViewById(R.id.cornerRadiusSeeker);
+        cornerRadiusValue = findViewById(R.id.cornerRadiusValue);
+        elevationSeeker = findViewById(R.id.elevationSeeker);
+        elevationValue = findViewById(R.id.elevationValue);
         
         // Paramètres automatiques
-        // autoThemeSwitch = findViewById(R.id.autoThemeSwitch); // Resource ID not found
-        // seasonalSwitch = findViewById(R.id.seasonalSwitch); // Resource ID not found
-        // materialYouSwitch = findViewById(R.id.materialYouSwitch); // Resource ID not found
+        autoThemeSwitch = findViewById(R.id.autoThemeSwitch);
+        seasonalSwitch = findViewById(R.id.seasonalSwitch);
+        materialYouSwitch = findViewById(R.id.materialYouSwitch);
         
         // Boutons de couleurs
-        // colorButtonsLayout = findViewById(R.id.colorButtonsLayout); // Resource ID not found
-        // primaryColorButton = findViewById(R.id.primaryColorButton); // Resource ID not found
-        // secondaryColorButton = findViewById(R.id.secondaryColorButton); // Resource ID not found
-        // backgroundColorButton = findViewById(R.id.backgroundColorButton); // Resource ID not found
+        colorButtonsLayout = findViewById(R.id.colorButtonsLayout);
+        primaryColorButton = findViewById(R.id.primaryColorButton);
+        secondaryColorButton = findViewById(R.id.secondaryColorButton);
+        backgroundColorButton = findViewById(R.id.backgroundColorButton);
     }
     
     private void setupRecyclerView() {
-        themeAdapter = new ThemeAdapter(this, new ThemeAdapter.OnThemeClickListener() {
-            @Override
-            public void onThemeClick(Theme theme) {
-                // themeManager.applyTheme(theme.getId());
-            }
-            
-            @Override
-            public void onThemeEdit(Theme theme) {
-                openThemeEditor(theme);
-            }
-            
-            @Override
-            public void onThemeDelete(Theme theme) {
-                if (!theme.isDefault()) {
-                    themeManager.deleteTheme(theme.getThemeId());
-                    loadThemes();
+        if (themeRecyclerView != null) {
+            themeAdapter = new ThemeAdapter(this, new ThemeAdapter.OnThemeClickListener() {
+                @Override
+                public void onThemeClick(Theme theme) {
+                    themeManager.applyTheme(theme.getThemeId());
                 }
-            }
-        });
-        
-        themeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        themeRecyclerView.setAdapter(themeAdapter);
-        
-        loadThemes();
+                
+                @Override
+                public void onThemeEdit(Theme theme) {
+                    openThemeEditor(theme);
+                }
+                
+                @Override
+                public void onThemeDelete(Theme theme) {
+                    if (!theme.isDefault()) {
+                        themeManager.deleteTheme(theme.getThemeId());
+                        loadThemes();
+                    }
+                }
+            });
+            
+            themeRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            themeRecyclerView.setAdapter(themeAdapter);
+            
+            loadThemes();
+        }
     }
     
     private void setupListeners() {
         // FAB pour créer un nouveau thème
-        fabCreateTheme.setOnClickListener(v -> {
-            // User currentUser = userManager.getCurrentUser();
-            // if (currentUser != null) {
-                String themeName = "Mon thème " + System.currentTimeMillis();
-                // themeManager.createAndApplyCustomTheme(themeName, 
-                //     "Thème personnalisé", currentUser.getUserId());
-                loadThemes();
-            // }
-        });
+        if (fabCreateTheme != null) {
+            fabCreateTheme.setOnClickListener(v -> {
+                createCustomTheme();
+            });
+        }
         
         // Listeners pour l'accessibilité
         setupAccessibilityListeners();
@@ -197,49 +197,66 @@ public class ThemeSettingsActivity extends AppCompatActivity implements ThemeMan
     }
     
     private void setupAccessibilityListeners() {
-        textScaleSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
-                    float scale = 0.5f + (progress / 100.0f) * 1.5f; // 0.5x à 2.0x
-                    textScaleValue.setText(String.format("%.1fx", scale));
-                    themeManager.updateTextScale(scale);
+        if (textScaleSeeker != null) {
+            textScaleSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                    if (fromUser) {
+                        float scale = 0.5f + (progress / 100.0f) * 1.5f; // 0.5x à 2.0x
+                        if (textScaleValue != null) {
+                            textScaleValue.setText(String.format("%.1fx", scale));
+                        }
+                        themeManager.updateTextScale(scale);
+                    }
                 }
-            }
-            
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+                
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {}
+                
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {}
+            });
+        }
         
-        highContrastSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
-            themeManager.setHighContrast(isChecked));
+        if (highContrastSwitch != null) {
+            highContrastSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
+                themeManager.setHighContrast(isChecked));
+        }
         
-        boldTextSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
-            themeManager.setBoldText(isChecked));
+        if (boldTextSwitch != null) {
+            boldTextSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
+                themeManager.setBoldText(isChecked));
+        }
         
-        reducedMotionSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
-            themeManager.setReducedMotion(isChecked));
+        if (reducedMotionSwitch != null) {
+            reducedMotionSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> 
+                themeManager.setReducedMotion(isChecked));
+        }
     }
     
     private void setupInterfaceListeners() {
-        roundedCornersSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            Theme currentTheme = themeManager.getCurrentTheme();
-            if (currentTheme != null) {
-                currentTheme.setRoundedCorners(isChecked);
-                themeManager.updateTheme(currentTheme);
-            }
-            cornerRadiusSeeker.setEnabled(isChecked);
-        });
+        if (roundedCornersSwitch != null) {
+            roundedCornersSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                Theme currentTheme = themeManager.getCurrentTheme();
+                if (currentTheme != null) {
+                    currentTheme.setRoundedCorners(isChecked);
+                    themeManager.updateTheme(currentTheme);
+                }
+                if (cornerRadiusSeeker != null) {
+                    cornerRadiusSeeker.setEnabled(isChecked);
+                }
+            });
+        }
         
-        cornerRadiusSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        if (cornerRadiusSeeker != null) {
+            cornerRadiusSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     float radius = progress; // 0 à 50 dp
-                    cornerRadiusValue.setText(String.format("%.0f dp", radius));
+                    if (cornerRadiusValue != null) {
+                        cornerRadiusValue.setText(String.format("%.0f dp", radius));
+                    }
                     Theme currentTheme = themeManager.getCurrentTheme();
                     if (currentTheme != null) {
                         currentTheme.setCornerRadius(radius);
@@ -254,13 +271,17 @@ public class ThemeSettingsActivity extends AppCompatActivity implements ThemeMan
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+        }
         
-        elevationSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        if (elevationSeeker != null) {
+            elevationSeeker.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     float elevation = progress; // 0 à 24 dp
-                    elevationValue.setText(String.format("%.0f dp", elevation));
+                    if (elevationValue != null) {
+                        elevationValue.setText(String.format("%.0f dp", elevation));
+                    }
                     Theme currentTheme = themeManager.getCurrentTheme();
                     if (currentTheme != null) {
                         currentTheme.setElevation(elevation);
@@ -275,146 +296,45 @@ public class ThemeSettingsActivity extends AppCompatActivity implements ThemeMan
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+        }
     }
     
     private void setupAutoListeners() {
-        autoThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // themeManager.setAutoThemeMode(isChecked);
-        });
+        if (autoThemeSwitch != null) {
+            autoThemeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // themeManager.setAutoThemeMode(isChecked);
+            });
+        }
         
-        seasonalSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // themeManager.setSeasonalEnabled(isChecked);
-        });
+        if (seasonalSwitch != null) {
+            seasonalSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // themeManager.setSeasonalEnabled(isChecked);
+            });
+        }
         
-        materialYouSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // Implementation for Material You if supported
-        });
+        if (materialYouSwitch != null) {
+            materialYouSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                // Implementation for Material You if supported
+            });
+        }
     }
     
     private void setupColorListeners() {
-        primaryColorButton.setOnClickListener(v -> openColorPicker("primary"));
-        secondaryColorButton.setOnClickListener(v -> openColorPicker("secondary"));
-        backgroundColorButton.setOnClickListener(v -> openColorPicker("background"));
-    }
-    
-    // ===================== Gestion des données =====================
-    
-    private void loadThemes() {
-        // User currentUser = userManager.getCurrentUser();
-        // if (currentUser != null) {
-        //     themeManager.getAvailableThemes(currentUser.getUserId()).observe(this, themes -> {
-        //         if (themes != null) {
-        //             themeAdapter.updateThemes(themes);
-        //         }
-        //     });
-        // }
-    }
-    
-    private void loadCurrentSettings() {
-        Theme currentTheme = themeManager.getCurrentTheme();
-        if (currentTheme != null) {
-            updateSettingsFromTheme(currentTheme);
+        if (primaryColorButton != null) {
+            primaryColorButton.setOnClickListener(v -> openColorPicker("primary"));
+        }
+        if (secondaryColorButton != null) {
+            secondaryColorButton.setOnClickListener(v -> openColorPicker("secondary"));
+        }
+        if (backgroundColorButton != null) {
+            backgroundColorButton.setOnClickListener(v -> openColorPicker("background"));
         }
     }
     
-    private void observeCurrentTheme() {
-        themeManager.getCurrentThemeLive().observe(this, theme -> {
-            if (theme != null) {
-                updateSettingsFromTheme(theme);
-                applyThemeToActivity(theme);
-            }
-        });
-    }
-    
-    private void updateSettingsFromTheme(Theme theme) {
-        // Accessibilité
-        int textScaleProgress = (int) ((theme.getTextScale() - 0.5f) / 1.5f * 100);
-        textScaleSeeker.setProgress(textScaleProgress);
-        textScaleValue.setText(String.format("%.1fx", theme.getTextScale()));
-        highContrastSwitch.setChecked(theme.isHighContrast());
-        boldTextSwitch.setChecked(theme.isBoldText());
-        reducedMotionSwitch.setChecked(theme.isReducedMotion());
-        
-        // Interface
-        roundedCornersSwitch.setChecked(theme.isRoundedCorners());
-        cornerRadiusSeeker.setProgress((int) theme.getCornerRadius());
-        cornerRadiusSeeker.setEnabled(theme.isRoundedCorners());
-        cornerRadiusValue.setText(String.format("%.0f dp", theme.getCornerRadius()));
-        elevationSeeker.setProgress((int) theme.getElevation());
-        elevationValue.setText(String.format("%.0f dp", theme.getElevation()));
-        
-        // Couleurs des boutons
-        updateColorButtons(theme);
-    }
-    
-    private void updateColorButtons(Theme theme) {
-        // Mettre à jour l'apparence des boutons de couleur
-        if (theme.getPrimaryColor() != null) {
-            primaryColorButton.setBackgroundTintList(
-                android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.parseColor(theme.getPrimaryColor())
-                )
-            );
-        }
-        
-        if (theme.getSecondaryColor() != null) {
-            secondaryColorButton.setBackgroundTintList(
-                android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.parseColor(theme.getSecondaryColor())
-                )
-            );
-        }
-        
-        if (theme.getBackgroundColor() != null) {
-            backgroundColorButton.setBackgroundTintList(
-                android.content.res.ColorStateList.valueOf(
-                    android.graphics.Color.parseColor(theme.getBackgroundColor())
-                )
-            );
-        }
-    }
-    
-    private void applyThemeToActivity(Theme theme) {
-        // Appliquer le thème à l'activité actuelle
-        ThemeApplicator.applyThemeToActivity(this, theme);
-        ThemeApplicator.applyThemeToToolbar(toolbar, theme);
-        ThemeApplicator.applyThemeToFAB(fabCreateTheme, theme);
-        
-        // Appliquer aux cartes
-        ThemeApplicator.applyThemeToCard(accessibilityCard, theme);
-        ThemeApplicator.applyThemeToCard(interfaceCard, theme);
-        ThemeApplicator.applyThemeToCard(autoCard, theme);
-        ThemeApplicator.applyThemeToCard(colorCard, theme);
-    }
-    
-    // ===================== Actions =====================
-    
-    private void openThemeEditor(Theme theme) {
-        // Intent intent = new Intent(this, ThemeEditorActivity.class);
-        // intent.putExtra("theme_id", theme.getThemeId());
-        // startActivity(intent);
-    }
+    // ===================== Actions simplifiées =====================
     
     private void openColorPicker(String colorType) {
-        // Intent intent = new Intent(this, ColorPickerActivity.class);
-        // intent.putExtra("color_type", colorType);
-        
-        Theme currentTheme = themeManager.getCurrentTheme();
-        // if (currentTheme != null) {
-        //     switch (colorType) {
-        //         case "primary":
-        //             intent.putExtra("current_color", currentTheme.getPrimaryColor());
-        //             break;
-        //         case "secondary":
-        //             intent.putExtra("current_color", currentTheme.getSecondaryColor());
-        //             break;
-        //         case "background":
-        //             intent.putExtra("current_color", currentTheme.getBackgroundColor());
-        //             break;
-        //     }
-        // }
-        
-        // startActivityForResult(intent, 100); // Deprecated method - disabled
+        android.widget.Toast.makeText(this, "Sélecteur de couleur " + colorType + " - Bientôt disponible", android.widget.Toast.LENGTH_SHORT).show();
     }
     
     @Override
@@ -459,5 +379,107 @@ public class ThemeSettingsActivity extends AppCompatActivity implements ThemeMan
     @Override
     public void onThemeApplied() {
         // Optionnel: masquer l'indicateur de chargement
+    }
+    
+    // ===================== Méthodes utilitaires simples =====================
+    
+    private void loadThemes() {
+        // Méthode simplifiée - charge les thèmes disponibles
+        if (themeAdapter != null) {
+            // Pour l'instant, on utilise juste le thème actuel
+            Theme currentTheme = themeManager.getCurrentTheme();
+            if (currentTheme != null) {
+                java.util.List<Theme> themes = new java.util.ArrayList<>();
+                themes.add(currentTheme);
+                themeAdapter.updateThemes(themes);
+                themeAdapter.setCurrentTheme(currentTheme);
+            }
+        }
+    }
+    
+    private void loadCurrentSettings() {
+        Theme currentTheme = themeManager.getCurrentTheme();
+        if (currentTheme != null) {
+            updateSettingsFromTheme(currentTheme);
+        }
+    }
+    
+    private void observeCurrentTheme() {
+        themeManager.getCurrentThemeLive().observe(this, theme -> {
+            if (theme != null) {
+                updateSettingsFromTheme(theme);
+                if (themeAdapter != null) {
+                    themeAdapter.setCurrentTheme(theme);
+                }
+            }
+        });
+    }
+    
+    private void updateSettingsFromTheme(Theme theme) {
+        if (theme != null) {
+            // Mise à jour des contrôles d'accessibilité
+            if (textScaleSeeker != null && textScaleValue != null) {
+                int progress = (int) ((theme.textScale - 0.8f) * 100f);
+                textScaleSeeker.setProgress(Math.max(0, Math.min(100, progress)));
+                textScaleValue.setText((int) (theme.textScale * 100) + "%");
+            }
+            
+            if (highContrastSwitch != null) {
+                highContrastSwitch.setChecked(theme.highContrast);
+            }
+            
+            if (boldTextSwitch != null) {
+                boldTextSwitch.setChecked(theme.boldText);
+            }
+            
+            if (reducedMotionSwitch != null) {
+                reducedMotionSwitch.setChecked(theme.reducedMotion);
+            }
+            
+            // Mise à jour des contrôles d'interface
+            if (roundedCornersSwitch != null) {
+                roundedCornersSwitch.setChecked(theme.roundedCorners);
+            }
+            
+            if (cornerRadiusSeeker != null && cornerRadiusValue != null) {
+                cornerRadiusSeeker.setProgress((int) theme.cornerRadius);
+                cornerRadiusValue.setText((int) theme.cornerRadius + "dp");
+            }
+            
+            if (elevationSeeker != null && elevationValue != null) {
+                elevationSeeker.setProgress((int) theme.elevation);
+                elevationValue.setText((int) theme.elevation + "dp");
+            }
+            
+            // Mise à jour des contrôles automatiques
+            if (autoThemeSwitch != null) {
+                autoThemeSwitch.setChecked(theme.themeType == Theme.ThemeType.AUTO);
+            }
+            
+            if (seasonalSwitch != null) {
+                seasonalSwitch.setChecked(theme.themeType == Theme.ThemeType.SEASONAL);
+            }
+            
+            if (materialYouSwitch != null) {
+                materialYouSwitch.setChecked(theme.themeType == Theme.ThemeType.MATERIAL_YOU);
+            }
+        }
+    }
+    
+    private void applyThemeToActivity(Theme theme) {
+        // Appliquer le thème à l'activité courante
+        recreate();
+    }
+    
+    private void openThemeEditor(Theme theme) {
+        // TODO: Implémenter l'éditeur de thème
+        android.widget.Toast.makeText(this, "Éditeur de thème - Bientôt disponible", android.widget.Toast.LENGTH_SHORT).show();
+    }
+    
+    private void createCustomTheme() {
+        String themeName = "Mon thème " + System.currentTimeMillis();
+        // Pour l'instant, on crée juste un thème simple
+        android.widget.Toast.makeText(this, "Création de thème personnalisé - Bientôt disponible", android.widget.Toast.LENGTH_SHORT).show();
+        loadThemes();
     }
 }

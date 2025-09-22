@@ -17,14 +17,16 @@ import fr.didictateur.inanutshell.data.shopping.ShoppingListDao;
 import fr.didictateur.inanutshell.Timer;
 import fr.didictateur.inanutshell.TimerDao;
 import fr.didictateur.inanutshell.Converters;
+import fr.didictateur.inanutshell.data.model.Notification;
+import fr.didictateur.inanutshell.data.dao.NotificationDao;
 
 /**
  * Base de données Room principale pour l'application
  */
 
 @Database(
-    entities = {CachedRecipe.class, MealPlan.class, ShoppingList.class, ShoppingItem.class, Timer.class}, 
-    version = 4,
+    entities = {CachedRecipe.class, MealPlan.class, ShoppingList.class, ShoppingItem.class, Timer.class, Notification.class}, 
+    version = 5,
     exportSchema = false
 )
 @TypeConverters({Converters.class})
@@ -45,6 +47,9 @@ public abstract class AppDatabase extends RoomDatabase {
     
     // DAO pour les minuteries
     public abstract TimerDao timerDao();
+    
+    // DAO pour les notifications
+    public abstract NotificationDao notificationDao();
     
     public static synchronized AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {

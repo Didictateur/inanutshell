@@ -296,9 +296,9 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
     private boolean matchesFilters(Recipe recipe) {
         // Text search
         if (!currentFilters.getTextQuery().isEmpty()) {
-            String query = currentFilters.getTextQuery().toLowerCase();
-            String recipeName = recipe.getName() != null ? recipe.getName().toLowerCase() : "";
-            String recipeDescription = recipe.getDescription() != null ? recipe.getDescription().toLowerCase() : "";
+        String query = currentFilters.getTextQuery().toLowerCase(java.util.Locale.ROOT);
+        String recipeName = recipe.getName() != null ? recipe.getName().toLowerCase(java.util.Locale.ROOT) : "";
+        String recipeDescription = recipe.getDescription() != null ? recipe.getDescription().toLowerCase(java.util.Locale.ROOT) : "";
             
             if (!recipeName.contains(query) && !recipeDescription.contains(query)) {
                 return false;
@@ -307,14 +307,14 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         
         // Ingredient search
         if (!currentFilters.getIngredient().isEmpty()) {
-            String ingredientQuery = currentFilters.getIngredient().toLowerCase();
+        String ingredientQuery = currentFilters.getIngredient().toLowerCase(java.util.Locale.ROOT);
             boolean ingredientFound = false;
             
             if (recipe.getRecipeIngredient() != null) {
                 for (fr.didictateur.inanutshell.data.model.RecipeIngredient ingredient : recipe.getRecipeIngredient()) {
-                    String food = ingredient.getFood() != null ? ingredient.getFood().toLowerCase() : "";
-                    String display = ingredient.getDisplay() != null ? ingredient.getDisplay().toLowerCase() : "";
-                    String original = ingredient.getOriginalText() != null ? ingredient.getOriginalText().toLowerCase() : "";
+                    String food = ingredient.getFood() != null ? ingredient.getFood().toLowerCase(java.util.Locale.ROOT) : "";
+                    String display = ingredient.getDisplay() != null ? ingredient.getDisplay().toLowerCase(java.util.Locale.ROOT) : "";
+                    String original = ingredient.getOriginalText() != null ? ingredient.getOriginalText().toLowerCase(java.util.Locale.ROOT) : "";
                     
                     if (food.contains(ingredientQuery) || display.contains(ingredientQuery) || original.contains(ingredientQuery)) {
                         ingredientFound = true;
@@ -401,7 +401,7 @@ public class AdvancedSearchActivity extends AppCompatActivity implements ActiveF
         }
         
         try {
-            String time = timeString.trim().toUpperCase();
+        String time = timeString.trim().toUpperCase(java.util.Locale.ROOT);
             
             // Handle ISO 8601 duration format (PT30M, PT1H30M)
             if (time.startsWith("PT")) {

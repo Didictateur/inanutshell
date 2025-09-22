@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Heure actuelle en haut -->
+    <TextView
+        android:id="@+id/currentTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+    android:text="@string/timer_default_time"
+        android:textColor="@color/text_secondary_dark"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <!-- Nom du timer -->
+    <TextView
+        android:id="@+id/timerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentTime"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp"
+    android:text="@string/timer_name_default"
+        android:textColor="@color/text_secondary_dark"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:fontFamily="sans-serif"
+        android:maxLines="2"
+        android:ellipsize="end" />
+
+    <!-- Conteneur principal centré -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Progress bar circulaire -->
+        <ProgressBar
+            android:id="@+id/circularProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginBottom="24dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular_progress_fullscreen" />
+
+        <!-- Affichage temps principal -->
+        <TextView
+            android:id="@+id/timerDisplay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-250dp"
+            android:text="@string/timer_default_duration"
+            android:textColor="@color/text_primary_dark"
+            android:textSize="64sp"
+            android:fontFamily="sans-serif-condensed"
+            android:letterSpacing="0.05"
+            android:textStyle="bold"
+            android:elevation="4dp" />
+
+    </LinearLayout>
+
+    <!-- Contrôles en bas (masquables) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/controlsCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="32dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/surface_dark"
+        android:alpha="0.9">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Ligne principale des contrôles -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="16dp">
+
+                <!-- Bouton Reset -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/resetButton"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginEnd="16dp"
+                    app:icon="@drawable/ic_refresh"
+                    app:iconSize="28dp"
+                    app:iconTint="@color/text_secondary_dark"
+                    app:backgroundTint="@color/surface_variant_dark"
+                    app:cornerRadius="32dp" />
+
+                <!-- Bouton Play/Pause principal -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/playPauseButton"
+                    style="@style/Widget.Material3.Button.Icon"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginHorizontal="16dp"
+                    app:icon="@drawable/ic_play_arrow"
+                    app:iconSize="36dp"
+                    app:iconTint="@color/white"
+                    app:backgroundTint="@color/accent_orange"
+                    app:cornerRadius="40dp"
+                    android:elevation="4dp" />
+
+                <!-- Bouton Retour -->
+                <ImageButton
+                    android:id="@+id/backButton"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_close"
+                    android:background="@drawable/bg_circular_button_dark"
+                    app:tint="@color/text_secondary_dark"
+                    android:contentDescription="@string/close_fullscreen" />
+
+            </LinearLayout>
+
+            <!-- Contrôles d'ajustement du temps -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <!-- -1 min -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/removeTimeButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/minus_one_minute"
+                    android:textColor="@color/text_secondary_dark"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/outline_dark"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="24dp" />
+
+                <!-- Instructions gestes -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/timer_gesture_instructions"
+                    android:textColor="@color/text_hint_dark"
+                    android:textSize="12sp"
+                    android:textAlignment="center"
+                    android:lineSpacingMultiplier="1.2"
+                    android:fontFamily="sans-serif" />
+
+                <!-- +1 min -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addTimeButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="16dp"
+                    android:text="@string/plus_one_minute"
+                    android:textColor="@color/accent_orange"
+                    android:textSize="14sp"
+                    app:strokeColor="@color/accent_orange"
+                    app:backgroundTint="@android:color/transparent"
+                    app:cornerRadius="24dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

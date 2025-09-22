@@ -25,7 +25,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@android:drawable/ic_menu_search"
             android:contentDescription="Rechercher"
-            android:tint="@color/toolbar_title" />
+            app:tint="@color/toolbar_title" />
 
     </androidx.appcompat.widget.Toolbar>
 

@@ -89,6 +89,11 @@ public class TimersActivity extends AppCompatActivity {
             public void onDeleteClick(Timer timer) {
                 deleteTimer(timer);
             }
+            
+            @Override
+            public void onFullscreenClick(Timer timer) {
+                openFullscreenTimer(timer);
+            }
         });
         
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -171,20 +176,7 @@ public class TimersActivity extends AppCompatActivity {
         });
     }
     
-    private void deleteTimer(Timer timer) {
-        timerManager.deleteTimer(timer, new TimerManager.SimpleCallback() {
-            @Override
-            public void onSuccess() {
-                TimerService.cancelTimer(TimersActivity.this, timer.id);
-                Toast.makeText(TimersActivity.this, "Minuterie supprimée", Toast.LENGTH_SHORT).show();
-            }
-            
-            @Override
-            public void onError(String error) {
-                Toast.makeText(TimersActivity.this, "Erreur: " + error, Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -268,6 +260,27 @@ public class TimersActivity extends AppCompatActivity {
         }
     }
     
+    private void deleteTimer(Timer timer) {
+        timerManager.deleteTimer(timer, new TimerManager.SimpleCallback() {
+            @Override
+            public void onSuccess() {
+                TimerService.cancelTimer(TimersActivity.this, timer.id);
+                Toast.makeText(TimersActivity.this, "Minuterie supprimée", Toast.LENGTH_SHORT).show();
+            }
+            
+            @Override
+            public void onError(String error) {
+                Toast.makeText(TimersActivity.this, "Erreur: " + error, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+    
+    private void openFullscreenTimer(Timer timer) {
+        Intent intent = new Intent(TimersActivity.this, FullscreenTimerActivity.class);
+        intent.putExtra("timer_id", timer.id);
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();

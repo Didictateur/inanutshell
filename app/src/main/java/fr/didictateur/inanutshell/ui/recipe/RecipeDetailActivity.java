@@ -90,8 +90,12 @@ public class RecipeDetailActivity extends AppCompatActivity {
     
     @Override
     public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        if (item.getItemId() == R.id.action_favorite) {
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_favorite) {
             toggleFavorite();
+            return true;
+        } else if (itemId == R.id.action_images) {
+            openImagesGallery();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -224,6 +228,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
                 intent.putExtra(fr.didictateur.inanutshell.ui.image.FullscreenImageActivity.EXTRA_IMAGE_URL, imageUrl);
                 intent.putExtra(fr.didictateur.inanutshell.ui.image.FullscreenImageActivity.EXTRA_RECIPE_NAME, recipe.getName());
                 startActivity(intent);
+            });
+            
+            // Long clic sur l'image pour gérer les images multiples
+            binding.ivRecipeImage.setOnLongClickListener(v -> {
+                Intent intent = new Intent(this, fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.class);
+                intent.putExtra(fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.EXTRA_RECIPE_ID, recipe.getId());
+                intent.putExtra(fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.EXTRA_RECIPE_NAME, recipe.getName());
+                startActivity(intent);
+                return true;
             });
         }
         
@@ -363,6 +376,15 @@ public class RecipeDetailActivity extends AppCompatActivity {
         Intent intent = new Intent(this, fr.didictateur.inanutshell.ui.edit.EditRecipeActivity.class);
         intent.putExtra("recipe_id", recipeId);
         startActivity(intent);
+    }
+    
+    private void openImagesGallery() {
+        if (recipe != null) {
+            Intent intent = new Intent(this, fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.class);
+            intent.putExtra(fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.EXTRA_RECIPE_ID, recipe.getId());
+            intent.putExtra(fr.didictateur.inanutshell.ui.image.MultipleImagesActivity.EXTRA_RECIPE_NAME, recipe.getName());
+            startActivity(intent);
+        }
     }
     
     private void showLoading(boolean show) {

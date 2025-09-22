@@ -3,38 +3,57 @@ plugins {
 }
 
 android {
-    namespace 'fr.didictateur.inanutshell'
-    compileSdk 34
+    namespace = 'fr.didictateur.inanutshell'
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "fr.didictateur.inanutshell"
-        minSdk 24
-        targetSdk 34
-        versionCode 1
-        versionName "1.0.0"
+    applicationId = "fr.didictateur.inanutshell"
+    minSdk = 24
+    targetSdk = 34
+    versionCode = 1
+    versionName = "1.0.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
+            proguardFiles(getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro')
         }
     }
     
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled = true
+    }
+
+    // Forcer l'utilisation de Java 17 pour la compilation (toolchain)
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
     }
     
     buildFeatures {
-        viewBinding true
-        dataBinding true
+    viewBinding = true
+    dataBinding = true
+    }
+    
+    packagingOptions {
+        pickFirst '**/META-INF/DEPENDENCIES'
+        pickFirst '**/META-INF/LICENSE'
+        pickFirst '**/META-INF/LICENSE.txt'
+        pickFirst '**/META-INF/NOTICE'
+        pickFirst '**/META-INF/NOTICE.txt'
     }
 }
 
 dependencies {
+
+    // Desugaring pour java.time (API 26+ sur minSdk 24)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     // Android Core
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
@@ -79,6 +98,17 @@ dependencies {
     
     // JSoup pour parsing HTML
     implementation 'org.jsoup:jsoup:1.17.2'
+    
+    // QR Code Generator - ZXing pour les QR codes
+    implementation 'com.google.zxing:core:3.5.1'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+    
+    // Charts Library - MPAndroidChart pour les graphiques
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    
+    // Cloud Storage APIs
+    implementation 'com.google.api-client:google-api-client-android:1.32.1'
+    implementation 'com.google.apis:google-api-services-drive:v3-rev173-1.25.0'
     
     // Tests
     testImplementation 'junit:junit:4.13.2'

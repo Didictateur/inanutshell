@@ -72,6 +72,9 @@ public class EditRecipeActivity extends AppCompatActivity implements ImageUtils.
     private Uri tempCameraUri;
     private String uploadedImageUrl;
     
+    // Constantes pour les codes de requête
+    private static final int REQUEST_CODE_IMAGE_EDITOR = 2001;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +129,17 @@ public class EditRecipeActivity extends AppCompatActivity implements ImageUtils.
         btnSelectFromGallery.setOnClickListener(v -> selectImageFromGallery());
         btnTakePhoto.setOnClickListener(v -> takePhotoWithCamera());
         btnRemoveImage.setOnClickListener(v -> removeCurrentImage());
+        
+        // Long click sur l'image pour l'éditer (si image présente)
+        imagePreview.setOnLongClickListener(v -> {
+            if (currentImageUri != null) {
+                editCurrentImage();
+                return true;
+            } else {
+                Toast.makeText(this, "Sélectionnez d'abord une image", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
         
         // Debug: Long click sur le bouton galerie pour réinitialiser les permissions
         btnSelectFromGallery.setOnLongClickListener(v -> {
@@ -786,6 +800,18 @@ public class EditRecipeActivity extends AppCompatActivity implements ImageUtils.
         Toast.makeText(this, R.string.image_removed, Toast.LENGTH_SHORT).show();
     }
     
+    /**
+     * Éditer l'image actuelle
+     */
+    private void editCurrentImage() {
+        if (currentImageUri != null) {
+            ImageUtils.launchImageEditor(this, currentImageUri, REQUEST_CODE_IMAGE_EDITOR);
+            Toast.makeText(this, "Appui long sur l'image pour éditer", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Aucune image à éditer", Toast.LENGTH_SHORT).show();
+        }
+    }
+    
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -802,6 +828,17 @@ public class EditRecipeActivity extends AppCompatActivity implements ImageUtils.
                 case ImageUtils.REQUEST_CODE_CAMERA:
                     if (tempCameraUri != null) {
                         onImageSelected(tempCameraUri, ImageUtils.getRealPathFromUri(this, tempCameraUri));
+                    }
+                    break;
+                    
+                case REQUEST_CODE_IMAGE_EDITOR:
+                    if (data != null && data.hasExtra(fr.didictateur.inanutshell.ui.image.ImageEditorActivity.EXTRA_EDITED_IMAGE_URI)) {
+                        Uri editedImageUri = data.getParcelableExtra(fr.didictateur.inanutshell.ui.image.ImageEditorActivity.EXTRA_EDITED_IMAGE_URI);
+                        if (editedImageUri != null) {
+                            // Remplacer l'image actuelle par l'image éditée
+                            onImageSelected(editedImageUri, ImageUtils.getRealPathFromUri(this, editedImageUri));
+                            Toast.makeText(this, "Image éditée avec succès", Toast.LENGTH_SHORT).show();
+                        }
                     }
                     break;
             }

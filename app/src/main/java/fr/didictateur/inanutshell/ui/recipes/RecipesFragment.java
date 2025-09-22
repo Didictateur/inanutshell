@@ -456,22 +456,16 @@ public class RecipesFragment extends Fragment implements RecipeAdapter.OnRecipeC
                     getActivity().runOnUiThread(() -> {
                         allRecipes.clear();
                         allRecipes.addAll(recipeList);
-                        
                         // Mettre en cache les recettes récupérées
                         cacheRecipes(recipeList);
-                        
                         // Sync favorites status with local storage
                         syncFavoritesStatus();
-                        
                         // Sync user ratings with local storage
                         syncRatingsStatus();
-                        
                         // Apply current filters
                         applyFilters();
-                        
                         showLoading(false);
                         binding.swipeRefresh.setRefreshing(false);
-                        
                         if (filteredRecipes.isEmpty()) {
                             if (allRecipes.isEmpty()) {
                                 showEmptyState();
@@ -484,19 +478,20 @@ public class RecipesFragment extends Fragment implements RecipeAdapter.OnRecipeC
                     });
                 }
             }
-            
             @Override
             public void onError(String error) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
                         showLoading(false);
                         binding.swipeRefresh.setRefreshing(false);
-                        Toast.makeText(getContext(), 
-                            getString(R.string.error_loading_recipes, error), 
-                            Toast.LENGTH_LONG).show();
-                        
-                        if (allRecipes.isEmpty()) {
-                            showErrorState(error);
+                        // Si l'erreur est liée à la config, afficher setup
+                        if (error != null && error.toLowerCase().contains("apiservice")) {
+                            showSetupRequired();
+                        } else {
+                            Toast.makeText(getContext(), getString(R.string.error_loading_recipes, error), Toast.LENGTH_LONG).show();
+                            if (allRecipes.isEmpty()) {
+                                showErrorState(error);
+                            }
                         }
                     });
                 }

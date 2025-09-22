@@ -75,7 +75,7 @@ public class AutoCompleteManager {
                     suggestions = suggestions.subList(0, maxSuggestions);
                 }
             } else {
-                String lowercaseQuery = query.toLowerCase().trim();
+                String lowercaseQuery = query.toLowerCase(java.util.Locale.ROOT).trim();
                 
                 // 1. Ajouter les suggestions de l'historique
                 List<String> historySuggestions = historyManager.getTextSuggestions(query, maxSuggestions / 2);
@@ -88,7 +88,7 @@ public class AutoCompleteManager {
                         break;
                     }
                     
-                    if (recipeName.toLowerCase().contains(lowercaseQuery) && 
+                    if (recipeName.toLowerCase(java.util.Locale.ROOT).contains(lowercaseQuery) && 
                         !containsIgnoreCase(suggestions, recipeName)) {
                         suggestions.add(recipeName);
                     }
@@ -116,7 +116,7 @@ public class AutoCompleteManager {
                     suggestions = suggestions.subList(0, maxSuggestions);
                 }
             } else {
-                String lowercaseQuery = query.toLowerCase().trim();
+                String lowercaseQuery = query.toLowerCase(java.util.Locale.ROOT).trim();
                 
                 // 1. Ajouter les suggestions de l'historique
                 List<String> historySuggestions = historyManager.getIngredientSuggestions(query, maxSuggestions / 2);
@@ -129,7 +129,7 @@ public class AutoCompleteManager {
                         break;
                     }
                     
-                    if (ingredient.toLowerCase().contains(lowercaseQuery) && 
+                    if (ingredient.toLowerCase(java.util.Locale.ROOT).contains(lowercaseQuery) && 
                         !containsIgnoreCase(suggestions, ingredient)) {
                         suggestions.add(ingredient);
                     }

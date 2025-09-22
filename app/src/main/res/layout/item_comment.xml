@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Indentation pour les réponses -->
+    <View
+        android:id="@+id/replyIndent"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- Avatar utilisateur -->
+    <ImageView
+        android:id="@+id/userAvatar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/circle_background"
+        android:src="@drawable/appicon"
+        android:scaleType="centerCrop" />
+
+    <!-- Contenu principal -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- En-tête -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Nom utilisateur"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                android:textColor="@color/text_primary" />
+
+            <TextView
+                android:id="@+id/timeAgo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Il y a 2h"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary" />
+
+            <!-- Indicateur modifié -->
+            <TextView
+                android:id="@+id/editedIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="modifié"
+                android:textSize="10sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="4dp"
+                android:visibility="gone" />
+
+            <!-- Indicateur signalé -->
+            <ImageView
+                android:id="@+id/reportedIndicator"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_report"
+                android:layout_marginStart="4dp"
+                android:visibility="gone"
+                app:tint="@color/warning" />
+
+        </LinearLayout>
+
+        <!-- Note -->
+        <RatingBar
+            android:id="@+id/rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="4.5"
+            android:isIndicator="true"
+            android:layout_marginTop="4dp" />
+
+        <!-- Contenu du commentaire -->
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Excellent recette ! Très facile à suivre et le résultat était parfait. Je recommande vivement."
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:lineSpacingExtra="2dp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <!-- Vote utile -->
+            <ImageButton
+                android:id="@+id/helpfulButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_thumb_up"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Utile" />
+
+            <TextView
+                android:id="@+id/helpfulCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="12sp"
+                android:textColor="@color/text_secondary"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Répondre -->
+            <ImageButton
+                android:id="@+id/replyButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_reply"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Répondre" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Actions utilisateur -->
+            <ImageButton
+                android:id="@+id/editButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Modifier"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/deleteButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_delete"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Supprimer"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/reportButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_report"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Signaler" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

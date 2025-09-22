@@ -164,4 +164,26 @@ public class Converters {
     public static String serverStatusToString(ServerConfig.ServerStatus status) {
         return status == null ? null : status.name();
     }
+    
+    // Converters pour Notification.NotificationType
+    @TypeConverter
+    public static fr.didictateur.inanutshell.data.model.Notification.NotificationType fromNotificationTypeString(String value) {
+        return value == null ? null : fr.didictateur.inanutshell.data.model.Notification.NotificationType.valueOf(value);
+    }
+    
+    @TypeConverter
+    public static String notificationTypeToString(fr.didictateur.inanutshell.data.model.Notification.NotificationType type) {
+        return type == null ? null : type.name();
+    }
+    
+    // Converters pour Notification.NotificationPriority
+    @TypeConverter
+    public static fr.didictateur.inanutshell.data.model.Notification.NotificationPriority fromNotificationPriorityString(String value) {
+        return value == null ? null : fr.didictateur.inanutshell.data.model.Notification.NotificationPriority.valueOf(value);
+    }
+    
+    @TypeConverter
+    public static String notificationPriorityToString(fr.didictateur.inanutshell.data.model.Notification.NotificationPriority priority) {
+        return priority == null ? null : priority.name();
+    }
 }

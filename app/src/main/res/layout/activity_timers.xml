@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:text="Aucune minuterie"
+                android:text="@string/timers_empty"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingHorizontal="32dp"
-                android:text="Créez votre première minuterie pour vos temps de cuisson"
+                android:text="@string/timers_empty_hint"
                 android:textColor="@android:color/darker_gray" />
 
         </LinearLayout>
@@ -74,6 +74,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_input_add"
-        android:contentDescription="Créer une minuterie" />
+    android:contentDescription="@string/timers_add_timer" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -33,7 +33,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🛒 Mes Listes de Courses"
+                        android:text="@string/shopping_lists_title"
                         android:textSize="24sp"
                         android:textStyle="bold"
                         android:gravity="center"
@@ -43,7 +43,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Organisez vos achats efficacement"
+                        android:text="@string/shopping_lists_subtitle"
                         android:textSize="14sp"
                         android:gravity="center"
                         android:textColor="@color/text_secondary" />
@@ -81,7 +81,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Aucune liste de courses"
+                    android:text="@string/shopping_lists_empty"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_secondary"
@@ -90,7 +90,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Appuyez sur + pour créer votre première liste"
+                    android:text="@string/shopping_lists_empty_add"
                     android:textSize="14sp"
                     android:textColor="@color/text_secondary"
                     android:gravity="center" />

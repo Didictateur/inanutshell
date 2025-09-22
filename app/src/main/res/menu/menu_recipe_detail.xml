@@ -8,4 +8,10 @@
         android:title="@string/toggle_favorite"
         app:showAsAction="always" />
         
+    <item
+        android:id="@+id/action_images"
+        android:icon="@drawable/ic_image_gallery"
+        android:title="Gérer les images"
+        app:showAsAction="ifRoom" />
+        
 </menu>

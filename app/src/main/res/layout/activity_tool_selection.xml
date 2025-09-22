@@ -13,7 +13,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Sélection des outils" />
+            app:title="@string/tool_selection_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -31,7 +31,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sélectionnez les outils nécessaires pour cette recette"
+                android:text="@string/tool_selection_subtitle"
                 android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                 android:layout_marginBottom="16dp" />
 
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:text="Terminé"
+    android:text="@string/tool_selection_done"
         app:icon="@drawable/ic_check" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

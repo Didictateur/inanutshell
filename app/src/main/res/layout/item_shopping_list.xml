@@ -33,7 +33,7 @@
                     android:id="@+id/textListName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ma liste de courses"
+                    android:text="@string/shopping_list_name_sample"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"
@@ -51,7 +51,7 @@
                         android:id="@+id/textItemCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="5 articles"
+                        android:text="@string/shopping_list_item_count_sample"
                         android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
@@ -65,7 +65,7 @@
                         android:id="@+id/textSource"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="📝 Manuelle"
+                        android:text="@string/shopping_list_source_sample"
                         android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
@@ -79,7 +79,7 @@
                         android:id="@+id/textDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="15/01/2024"
+                        android:text="@string/shopping_list_date_sample"
                         android:textSize="12sp"
                         android:textColor="@color/text_secondary" />
 
@@ -101,7 +101,7 @@
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/ic_share"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Partager"
+                    android:contentDescription="@string/shopping_list_share"
                     android:padding="6dp" />
 
                 <ImageButton
@@ -111,7 +111,7 @@
                     android:layout_marginEnd="4dp"
                     android:src="@drawable/ic_check"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Marquer comme terminé"
+                    android:contentDescription="@string/shopping_list_mark_completed"
                     android:padding="6dp" />
 
                 <ImageButton
@@ -120,9 +120,9 @@
                     android:layout_height="36dp"
                     android:src="@drawable/ic_delete"
                     android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="Supprimer"
+                    android:contentDescription="@string/shopping_list_delete"
                     android:padding="6dp"
-                    android:tint="@color/error" />
+                    app:tint="@color/error" />
 
             </LinearLayout>
 
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:text="40%"
+                android:text="@string/shopping_list_progress_sample"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:textColor="@color/success" />

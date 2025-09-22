@@ -59,7 +59,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Image de la recette"
+                        android:text="@string/recipe_image"
                         android:textStyle="bold"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp" />
@@ -82,38 +82,40 @@
                         android:orientation="horizontal"
                         android:gravity="center">
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_select_from_gallery"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginEnd="8dp"
-                            android:text="Galerie"
-                            android:drawableTop="@android:drawable/ic_menu_gallery"
-                            android:drawablePadding="4dp"
+                            android:text="@string/gallery"
+                            app:icon="@android:drawable/ic_menu_gallery"
+                            app:iconGravity="top"
+                            app:iconPadding="4dp"
                             style="@style/Widget.Material3.Button.OutlinedButton" />
 
-                        <Button
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/btn_take_photo"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="8dp"
-                            android:text="Photo"
-                            android:drawableTop="@android:drawable/ic_menu_camera"
-                            android:drawablePadding="4dp"
+                            android:text="@string/photo"
+                            app:icon="@android:drawable/ic_menu_camera"
+                            app:iconGravity="top"
+                            app:iconPadding="4dp"
                             style="@style/Widget.Material3.Button.OutlinedButton" />
 
                     </LinearLayout>
 
                     <!-- Bouton pour supprimer l'image -->
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_remove_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="8dp"
-                        android:text="Supprimer l'image"
+                        android:text="@string/remove_image"
                         android:visibility="gone"
                         style="@style/Widget.Material3.Button.TextButton" />
 
@@ -217,7 +219,7 @@
                     android:id="@+id/tv_selected_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Aucune catégorie"
+                    android:text="@string/no_category"
                     android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
                     android:padding="12dp"
                     android:background="@drawable/bg_tag_rounded"
@@ -262,7 +264,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Outils et ustensiles"
+                    android:text="@string/tools_and_utensils"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_primary"
@@ -272,7 +274,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Outils"
+                    android:text="@string/tools"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                     android:textColor="@color/text_secondary"
                     android:layout_marginBottom="4dp" />
@@ -290,7 +292,7 @@
                     android:id="@+id/btn_select_tools"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sélectionner les outils"
+                    android:text="@string/select_tools"
                     android:layout_marginBottom="16dp"
                     style="@style/Widget.Material3.Button.OutlinedButton" />
 

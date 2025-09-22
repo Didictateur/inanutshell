@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Noter cette recette"
+        android:text="@string/dialog_rating_title"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
         android:textStyle="bold"
         android:gravity="center" />
@@ -33,7 +33,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Appuyez sur les étoiles pour noter"
+            android:text="@string/dialog_rating_hint"
             android:textAppearance="@style/TextAppearance.Material3.BodySmall"
             android:textColor="?android:attr/textColorSecondary" />
 
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="Supprimer"
+            android:text="@string/dialog_rating_remove"
             android:textColor="?attr/colorError"
             style="@style/Widget.Material3.Button.TextButton" />
 
