@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">In a Nutshell</string>
+    <string name="setup_required_message">Veuillez configurer l URL et le compte Mealie pour utiliser l application.</string>
+    <string name="mealie_setup_required">Veuillez configurer l URL du serveur Mealie pour continuer.</string>
+    <string name="setup_required">Configuration requise</string>
+    <string name="setup">Configurer</string>
+    <string name="recipes">Recettes</string>
+    <string name="categories">Catégories</string>
+    <string name="favorites">Favoris</string>
+    <string name="error_loading_recipes">Erreur lors du chargement des recettes : %1$s</string>
+    <string name="no_recipes">Aucune recette trouvée</string>
+    <string name="no_recipes_message">Aucune recette disponible.</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="error_loading_recipes_title">Erreur de chargement</string>
+    <string name="retry">Réessayer</string>
+    <string name="added_to_favorites">Ajouté aux favoris</string>
+    <string name="removed_from_favorites">Retiré des favoris</string>
+</resources>

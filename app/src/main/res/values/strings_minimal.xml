@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">In a Nutshell</string>
+    <string name="setup_required_message">Veuillez configurer l URL et le compte Mealie pour utiliser l application.</string>
+    <string name="mealie_setup_required">Veuillez configurer l URL du serveur Mealie pour continuer.</string>
+    <string name="setup_required">Configuration requise</string>
+    <string name="setup">Configurer</string>
+</resources>
